@@ -1,0 +1,12 @@
+{
+  "alunos": [
+    {
+      "nome": "João Pedro",
+      "matricula": "201821250003"
+    },
+    {
+      "nome": "Myrlla Lucas",
+      "matricula": "201821250030"
+    }
+  ]
+}
