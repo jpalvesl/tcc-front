@@ -13,7 +13,8 @@
     "test": "echo Testes ainda nao implementados",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cm": "cz"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,10 +26,16 @@
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "@vitejs/plugin-react": "^3.1.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
