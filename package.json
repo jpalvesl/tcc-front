@@ -10,8 +10,10 @@
   "scripts": {
     "dev": "vite",
     "api": "echo Mock ainda nao implementado",
+    "test": "echo Testes ainda nao implementados",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,6 +27,7 @@
     "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.33.0",
     "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
   }
