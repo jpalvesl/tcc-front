@@ -3,10 +3,6 @@
   "private": true,
   "version": "0.1",
   "type": "module",
-  "engines": {
-    "npm": "please-use-yarn",
-    "yarn": ">= 1.22.19"
-  },
   "scripts": {
     "dev": "vite",
     "api": "nodemon --exec node --loader ts-node/esm api/server.ts",
