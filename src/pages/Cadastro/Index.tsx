@@ -1,14 +1,57 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
 import { ActionsRegistro, CadastroContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerRegistro } from './styles';
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
+import api from '../../services/api';
+import { toast } from 'react-toastify';
 
+interface Usuario {
+	id?: number;
+	ehAdm?: boolean;
+	ehProfessor?: boolean;
+	email: string;
+	nome: string;
+	usuario: string;
+	senha: string;
+	instituicaoAtualId?: number;
+}
 
 export default function Cadastro() {
+	const [email, setEmail] = useState('');
+	const [nome, setNome] = useState('');
+	const [usuario, setUsuario] = useState('');
+	const [senha, setSenha] = useState('');
+	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
+
+	async function handleCriarConta() {
+		if (senha !== confirmacaoSenha) {
+			console.log('Senha errada');
+			return;
+		} 
+		
+		const usuarioPayload: Usuario = {
+			email,
+			nome,
+			usuario,
+			senha,
+		};
+
+		await api.post('/usuario', usuarioPayload)
+			.then(response => {
+				if (response.status === 201) {
+					toast('Usuário criado com sucesso');
+				}
+			})
+			.catch(err => {
+				console.log('erro: ', err);
+			});
+	}
+
 	return (
 		<>
-			<NavBar></NavBar>
+			<NavBar />
 			<CadastroContainer>
 				<ChamadaContainer>
 					<ChamadaImage>
@@ -38,7 +81,11 @@ export default function Cadastro() {
 							name='email'
 							rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
 						>
-							<Input size='large'/>
+							<Input 
+								size='large'
+								value={email}
+								onChange={(evt) => setEmail(evt.target.value)}
+							/>
 						</Form.Item>
 
 						<Form.Item
@@ -46,7 +93,11 @@ export default function Cadastro() {
 							name='nome'
 							rules={[{required: true, message: 'Por favor digite o nome!'}]}
 						>
-							<Input size='large' style={{width: '100%'}}/>
+							<Input 
+								size='large'
+								value={nome}
+								onChange={(evt) => setNome(evt.target.value)}
+							/>
 						</Form.Item>
 
 						<Form.Item
@@ -54,7 +105,11 @@ export default function Cadastro() {
 							name='usuario'
 							rules={[{required: true, message: 'Por favor digite o usuario!'}]}
 						>
-							<Input size='large' />
+							<Input 
+								size='large'
+								value={usuario}
+								onChange={(evt) => setUsuario(evt.target.value)}
+							/>
 						</Form.Item>
 
 						<Form.Item
@@ -62,7 +117,12 @@ export default function Cadastro() {
 							name='senha'
 							rules={[{required: true, message: 'Por favor digite o usuario!'}]}
 						>
-							<Input size='large' />
+							<Input 
+								size='large'
+								type='password'
+								value={senha}
+								onChange={(evt) => setSenha(evt.target.value)}
+							/>
 						</Form.Item>
 
 						<Form.Item
@@ -70,7 +130,12 @@ export default function Cadastro() {
 							name='confirmar_senha'
 							rules={[{required: true, message: 'Por favor digite o usuario!'}]}
 						>
-							<Input size='large' />
+							<Input 
+								size='large'
+								type='password'
+								value={confirmacaoSenha}
+								onChange={(evt) => setConfirmacaoSenha(evt.target.value)}
+							/>
 						</Form.Item>
 
 						<Form.Item>
@@ -78,6 +143,7 @@ export default function Cadastro() {
 								style={{width: '100%'}} 
 								size='large' type="primary" 
 								htmlType="submit"
+								onClick={handleCriarConta}
 							>
 								Criar nova conta
 							</Button>
