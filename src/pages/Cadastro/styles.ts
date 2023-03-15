@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { themes } from '../../styles/themes';
 
 export const CadastroContainer = styled.div`
   padding-top: 100px;
@@ -16,7 +17,7 @@ export const ChamadaContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #FFEDD5;
+  background-color: ${themes.default.orange['100']};
   box-shadow: 6px 0px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -53,10 +54,10 @@ export const ContainerRegistro = styled.div`
   p {
     text-align: center;
     font-size: 24px;
-    color: #1f2937;
+    color: ${themes.default.gray[800]};
 
     a {
-      color: #2563eb;
+      color: ${themes.default.blue['600']};
       text-decoration: none;
     }
   }

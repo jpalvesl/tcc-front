@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { themes } from '../../styles/themes';
 
 
 export const HeaderContainer = styled.nav`
@@ -14,7 +15,7 @@ export const HeaderContainer = styled.nav`
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background-color: #111827;
+  background-color: ${themes.default.gray['900']};
 `;
 
 export const Actions = styled.div`
@@ -25,7 +26,7 @@ export const Actions = styled.div`
 
 export const Action = styled(Link)`
   font-size: 28px;
-  color: #fff;
+  color: ${themes.default.white};
   text-decoration: none;
 `;
 
@@ -33,5 +34,5 @@ export const UserActions = styled.div``;
 
 export const UserIcon = styled(UserOutlined)`
   font-size: 40px;
-  color: #fff;
+  color: ${themes.default.white};
 `;

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { themes } from '../../styles/themes';
 
 export const LoginContainer = styled.div`
   padding-top: 100px;
@@ -16,7 +17,7 @@ export const ChamadaContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #FFEDD5;
+  background-color: ${themes.default.orange['100']};
 `;
 
 export const ChamadaImage = styled.div`
