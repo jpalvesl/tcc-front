@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { themes } from './themes';
 
 export const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -18,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif;
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -48,7 +49,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body, html, #root {
     height: 100vh;
-
+    background-color: ${themes.default.zinc['100']};
   }
 `;
 

@@ -4,7 +4,8 @@ export const themes = {
 		white: '#fff',
 
 		zinc: {
-			'200':  '',
+			'100': '#f4f4f5',
+			'200':  '#e4e4e7',
 		},
 		gray: {
 			'50': '#f9fafb',

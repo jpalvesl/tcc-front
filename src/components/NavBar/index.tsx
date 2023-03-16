@@ -7,7 +7,9 @@ export const NavBar = () => {
 		<HeaderContainer>
 			<Actions>
 
-				<QuestionCircleOutlined style={{ fontSize: 40, color: themes.default.white }} />
+				<Action to='/'>
+					<QuestionCircleOutlined style={{ fontSize: 40, color: themes.default.white }} />
+				</Action>
 				<Action to='/problema'>Problemas</Action>
 				<Action to='/contato'>Contato</Action>
 				<Action to='/sobre'>Sobre</Action>

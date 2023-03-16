@@ -65,8 +65,6 @@ export default function Login() {
 							</Button>
 						</Form.Item>
 					</Form>
-					<button />
-
 					<p>
                     Não tem uma conta ainda? <Link to='/cadastro'>Inscreva-se gratuitamente.</Link>
 					</p>

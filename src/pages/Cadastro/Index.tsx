@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
 import { ActionsRegistro, CadastroContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerRegistro } from './styles';
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import UsuarioService from '../../services/UsuarioService';
 
 interface Usuario {
 	id?: number;
@@ -25,7 +27,9 @@ export default function Cadastro() {
 	const [senha, setSenha] = useState('');
 	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
 
-	async function handleCriarConta() {
+	const navigate = useNavigate();
+
+	function handleOnFinish() {
 		if (senha !== confirmacaoSenha) {
 			console.log('Senha errada');
 			return;
@@ -38,15 +42,21 @@ export default function Cadastro() {
 			senha,
 		};
 
-		await api.post('/usuario', usuarioPayload)
+		api.post('/usuario', usuarioPayload)
 			.then(response => {
 				if (response.status === 201) {
-					toast('Usuário criado com sucesso');
+					toast.success('Usuário criado com sucesso');
+					navigate('/login');
 				}
 			})
-			.catch(err => {
-				console.log('erro: ', err);
+			.catch((err : AxiosError) => {
+				toast.error(`Não foi possível criar usuário ${err.message}`);
 			});
+	}
+
+	function handleOnFinishFailed() {
+		toast.warning('Não foi possível criar usuário pois houve erro nos dados');
+		UsuarioService.findByInstituicao(1).then(response => console.log(response));
 	}
 
 	return (
@@ -72,8 +82,8 @@ export default function Cadastro() {
 						name="basic"
 						layout='vertical'
 						initialValues={{ remember: true }}
-						onFinish={() => {console.log('cu');}}
-						onFinishFailed={() => {console.log('cu');}}
+						onFinish={handleOnFinish}
+						onFinishFailed={handleOnFinishFailed}
 						autoComplete="off"
 					>
 						<Form.Item
@@ -83,6 +93,7 @@ export default function Cadastro() {
 						>
 							<Input 
 								size='large'
+								type='email'
 								value={email}
 								onChange={(evt) => setEmail(evt.target.value)}
 							/>
@@ -143,7 +154,6 @@ export default function Cadastro() {
 								style={{width: '100%'}} 
 								size='large' type="primary" 
 								htmlType="submit"
-								onClick={handleCriarConta}
 							>
 								Criar nova conta
 							</Button>
