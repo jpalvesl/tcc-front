@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
-import { ActionsLogin, LoginContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerRegistro} from './styles';
+import { ActionsLogin, LoginContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerLogin} from './styles';
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
+import { themes } from '../../styles/themes';
 
 
 export default function Login() {
@@ -17,34 +18,31 @@ export default function Login() {
 
 					<ChamadaTexto>
 						<strong>Comece sua jornada conosco </strong>
-						e entenda de uma vez por todas os conceitos da programação e se desafie cada vez mais, com nossa lista de problemas</ChamadaTexto>
+                        e entenda de uma vez por todas os conceitos da programação e se desafie cada vez mais, com nossa lista de problemas</ChamadaTexto>
 				</ChamadaContainer>
 
-				<ContainerRegistro>
+				<ContainerLogin>
 					<h2>Login</h2>
 
 					<ActionsLogin></ActionsLogin>
-					<h2>Registrar</h2>
+                    
 
-					
-					
+                    
+                    
 					<Form
 						name="basic"
 						layout='vertical'
-						labelCol={{ span: 8 }}
-						wrapperCol={{ span: 16 }}
-						style={{ maxWidth: 600 }}
 						initialValues={{ remember: true }}
-						onFinish={() => {console.log('oi');}}
-						onFinishFailed={() => {console.log('cu');}}
+						onFinish={() => {console.log('ok');}}
+						onFinishFailed={() => {console.log('ok');}}
 						autoComplete="off"
 					>
 						<Form.Item
 							label='Usuário ou email'
-							name='user-email'
-							rules={[{required: true, message: 'Por favor digite o seu usuário ou e-mail!'}]}
+							name='email-user'
+							rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
 						>
-							<Input />
+							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} />
 						</Form.Item>
 
 						<Form.Item
@@ -52,25 +50,29 @@ export default function Login() {
 							name='senha'
 							rules={[{required: true, message: 'Por favor digite sua senha!'}]}
 						>
-							<Input />
+							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}}/>
 						</Form.Item>
 
-						
+                        
 
-						<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-							<Button type="primary" htmlType="submit">
-								Entrar
+						<Form.Item>
+							<Button 
+								style={{width: '100%', backgroundColor: 'green'}} 
+								size='large' type="primary" 
+								htmlType="submit"
+							>
+                                Criar nova conta
 							</Button>
 						</Form.Item>
 					</Form>
 					<button />
 
 					<p>
-					Não tem uma conta ainda? <Link to='/cadastro'>Inscreva-se gratuitamente.</Link>
+                    Não tem uma conta ainda? <Link to='/cadastro'>Inscreva-se gratuitamente.</Link>
 					</p>
-				</ContainerRegistro>
+				</ContainerLogin>
 			</LoginContainer>
-			
+            
 		</>
 	);
 }
