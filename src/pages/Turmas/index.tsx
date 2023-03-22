@@ -1,4 +1,4 @@
-import { Button, Input } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined, FilterOutlined, KeyOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
@@ -10,8 +10,29 @@ import { TurmasContainer,
 	TurmaActions 
 } from './styles';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
+
 
 function Turmas() {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	function showModal() {
+		setIsModalOpen(true);
+	}
+
+	function closeModal() {
+		setIsModalOpen(false);
+	}
+
+	function deleteTurma() {
+		// requisicao para apagar a turma
+		toast.info('Turma exlcuida com sucesso');
+		closeModal();
+	}
+
+
 	return (
 		<>
 			{/* <NavBar /> */}
@@ -54,7 +75,7 @@ function Turmas() {
 						<Button size='large' >
 							<EditOutlined />
 						</Button>
-						<Button size='large' >
+						<Button size='large' onClick={showModal}>
 							<DeleteOutlined />
 						</Button>
 					</TurmaActions>
@@ -95,6 +116,7 @@ function Turmas() {
 				</TurmaRow>
 
 			</TurmasContainer>
+			<Modal title='Apagar turma' open={isModalOpen} onOk={deleteTurma} onCancel={closeModal}/>
 		</>
 	);
 }
