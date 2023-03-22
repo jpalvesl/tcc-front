@@ -4,6 +4,7 @@ import Contato from './pages/Contato/Index';
 import Login from './pages/Login/Index';
 import Sobre from './pages/Sobre/Index';
 import { Turmas } from './pages/Turmas';
+import { TurmaTarefas } from './pages/TurmaTarefas';
 
 export const Router = createBrowserRouter([
 	{
@@ -25,6 +26,10 @@ export const Router = createBrowserRouter([
 	{
 		path: '/turma',
 		element: <Turmas />
+	},
+	{
+		path: '/turma/:id',
+		element: <TurmaTarefas />
 	}
 ]);
 
