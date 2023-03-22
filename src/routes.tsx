@@ -3,6 +3,7 @@ import Cadastro from './pages/Cadastro/Index';
 import Contato from './pages/Contato/Index';
 import Login from './pages/Login/Index';
 import Sobre from './pages/Sobre/Index';
+import { Turmas } from './pages/Turmas';
 
 export const Router = createBrowserRouter([
 	{
@@ -20,6 +21,10 @@ export const Router = createBrowserRouter([
 	{
 		path: '/contato',
 		element: <Contato />
+	},
+	{
+		path: '/turma',
+		element: <Turmas />
 	}
 ]);
 

@@ -51,6 +51,11 @@ export const GlobalStyle = createGlobalStyle`
     height: 100vh;
     background-color: ${themes.default.zinc['100']};
   }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 `;
 
 

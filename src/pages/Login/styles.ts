@@ -57,7 +57,6 @@ p {
 
   a {
     color: #2563eb;
-    text-decoration: none;
   }
 }
 `;

@@ -58,7 +58,6 @@ export const ContainerRegistro = styled.div`
 
     a {
       color: ${themes.default.blue['600']};
-      text-decoration: none;
     }
   }
 `;
