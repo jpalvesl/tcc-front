@@ -40,7 +40,7 @@ function Turmas() {
 
 	return (
 		<>
-			{/* <NavBar /> */}
+			<NavBar />
 			<TurmasContainer>
 				<TurmasTitle>Turmas</TurmasTitle>
 				
@@ -49,7 +49,7 @@ function Turmas() {
 				<SearchRow>
 					<Input size='large' placeholder='Buscar turma...' />
 
-					<Button size='large' style={{ width: '150px' }} >
+					<Button size='large' style={{ width: '150px' }} onClick={handleCriarTurma} >
 						<PlusOutlined />
 						Nova Turma
 					</Button>

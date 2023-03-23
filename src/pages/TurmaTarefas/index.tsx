@@ -2,6 +2,7 @@ import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
 import { Divider } from '../../components/Divider';
+import { NavBar } from '../../components/NavBar';
 import { TurmaTarefasContainer, 
 	DescriptionContainer, 
 	DescriptionLeft, 
@@ -94,73 +95,76 @@ const columnsRoteiros = [
 
 function TurmaTarefas() {
 	return (
-		<TurmaTarefasContainer>
-			<h1>Turmas</h1>
-
-			<Divider />
-
-			<DescriptionContainer>
-				<DescriptionLeft>
-					<p>
-						<strong>Nome da turma: </strong> Algoritimos e Programação - IFPB-CG 2018.2
-						<span>Criado em: 20/08/2018 | Encerra em 20/12/2018</span>
-					</p>
-					<p>
-						<strong>Professor: </strong> Henrique do Nascimento Cunha
-					</p>
-				</DescriptionLeft>
-
-				<DescriptionRight>
-					<p>
-						<strong>Instituição: </strong> Instituto Federal da Paraíba
-					</p>
-					<p>
-						<strong>Monitor: </strong> Allan Bispo
-					</p>
-				</DescriptionRight>
-			</DescriptionContainer>
-
-			<SearchRow>
-				<Input size='large' placeholder='Buscar tarefa' />
-
-				<Button size='large' >
-					<FilterOutlined />
-				</Button>
-			</SearchRow>
-
-			<ContentContainer>
-				<ProvasSection>
-					<h2>Provas</h2>
-					<Table 
-						size='middle'
-						bordered
-						dataSource={dataSourceProvas}
-						columns={columnsProvas}
-						pagination={false}
-					/>
-				</ProvasSection>
+		<>
+			<NavBar />    
+			<TurmaTarefasContainer>
+				<h1>Turmas</h1>
 
 				<Divider />
 
-				<RoteirosSection>
-					<h2>Roteiros</h2>
-					<Table
-						size='middle'
-						bordered
-						dataSource={dataSourceRoteiros}
-						columns={columnsRoteiros}
-						pagination={false}
-					/>
-				</RoteirosSection>
+				<DescriptionContainer>
+					<DescriptionLeft>
+						<p>
+							<strong>Nome da turma: </strong> Algoritimos e Programação - IFPB-CG 2018.2
+							<span>Criado em: 20/08/2018 | Encerra em 20/12/2018</span>
+						</p>
+						<p>
+							<strong>Professor: </strong> Henrique do Nascimento Cunha
+						</p>
+					</DescriptionLeft>
 
-				<MembrosSection>
-					<h2>
-						<PlusOutlined /> Membros
-					</h2>
-				</MembrosSection>
-			</ContentContainer>
+					<DescriptionRight>
+						<p>
+							<strong>Instituição: </strong> Instituto Federal da Paraíba
+						</p>
+						<p>
+							<strong>Monitor: </strong> Allan Bispo
+						</p>
+					</DescriptionRight>
+				</DescriptionContainer>
 
-		</TurmaTarefasContainer>
+				<SearchRow>
+					<Input size='large' placeholder='Buscar tarefa' />
+
+					<Button size='large' >
+						<FilterOutlined />
+					</Button>
+				</SearchRow>
+
+				<ContentContainer>
+					<ProvasSection>
+						<h2>Provas</h2>
+						<Table 
+							size='middle'
+							bordered
+							dataSource={dataSourceProvas}
+							columns={columnsProvas}
+							pagination={false}
+						/>
+					</ProvasSection>
+
+					<Divider />
+
+					<RoteirosSection>
+						<h2>Roteiros</h2>
+						<Table
+							size='middle'
+							bordered
+							dataSource={dataSourceRoteiros}
+							columns={columnsRoteiros}
+							pagination={false}
+						/>
+					</RoteirosSection>
+
+					<MembrosSection>
+						<h2>
+							<PlusOutlined /> Membros
+						</h2>
+					</MembrosSection>
+				</ContentContainer>
+
+			</TurmaTarefasContainer>
+		</>
 	);
 }
 

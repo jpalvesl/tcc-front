@@ -9,6 +9,7 @@ export const TurmasContainer = styled.div`
   width: 100vw;
   height: 100vh;
   margin: auto;
+  margin-top: 132px;
 `;
 
 export const TurmasTitle = styled.h1`

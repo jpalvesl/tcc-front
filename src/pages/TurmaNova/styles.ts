@@ -7,6 +7,7 @@ export const TurmaNovaContainer = styled.div`
   width: 100vw;
   height: 100vh;
   margin: auto;
+  margin-top: 132px;
 
   h1 {
     font-size: 32px;
