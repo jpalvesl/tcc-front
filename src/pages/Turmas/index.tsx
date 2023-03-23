@@ -9,7 +9,7 @@ import { TurmasContainer,
 	TurmaInfo, 
 	TurmaActions 
 } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -17,6 +17,11 @@ import { toast } from 'react-toastify';
 
 function Turmas() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const navigate = useNavigate();
+
+	function handleCriarTurma() {
+		navigate('nova');
+	}
 
 	function showModal() {
 		setIsModalOpen(true);
@@ -72,7 +77,7 @@ function Turmas() {
 					</TurmaInfo>
 
 					<TurmaActions>
-						<Button size='large' >
+						<Button size='large' onClick={handleCriarTurma} >
 							<EditOutlined />
 						</Button>
 						<Button size='large' onClick={showModal}>
