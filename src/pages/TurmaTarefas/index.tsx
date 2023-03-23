@@ -1,8 +1,12 @@
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
+import TurmaService from '../../services/TurmaService';
+import { Turma } from '../../types/Turma';
 import { TurmaTarefasContainer, 
 	DescriptionContainer, 
 	DescriptionLeft, 
@@ -94,6 +98,20 @@ const columnsRoteiros = [
 ];
 
 function TurmaTarefas() {
+	const [turma, setTurma] = useState<Turma>();
+	
+	const { turma_id } = useParams();
+	
+
+	useEffect(() => {
+		async function loadTurma() {
+			const { data } = await TurmaService.findById(turma_id);
+			setTurma(data);
+			console.log(data);
+		}
+
+		loadTurma();
+	}, []);
 	return (
 		<>
 			<NavBar />    
@@ -105,8 +123,8 @@ function TurmaTarefas() {
 				<DescriptionContainer>
 					<DescriptionLeft>
 						<p>
-							<strong>Nome da turma: </strong> Algoritimos e Programação - IFPB-CG 2018.2
-							<span>Criado em: 20/08/2018 | Encerra em 20/12/2018</span>
+							<strong>Nome da turma: </strong> {turma?.titulo}
+							<span>Criado em: {turma?.dtAbertura} | Encerra em {turma?.dtEncerramento}</span>
 						</p>
 						<p>
 							<strong>Professor: </strong> Henrique do Nascimento Cunha

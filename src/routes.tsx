@@ -29,7 +29,7 @@ export const Router = createBrowserRouter([
 		element: <Turmas />
 	},
 	{
-		path: '/turma/:id',
+		path: '/turma/:turma_id',
 		element: <TurmaTarefas />
 	},
 	{

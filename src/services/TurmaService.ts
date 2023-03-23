@@ -1,3 +1,4 @@
+import { Turma } from '../types/Turma';
 import api from './api';
 const localDefaultEndpoint = 'turma';
 
@@ -6,23 +7,41 @@ class TurmaService {
 		return api.get(`${localDefaultEndpoint}/instituicao/${instituicaoId}`);
 	}
 
-	findById() {}
+	findById(turmaId: number) {
+		return api.get(`${localDefaultEndpoint}/${turmaId}`);
+	}
 	
-	findByUsuario() {}
+	findByUsuario(usuarioId: number) {
+		return api.get(`${localDefaultEndpoint}/usuario/${usuarioId}`);
+	}
   
-	add() {}
+	add(criadorId: number, payload: Turma)  {
+		return api.post(`${localDefaultEndpoint}/criador/${criadorId}`, payload);
+	}
 
-	addAlunoEmTurma() {}
+	addAlunoEmTurma(turmaId: number, alunoId: number, criadorId: number) {
+		return api.post(`${localDefaultEndpoint}/${turmaId}/aluno/${alunoId}/criador/${criadorId}`);
+	}
 
-	removerAlunoDaTurma() {}
+	removerAlunoDaTurma(turmaId: number, alunoId: number, criadorId: number) {
+		return api.delete(`${localDefaultEndpoint}/${turmaId}/aluno/${alunoId}/criador/${criadorId}`);
+	}
 
-	addProfessorEmTurma() {}
+	addProfessorEmTurma(turmaId: number, professorId: number, professorAdicionadoId: number) {
+		return api.post(`${localDefaultEndpoint}/${turmaId}/professor/${professorId}/professor_adicionado/${professorAdicionadoId}`);
+	}
 	
-	removerProfessorDaTurma() {}
+	removerProfessorDaTurma(turmaId: number, professorId: number, professorAdicionadoId: number) {
+		return api.delete(`${localDefaultEndpoint}/${turmaId}/professor/${professorId}/professor_adicionado/${professorAdicionadoId}`);
+	}
 
-	edit() {}
+	edit(turmaId: number, usuarioId: number, payload: Turma) {
+		return api.patch(`${localDefaultEndpoint}/${turmaId}/usuario/${usuarioId}`, payload);
+	}
 
-	delete() {}
+	delete(turmaId: number, usuarioId: number) {
+		return api.delete(`${localDefaultEndpoint}/${turmaId}/usuario/${usuarioId}`);
+	}
 }
 
 
