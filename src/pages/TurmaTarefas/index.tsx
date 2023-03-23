@@ -1,11 +1,13 @@
-import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
+import { FilterOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
+import TarefaService from '../../services/TarefaService';
 import TurmaService from '../../services/TurmaService';
+import { Tarefa } from '../../types/Tarefa';
 import { Turma } from '../../types/Turma';
 import { TurmaTarefasContainer, 
 	DescriptionContainer, 
@@ -99,15 +101,22 @@ const columnsRoteiros = [
 
 function TurmaTarefas() {
 	const [turma, setTurma] = useState<Turma>();
+	const [roteiros, setRoteiros] = useState<Tarefa[]>([]);
+	const [provas, setProvas] = useState<Tarefa[]>([]);
+	const [showMembros, setShowMembros] = useState(false);
+	const [membros, setMembros] = useState([1, 2]);
+
 	
 	const { turma_id } = useParams();
 	
 
 	useEffect(() => {
 		async function loadTurma() {
-			const { data } = await TurmaService.findById(turma_id);
-			setTurma(data);
-			console.log(data);
+			const { data: turmasData } = await TurmaService.findById(Number(turma_id));
+			setTurma(turmasData);
+
+			const { data: roteirosData } = await TarefaService.findByAluno(1);
+			setRoteiros(roteirosData);
 		}
 
 		loadTurma();
@@ -155,7 +164,14 @@ function TurmaTarefas() {
 						<Table 
 							size='middle'
 							bordered
-							dataSource={dataSourceProvas}
+							dataSource={provas.map((prova, idx) => (
+								{
+									key: idx,
+									name: 'Teste',
+									pontuacao: '1',
+									prazo: '10/10/2023'
+								}
+							))}
 							columns={columnsProvas}
 							pagination={false}
 						/>
@@ -168,16 +184,35 @@ function TurmaTarefas() {
 						<Table
 							size='middle'
 							bordered
-							dataSource={dataSourceRoteiros}
+							dataSource={roteiros.map((roteiro, idx) => (
+								{
+									key: idx,
+									name: (
+										<>
+											<Clipboard size={16} key={idx}/> {roteiro.descricao}
+										</>
+									),
+									pontuacao: 'x',
+									prazo: roteiro.dtEncerramento.replaceAll('-', '/')
+								}
+							))}
 							columns={columnsRoteiros}
 							pagination={false}
 						/>
 					</RoteirosSection>
 
 					<MembrosSection>
-						<h2>
-							<PlusOutlined /> Membros
+						<h2 onClick={() => setShowMembros(!showMembros)} style={{ cursor: 'pointer' }}>
+							{showMembros ? <PlusOutlined /> : <MinusOutlined />} Membros
 						</h2>
+						{showMembros 
+							? membros.map((membro, idx) => (
+								<div key={`${membro?.id}-${idx}`}>
+									<img src="" alt="" />
+									<span>Nome</span>
+								</div>
+							)) 
+							: null}
 					</MembrosSection>
 				</ContentContainer>
 

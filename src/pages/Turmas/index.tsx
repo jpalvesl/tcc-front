@@ -19,9 +19,14 @@ import { Turma } from '../../types/Turma';
 
 function Turmas() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [searchText, setSearchText] = useState('');
 	const [turmas, setTurmas] = useState<Array<Turma>>([]);
 	const [turmasProfessor, setTurmasProfessor] = useState<Array<Turma>>([]);
+	
 	const navigate = useNavigate();
+	const turmasFiltradas = turmas.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
+	const turmasProfessorFiltradas = turmasProfessor.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
+
 
 	useEffect(() => {
 		async function initializeData() {
@@ -60,7 +65,12 @@ function Turmas() {
 				<Divider />
 
 				<SearchRow>
-					<Input size='large' placeholder='Buscar turma...' />
+					<Input 
+						size='large' 
+						placeholder='Buscar turma...' 
+						value={searchText}
+						onChange={(evt) => setSearchText(evt.target.value)}
+					/>
 
 					<Button size='large' style={{ width: '150px' }} onClick={handleCriarTurma} >
 						<PlusOutlined />
@@ -81,14 +91,14 @@ function Turmas() {
 				{turmasProfessor?.length === 0 ? null : (
 					<>
 						<h2 style={{ fontSize: 32, paddingLeft: 16, marginBottom: 16, fontFamily: 'Poppins' }}>Turmas como professor</h2>
-						{turmasProfessor?.map((turma, idx) => (
+						{turmasProfessorFiltradas?.map((turma, idx) => (
 							<TurmaRow key={`${turma.id}-${idx}`}>
 								<TurmaInfo>
 									<Link to={`/turma/${turma.id}`}>
 										<h3>{turma.nomeTurma} - {turma.semestre}</h3>
 									</Link>
 									<Link to={`/instituicao/${turma.instituicaoId}`}>
-										<span>{turma.instituicaoId}</span>
+										<span>{turma.instituicaoTitulo}</span>
 									</Link>
 								</TurmaInfo>
 
@@ -109,14 +119,14 @@ function Turmas() {
 
 
 				<h2 style={{ fontSize: 32, paddingLeft: 16, marginBottom: 16, fontFamily: 'Poppins' }}>Turmas como aluno</h2>
-				{turmas?.map((turma, idx) => (
+				{turmasFiltradas?.map((turma, idx) => (
 					<TurmaRow key={`${turma.id}-${idx}`}>
 						<TurmaInfo>
 							<Link to={`/turma/${turma.id}`}>
 								<h3>{turma.nomeTurma} - {turma.semestre}</h3>
 							</Link>
 							<Link to={`/instituicao/${turma.instituicaoId}`}>
-								<span>{turma.instituicaoId}</span>
+								<span>{turma.instituicaoTitulo}</span>
 							</Link>
 						</TurmaInfo>
 					</TurmaRow>

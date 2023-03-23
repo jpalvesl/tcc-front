@@ -6,4 +6,5 @@ export interface Turma {
   dtEncerramento?: string;
   nomeTurma: string;
   instituicaoId?: number;
+  instituicaoTitulo?: string;
 }
