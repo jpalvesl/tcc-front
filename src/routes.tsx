@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import Cadastro from './pages/Cadastro/Index';
 import Contato from './pages/Contato/Index';
 import Login from './pages/Login/Index';
+import { EditarPerfil } from './pages/Perfil/Form/EditPerfil';
+import Perfil from './pages/Perfil/Index';
 import Sobre from './pages/Sobre/Index';
 import { TurmaNova } from './pages/TurmaNova';
 import { Turmas } from './pages/Turmas';
@@ -36,5 +38,13 @@ export const Router = createBrowserRouter([
 		path: '/turma/nova',
 		element: <TurmaNova />,
 	},
+	{
+		path: '/perfil',
+		element: <Perfil />
+	},
+	{
+		path: '/perfil/:id',
+		element: <EditarPerfil/>
+	}
 ]);
 
