@@ -1,20 +1,34 @@
+import { Usuario } from '../types/Usuario';
 import api from './api';
 const localDefaultEndpoint = 'usuario';
 
 class UsuarioService {
+	
 	findByInstituicao(instituicaoId: number) {
 		return api.get(`${localDefaultEndpoint}/instituicao/${instituicaoId}`);
 	}
 
-	findById() {}
+	findById(usuarioId: number) {
+		return api.get(`${localDefaultEndpoint}/${usuarioId}`);
+	}
   
-	findByTurma() {}
+	findByTurma(turmaId: number) {
+		return api.get(`${localDefaultEndpoint}/usuario/${turmaId}`);
 
-	cadastrar() {}
+	}
 
-	edit() {}
+	cadastrar(payload: Usuario) {
+		return api.post(`${localDefaultEndpoint}`, payload);
+	}
 
-	delete() {}
+	edit(usuarioId: number, payload: Usuario) {
+		return api.patch(`${localDefaultEndpoint}/${usuarioId}`,payload);
+
+	}
+
+	delete(usuarioId: number) {
+		return api.delete(`${localDefaultEndpoint}/${usuarioId}`);
+	}
 }
 
 

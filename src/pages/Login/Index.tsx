@@ -1,13 +1,38 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
 import { ActionsLogin, LoginContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerLogin} from './styles';
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
 import { themes } from '../../styles/themes';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../contexts/auth';
+
 
 
 export default function Login() {
-	return (
+
+	
+	const [email, setEmail] = useState('');
+	
+	const [senha, setSenha] = useState('');
+	
+	const { signIn, signed } = useContext(AuthContext);
+
+	const handleSubmit = async () => {
+		const data = {
+			email,
+			senha,
+			
+		};
+		console.log('datinha',data);
+		await signIn(data);
+		return false;
+	};
+
+	
+	
+	console.log(signed);
+	if(!signed) {return (
 		<>
 			<NavBar></NavBar>
 			<LoginContainer>
@@ -33,7 +58,7 @@ export default function Login() {
 						name="basic"
 						layout='vertical'
 						initialValues={{ remember: true }}
-						onFinish={() => {console.log('ok');}}
+						onFinish={handleSubmit}
 						onFinishFailed={() => {console.log('ok');}}
 						autoComplete="off"
 					>
@@ -42,7 +67,7 @@ export default function Login() {
 							name='email-user'
 							rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
 						>
-							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} />
+							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} value={email} onChange={(e) => [setEmail(e.target.value)]}/>
 						</Form.Item>
 
 						<Form.Item
@@ -50,7 +75,7 @@ export default function Login() {
 							name='senha'
 							rules={[{required: true, message: 'Por favor digite sua senha!'}]}
 						>
-							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}}/>
+							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} value={senha} onChange={(e) => [setSenha(e.target.value)]}/>
 						</Form.Item>
 
                         
@@ -61,7 +86,7 @@ export default function Login() {
 								size='large' type="primary" 
 								htmlType="submit"
 							>
-                                Criar nova conta
+                                Login
 							</Button>
 						</Form.Item>
 					</Form>
@@ -72,5 +97,9 @@ export default function Login() {
 			</LoginContainer>
             
 		</>
-	);
+	);}
+	else{
+		return <Navigate to="/" />;
+	}
+	
 }

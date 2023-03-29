@@ -27,15 +27,20 @@ export const ContatoContainer = styled.div`
 `; 
 
 export const CampoContato = styled.div`
-
-  
-  margin: 100px auto;
+  border: 1px solid white;
+  margin: 0 auto;
+  margin-top: 100px;
   max-width: 1336px;
+  
   
   width: 100%;
   background-color: #fff;
   width:1200px;
   height: 800px;
+  position: relative;
+  display: block;
+  
+  
 
   
 
@@ -45,10 +50,43 @@ export const CampoInfo = styled.div`
 
   background-color: ${themes.default.purble[300]};
   width:795px;
+  
   height: 136px;
+  margin: 0 auto;
+  margin-top: 50px;
+
+  width:795px;
+  height: 136px;
+
+  p {
+    font-family: 'Poppins', sans-serif;
+    padding: 50px 15px 0px 15px;
+    font-size: 20px;
+  }
+  
+  
   
 
 
 `;
+export const CampoForm = styled.div`
+
+
+  
+  width:795px;
+  
+  height: 136px;
+  margin: 0 auto;
+  margin-top: 50px;
+
+  width:795px;
+  height: 136px;
+  
+  
+  
+
+
+`;
+
 
 export const ActionsLogin = styled.div``;

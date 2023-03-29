@@ -1,6 +1,7 @@
 import { GlobalStyle } from './styles/GlobalStyles';
 import { RouterProvider } from 'react-router-dom'; 
 import { Router } from './routes';
+import { AuthProvider } from './contexts/auth';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,9 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
 	return (
 		<>
-			<RouterProvider router={Router} />
-			<ToastContainer />
-			<GlobalStyle />
+			<AuthProvider>
+				<RouterProvider router={Router} />
+				<ToastContainer />
+				<GlobalStyle />
+			</AuthProvider>
+			
 		</>
 	);
 }
