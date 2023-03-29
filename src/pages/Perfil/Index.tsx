@@ -6,13 +6,12 @@ import { useEffect, useState } from 'react';
 
 
 import UsuarioService from '../../services/UsuarioService';
-
 import { Button, Divider, Tabs, TabsProps } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { Turma } from '../../types/Turma';
 import TurmaService from '../../services/TurmaService';
-
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import PhotoPerfil from '../../assets/icons/PhotoPerfil';
 
 
 
@@ -36,8 +35,9 @@ export default function Perfil(){
 	useEffect(() => {
 		async function initializeData() {
 			const { data } = await TurmaService.findByUsuario(2);
+			
 			setTurmas(data);
-			console.log('TURMA',data);
+			
 		}
 
 		initializeData();

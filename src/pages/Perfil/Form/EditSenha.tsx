@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PhotoPerfil from '../../../assets/icons/PhotoPerfil';
 
 import { Divider } from '../../../components/Divider';
@@ -11,7 +11,7 @@ import { CampoForm, CampoImage, PerfilContainer } from './styles';
 
 
 
-function EditarPerfil (){
+function AlterarSenha (){
 	const { id } = useParams();
 	const [model,setModel] = useState<Usuario>({
 		nome: '',
@@ -97,57 +97,51 @@ function EditarPerfil (){
 							onFinishFailed={()=>console.log('aqui')}
 							
 						>
+							
+
+							
+
 							<Form.Item
-								label='Email'
-								name='email'
-								
-								rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
+								label='Senha atual'
+								name='senhaAtual'
+								rules={[{required: true, message: 'Por favor digite a senha atual!'}]}
 							>
-								
-								
 								<Input 
 									size='large'
-									type='email'
-									value={model.email}
-									name="email"
-									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
-									
+									type='password'
+						
+									onChange={()=>console.log('aq')}
 								/>
 							</Form.Item>
 
 							<Form.Item
-								label='Nome'
-								name='nome'
-								rules={[{required: true, message: 'Por favor digite o nome!'}]}
+								label='Nova senha'
+								name='senha'
+								rules={[{required: true, message: 'Por favor digite a nova senha!'}]}
 							>
 								<Input 
 									size='large'
-									value={model.nome}
-									name="nome"
-									
+									type='password'
+						
+									onChange={()=>console.log('aq')}
 								/>
 							</Form.Item>
-
 							<Form.Item
-								label='Usuario'
-								name='usuario'
-								rules={[{required: true, message: 'Por favor digite o usuario!'}]}
+								label='Confirmar nova senha'
+								name='confirmar_senha'
+								rules={[{required: true, message: 'Por favor confirme a nova senha!'}]}
 							>
 								<Input 
 									size='large'
-									value='teste'
-									name="usuario"
-									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+									type='password'
+						
+									onChange={()=>console.log('aq')}
 								/>
-							</Form.Item>
-
-							<Form.Item>
-								<p><Link to={`/perfil/${id}/password`}>Alterar senha</Link></p>
 							</Form.Item>
 
 							<Form.Item>
 								<Button 
-									style={{float: 'right'}} 
+									style={{width: '100%'}} 
 									size='large' type="primary" 
 									htmlType="submit"
 								>
@@ -165,4 +159,4 @@ function EditarPerfil (){
 		</>
 	);
 }
-export {EditarPerfil};
+export {AlterarSenha};
