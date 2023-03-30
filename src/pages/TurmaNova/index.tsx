@@ -4,12 +4,19 @@ import { Divider } from '../../components/Divider';
 
 import { TurmaNovaContainer } from './styles';
 import { NavBar } from '../../components/NavBar';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import TurmaService from '../../services/TurmaService';
 import { Turma } from '../../types/Turma';
 import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/auth';
 
 const { RangePicker } = DatePicker;
+
+interface TurmaNovaState {
+	actionType: 'UPDATE' | 'CREATE';
+	turmaAtual?: Turma;
+}
 
 function TurmaNova() {
 	const [nome, setNome] = useState('');
@@ -19,8 +26,19 @@ function TurmaNova() {
 	const [monitores, setMonitores] = useState([]);
 	const [datas, setDatas] = useState([]);
 
+	const navigate = useNavigate();
+	const { state } = useLocation();
+	
+	const { actionType, turmaAtual } = state as TurmaNovaState;
+	const { user } = useContext(AuthContext);
+	console.log(actionType, turmaAtual);
+	
+
+	useEffect(() => {}, []);
+
 	async function handleOnFinish(criadorId: number) {
 		const turma: Turma = {
+			...turmaAtual,
 			nomeTurma: nome,
 			semestre: semestre,
 			dtAbertura: datas[0],
@@ -28,18 +46,33 @@ function TurmaNova() {
 			instituicaoId: 1, 
 		};
 		
-		TurmaService.add(criadorId, turma).then(() => toast('Turma Criada com sucesso.')).catch(() => toast('Erro ao criar conta'));
+		if (actionType === 'CREATE'){
+			TurmaService.add(criadorId, turma)
+				.then(() => {
+					toast('Turma Criada com sucesso.');
+					navigate('/turma');
+				})
+				.catch(() => toast('Erro ao criar conta'));
+		} else {
+			TurmaService.edit(turmaAtual.id, criadorId, turma)
+				.then(() => {
+					toast('Turma Criada com sucesso.');
+					navigate('/turma');
+				})
+				.catch(() => toast('Erro ao criar conta'));
+		}
+		
 	}
 	
 	return (
 		<>
 			<NavBar />    
 			<TurmaNovaContainer>
-				<h1>Criar Turma</h1>
+				<h1>{actionType === 'CREATE' ? 'Criar Turma' : 'Editar Turma'}</h1>
 				<Divider />
 				<Form 
 					layout='vertical'
-					onFinish={() => handleOnFinish(1)}
+					onFinish={() => handleOnFinish(user.id)}
 				>
 					<Form.Item label="Nome">
 						<Input 
@@ -96,7 +129,7 @@ function TurmaNova() {
 					</Form.Item>
 
 					<Button size='large' style={{ width: '100%' }} htmlType='submit'>
-          Criar Turma
+						{actionType === 'CREATE' ? 'Criar Turma' : 'Editar Turma'}
 					</Button>
 				</Form>
 			</TurmaNovaContainer>

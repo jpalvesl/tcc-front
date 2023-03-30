@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 			const storageToken = localStorage.getItem('@Auth:token');
 
 			if (storageUser && storageToken) {
-				setUser(storageUser);
+				setUser(JSON.parse(storageUser));
 			}
 		};
 		loadingStoreData();
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 					'Authorization'
 				] = `Bearer ${token}`;
 
-				localStorage.setItem('@Auth:user', JSON.stringify(filtragem_senha));
+				localStorage.setItem('@Auth:user', JSON.stringify(filtragem_senha[0]));
 				
 				localStorage.setItem('@Auth:token', token);
 			}
@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }) => {
 		<AuthContext.Provider
 			value={{
 				user,
+				setUser,
 				signIn,
 				singOut,
 				signed: !!user,

@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AuthContext } from './contexts/auth';
 import Cadastro from './pages/Cadastro/Index';
 import Contato from './pages/Contato/Index';
+import { Home } from './pages/Home';
 import Login from './pages/Login/Index';
 import { EditarPerfil } from './pages/Perfil/Form/EditPerfil';
 import { AlterarSenha } from './pages/Perfil/Form/EditSenha';
@@ -21,7 +22,10 @@ const Private = ({Item}) => {
 
 export const Router = createBrowserRouter([
 
-	
+	{
+		path: '/',
+		element: <Home />
+	},
 	{
 		path: '/cadastro',
 		element: <Cadastro />
@@ -40,7 +44,7 @@ export const Router = createBrowserRouter([
 	},
 	{
 		path: '/turma',
-		element:<Private Item={Turmas} />
+		element: <Private Item={Turmas} />
 	},
 	{
 		path: '/turma/:turma_id',
@@ -48,6 +52,10 @@ export const Router = createBrowserRouter([
 	},
 	{
 		path: '/turma/nova',
+		element: <TurmaNova />,
+	},
+	{
+		path: '/turma/editar',
 		element: <TurmaNova />,
 	},
 	{

@@ -10,11 +10,11 @@ import { TurmasContainer,
 	TurmaActions 
 } from './styles';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import TurmaService from '../../services/TurmaService';
 import { Turma } from '../../types/Turma';
-
+import { AuthContext } from '../../contexts/auth';
 
 
 function Turmas() {
@@ -22,26 +22,49 @@ function Turmas() {
 	const [searchText, setSearchText] = useState('');
 	const [turmas, setTurmas] = useState<Array<Turma>>([]);
 	const [turmasProfessor, setTurmasProfessor] = useState<Array<Turma>>([]);
-	
+	const [turmaDeletadaId, setTurmaDeletadaId] = useState<number>();
+
 	const navigate = useNavigate();
+	const { user } = useContext(AuthContext);
+	
+	
+
 	const turmasFiltradas = turmas.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 	const turmasProfessorFiltradas = turmasProfessor.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 
 
 	useEffect(() => {
 		async function initializeData() {
-			const { data } = await TurmaService.findByUsuario(1);
-			setTurmas(data);
+
+			const { data } = await TurmaService.findByUsuario(user.id);
+			
+			setTurmas(data.aluno);
+			setTurmasProfessor(data.professor);
 		}
 
 		initializeData();
 	}, []);
 
 	function handleCriarTurma() {
-		navigate('nova');
+		navigate('nova', {
+			state: {
+				actionType: 'CREATE',
+				turma: {}
+			}
+		});
 	}
 
-	function showModal() {
+	function handleEditarTurma(actionType: string, turma: Turma) {
+		navigate('editar', {
+			state: {
+				actionType,
+				turmaAtual: turma
+			}
+		});
+	}
+
+	function showModal(turmaId?: number) {
+		setTurmaDeletadaId(turmaId);
 		setIsModalOpen(true);
 	}
 
@@ -49,10 +72,20 @@ function Turmas() {
 		setIsModalOpen(false);
 	}
 
-	function deleteTurma() {
-		// requisicao para apagar a turma
-		toast.info('Turma exlcuida com sucesso');
-		closeModal();
+	async function deleteTurma() {
+		try {
+			await TurmaService.delete(turmaDeletadaId!, user.id);
+		
+			const turmasAtuaisProfessor = turmasProfessor.filter(({ id }) => id !== turmaDeletadaId);
+
+			setTurmasProfessor(turmasAtuaisProfessor);
+
+			toast.info('Turma exlcuida com sucesso');
+		} catch (error) {
+			toast.info('Erro ao excluir turma');
+		} finally {
+			closeModal();
+		}
 	}
 
 
@@ -103,10 +136,10 @@ function Turmas() {
 								</TurmaInfo>
 
 								<TurmaActions>
-									<Button size='large' onClick={handleCriarTurma} >
+									<Button size='large' onClick={() => handleEditarTurma('UPDATE', turma)} >
 										<EditOutlined />
 									</Button>
-									<Button size='large' onClick={showModal}>
+									<Button size='large' onClick={() => showModal(turma.id)}>
 										<DeleteOutlined />
 									</Button>
 								</TurmaActions>

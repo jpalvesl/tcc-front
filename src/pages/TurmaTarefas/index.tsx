@@ -112,7 +112,7 @@ function TurmaTarefas() {
 
 	useEffect(() => {
 		async function loadTurma() {
-			const { data: turmasData } = await TurmaService.findById(Number(turma_id));
+			const { data: turmasData } = await TurmaService.findById(turma_id);
 			setTurma(turmasData);
 
 			const { data: roteirosData } = await TarefaService.findByAluno(1);
