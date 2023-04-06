@@ -8,6 +8,8 @@ import Login from './pages/Login/Index';
 import { EditarPerfil } from './pages/Perfil/Form/EditPerfil';
 import { AlterarSenha } from './pages/Perfil/Form/EditSenha';
 import Perfil from './pages/Perfil/Index';
+import { Problema } from './pages/Problema';
+import { Problemas } from './pages/Problemas';
 import Sobre from './pages/Sobre/Index';
 import { TurmaNova } from './pages/TurmaNova';
 import { Turmas } from './pages/Turmas';
@@ -69,6 +71,14 @@ export const Router = createBrowserRouter([
 	{
 		path: '/perfil/:id/password',
 		element: <AlterarSenha/>
+	},
+	{
+		path: '/problema/:id',
+		element: <Problema />
+	},
+	{
+		path: '/problema',
+		element: <Problemas />
 	}
 ]);
 
