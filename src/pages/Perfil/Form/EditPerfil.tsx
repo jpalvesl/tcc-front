@@ -8,6 +8,7 @@ import { NavBar } from '../../../components/NavBar';
 import UsuarioService from '../../../services/UsuarioService';
 import { Usuario } from '../../../types/Usuario';
 import { CampoForm, CampoImage, PerfilContainer } from './styles';
+import { toast } from 'react-toastify';
 
 
 
@@ -43,7 +44,6 @@ function EditarPerfil (){
 
 	async function findTask(id:number) {
 		const response = await UsuarioService.findById(id);
-		console.log('datat',response.data);
 		
 		setModel( {
 			id,
@@ -65,12 +65,15 @@ function EditarPerfil (){
 
 	
 	async function handleOnFinish(id: number){
-		console.log('id', id);
-		console.log('modelzin', model);
 		await UsuarioService.edit(id,model);
 		const resposta = await UsuarioService.findById(id);
 		
 		console.log(resposta);
+	}
+
+	function handleOnFinishFailed(id: number) {
+		toast.warning('Não foi possível criar usuário pois houve erro nos dados');
+		UsuarioService.edit(id,model).then(response => console.log(response));
 	}
 
 
@@ -94,7 +97,7 @@ function EditarPerfil (){
 							layout='vertical'
 							initialValues={model}
 							onFinish={()=> handleOnFinish(id)}
-							onFinishFailed={()=>console.log('aqui')}
+							onFinishFailed={handleOnFinish(id)}
 							
 						>
 							<Form.Item
@@ -124,6 +127,7 @@ function EditarPerfil (){
 									size='large'
 									value={model.nome}
 									name="nome"
+									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
 									
 								/>
 							</Form.Item>
@@ -146,6 +150,7 @@ function EditarPerfil (){
 							</Form.Item>
 
 							<Form.Item>
+								
 								<Button 
 									style={{float: 'right'}} 
 									size='large' type="primary" 
@@ -153,6 +158,13 @@ function EditarPerfil (){
 								>
 								Salvar
 								</Button>
+								<Link to={'/perfil'}>
+									<Button 
+										style={{float: 'right', marginRight: '5px'}} 
+										size='large' >
+								Cancelar
+									</Button></Link>
+								
 							</Form.Item>
 						</Form>}
 						

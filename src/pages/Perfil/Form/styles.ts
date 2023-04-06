@@ -72,7 +72,9 @@ export const CampoImage = styled.div`
 export const CampoForm = styled.div`
   
   width: 70%;
-  
+  a {
+    color: ${themes.default.blue['600']};
+  }
 
   
   

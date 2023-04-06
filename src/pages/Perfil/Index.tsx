@@ -1,17 +1,18 @@
 import { NavBar } from '../../components/NavBar';
-import { CabecalhoPerfil, CampoFoto, CampoInfo, ConteudoPerfil, PerfilContainer } from './styles';
+import { CabecalhoPerfil, CampoFoto, CampoInfo, ContainerTabs, ConteudoPerfil, PerfilContainer } from './styles';
 
 import { Usuario } from '../../types/Usuario';
 import { useEffect, useState } from 'react';
 
 
 import UsuarioService from '../../services/UsuarioService';
-import { Button, Divider, Tabs, TabsProps } from 'antd';
+import { Button, Divider, Tabs, TabsProps, Tag } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { Turma } from '../../types/Turma';
 import TurmaService from '../../services/TurmaService';
 import { useNavigate } from 'react-router-dom';
 import PhotoPerfil from '../../assets/icons/PhotoPerfil';
+import Table, { ColumnsType } from 'antd/es/table';
 
 
 
@@ -27,6 +28,37 @@ export default function Perfil(){
 
 	const [turmas, setTurmas] = useState<Array<Turma>>([]);
 
+	interface DataType {
+		key: string;
+		name: string;
+		age: number;
+		address: string;
+		tags: string[];
+	}
+
+	const columns: ColumnsType<DataType> = [
+		{
+			title: 'Dificuldade',
+			dataIndex: 'dificuldade',
+			key: 'dificuldade',
+			render: (text) => <a>{text}</a>,
+		},
+		{
+			title: 'Titulo',
+			dataIndex: 'titulo',
+			key: 'titulo',
+		},
+		{
+			title: 'Resolvido',
+			dataIndex: 'resolvido',
+			key: 'resolvido',
+		}
+	];
+
+	const data: DataType[] = [
+		
+	];
+
 
 	function editTask(id: number){
 		navigate(`/perfil/${id}`);
@@ -36,7 +68,7 @@ export default function Perfil(){
 		async function initializeData() {
 			const { data } = await TurmaService.findByUsuario(2);
 			
-			setTurmas(data);
+			setTurmas(data.aluno);
 			
 		}
 
@@ -62,17 +94,21 @@ export default function Perfil(){
 		
 		{
 			key: '1',
-			label: 'Status dos problemas',
-			children: 'Content of Tab Pane 1',
+			label: <p className='label-titulo'>Status dos problemas</p>,
+			children: <Table columns={columns} dataSource={data}/>
 		},
 		{
 			key: '2',
-			label: 'Turmas',
-			children:  turmas?.map((turma, idx) => (
+			label: <p className='label-titulo'>Turmas</p>,
+			children:  <p> <h3 className='titulo'>Minhas Turmas</h3><Divider/>{turmas?.map((turma, idx) => (
 				
-				<h3 className='turmasAluno' key={idx}>{turma.nomeTurma} - {turma.semestre}</h3>
+				<div key={turma.id}>
+					<p className='turmasAluno' key={idx}>{turma.nomeTurma} - {turma.semestre}</p>
+					<p className='instituicaoTitulo'>{turma.instituicaoTitulo}</p>
+				</div>
+				
 						
-			))
+			))}</p>
 			
 		}
 		
@@ -119,7 +155,8 @@ export default function Perfil(){
 
 				</CabecalhoPerfil>
 				<ConteudoPerfil>
-					<Tabs defaultActiveKey="1" items={items} onChange={onChange} size='large' style={{width: '1000px'}}/>
+					<ContainerTabs><Tabs defaultActiveKey="1" items={items} onChange={onChange} size='large' style={{width: '1000px'}}/>
+					</ContainerTabs>
 				</ConteudoPerfil>
 			</PerfilContainer>
 		</>

@@ -54,8 +54,21 @@ export const ConteudoPerfil = styled.div`
   
   justify-content: center;
 
-  h3.turmasAluno {
+  p.turmasAluno {
     font-size: 22px;
+  }
+
+  p.instituicaoTitulo{
+    font-size: 20px;
+  }
+
+  h3.titulo {
+    font-size: 24px;
+  }
+
+  p.label-titulo {
+    font-size: 24px;
+    color: ${themes.default.gray['500']};
   }
 
   
@@ -117,6 +130,26 @@ export const CampoInfo = styled.div`
     font-size: 20px;
 
   }
+  
+  
+
+`;
+
+export const ContainerTabs = styled.div`
+
+  div.ant-tabs-nav-wrap {
+    
+  }
+
+  div.ant-tabs-nav-list {
+    backgroud-color: pink;
+    margin:0 auto;
+  }
+
+  div.ant-tabs-ink-bar {
+    background: #000;
+  }
+  
   
   
 
