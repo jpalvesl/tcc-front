@@ -115,7 +115,12 @@ function TurmaTarefas() {
 			const { data: turmasData } = await TurmaService.findById(turma_id);
 			setTurma(turmasData);
 
-			const { data: roteirosData } = await TarefaService.findByAluno(1);
+			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+			console.log('user', user);
+
+			if (!user) return;
+
+			const { data: roteirosData } = await TarefaService.findByTurma(turma_id);
 			setRoteiros(roteirosData);
 		}
 
