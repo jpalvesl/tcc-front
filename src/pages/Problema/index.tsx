@@ -1,4 +1,6 @@
-import { Space, Tag, Tabs, Table } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Space, Tag, Tabs, Dropdown, MenuProps, Button } from 'antd';
+import { Link } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import { Descricao } from './Descricao';
@@ -30,6 +32,25 @@ const tags = [
 	},
 ];
 
+const itemsDropDown = [
+	{
+		key: '1',
+		label: (
+			<Link>
+        Problema
+			</Link>
+		),
+	},
+	{
+		key: '2',
+		label: (
+			<Link>
+        Casos de teste
+			</Link>
+		),
+	},
+];
+
 const items = [
 	{
 		key: '1',
@@ -47,8 +68,15 @@ const items = [
 		children: <Submissoes />,
 	},
 	{
-		key: '3',
-		label: 'Editar',
+		key: '4',
+		label: (
+			<Dropdown menu={{ items: itemsDropDown }}>
+				<Space>
+					Editar
+					<DownOutlined />
+				</Space>
+			</Dropdown>
+		),
 		children: <Editar />,
 	},
 ];
@@ -92,9 +120,6 @@ function Problema() {
 						onChange={onChange} 
 						style={{margin: 16, display: 'block'}}
 					/>
-
-					
-        
 				</HeaderContainer>
 			</ProblemaContainer>
 		</>

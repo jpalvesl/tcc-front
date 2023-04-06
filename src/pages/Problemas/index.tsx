@@ -1,4 +1,5 @@
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
+import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
 import { useState } from 'react';
 import { NavBar } from '../../components/NavBar';
@@ -24,6 +25,29 @@ const columns = [
 		title: 'Resolvido',
 		dataIndex: 'resolvido',
 		key: 'resolvido',
+	},
+];
+
+const dataSource = [
+	{
+		key: '1',
+		nome: 'Fibonacci',
+		autor: 'Henrique Cunha',
+		dificuldade: 2,
+		resolvido: <CheckCircle size={32} />
+	},
+	{
+		key: '1',
+		nome: 'Acidez de uma solução',
+		autor: 'Henrique Cunha',
+		dificuldade: 1,
+		resolvido: <XCircle size={32} />
+	},
+	{
+		key: '1',
+		nome: 'Fatorial',
+		autor: 'Jorge Luiz',
+		dificuldade: 1,
 	},
 ];
 
@@ -56,6 +80,7 @@ function Problemas() {
 				<Table 
 					style={{ margin: 16 }} 
 					columns={columns} 
+					dataSource={dataSource}
 					pagination={false}
 				/>
 			</ProblemasContainer>
