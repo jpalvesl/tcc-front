@@ -2,6 +2,7 @@ import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
 import { ProblemasContainer, SearchRow } from './styles';
 
@@ -54,6 +55,12 @@ const dataSource = [
 function Problemas() {
 	const [searchText, setSearchText] = useState('');
 
+	const navigate = useNavigate();
+
+	function handleAddNovoProblema() {
+		navigate('novo');
+	}
+
 	return (
 		<>
 			<NavBar />
@@ -67,7 +74,11 @@ function Problemas() {
 						onChange={(evt) => setSearchText(evt.target.value)}
 					/>
 
-					<Button size='large' style={{ width: '170px' }} onClick={() => {}} >
+					<Button 
+						size='large' 
+						style={{ width: '170px' }} 
+						onClick={handleAddNovoProblema} 
+					>
 						<PlusOutlined />
 						Novo Problema
 					</Button>

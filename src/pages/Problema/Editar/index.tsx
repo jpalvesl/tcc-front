@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 function Editar() {
@@ -7,7 +7,6 @@ function Editar() {
 			name="basic"
 			layout='vertical'
 			initialValues={{ remember: true }}
-			style={{ textAlign: 'right' }}
 			// onFinish={handleOnFinish}
 			// onFinishFailed={handleOnFinishFailed}
 			autoComplete="off"
@@ -26,17 +25,24 @@ function Editar() {
 				label='Fonte'
 				name='fonte'
 			>
+				<Input
+					size='large'
+				/>
+			</Form.Item>
+
+			<Form.Item
+				label='Tópicos'
+				name='topicos'
+			>
 				<Select
 					size='large'
 					options={[{ value: '1', label: 'String' }, { value: '2', label: 'Repetição' }]}
 				/>
 			</Form.Item>
 
-			{/* Adicionar checkbox */}
-
 			<Form.Item
-				label='Tópicos'
-				name='topicos'
+				label='Dificuldade'
+				name='dificuldade'
 			>
 				<Select
 					size='large'
@@ -69,6 +75,12 @@ function Editar() {
 				<TextArea
 					rows={5}
 				/>
+			</Form.Item>
+
+			<Form.Item>
+				<Checkbox onChange={(e) => {
+					console.log(`checked = ${e.target.checked}`);
+				}}>Problema de Prova</Checkbox>
 			</Form.Item>
 			
 

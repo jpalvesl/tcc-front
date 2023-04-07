@@ -1,6 +1,5 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Space, Tag, Tabs, Dropdown, MenuProps, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Space, Tag, Tabs, Dropdown } from 'antd';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import { Descricao } from './Descricao';
@@ -35,19 +34,11 @@ const tags = [
 const itemsDropDown = [
 	{
 		key: '1',
-		label: (
-			<Link>
-        Problema
-			</Link>
-		),
+		label: 'Problema',
 	},
 	{
 		key: '2',
-		label: (
-			<Link>
-        Casos de teste
-			</Link>
-		),
+		label: 'Casos de teste',
 	},
 ];
 

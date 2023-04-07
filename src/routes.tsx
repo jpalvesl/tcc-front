@@ -9,6 +9,8 @@ import { EditarPerfil } from './pages/Perfil/Form/EditPerfil';
 import { AlterarSenha } from './pages/Perfil/Form/EditSenha';
 import Perfil from './pages/Perfil/Index';
 import { Problema } from './pages/Problema';
+import { CasosDeTeste } from './pages/Problema/CasosDeTeste';
+import { ProblemaNovo } from './pages/ProblemaNovo';
 import { Problemas } from './pages/Problemas';
 import Sobre from './pages/Sobre/Index';
 import { TurmaNova } from './pages/TurmaNova';
@@ -79,6 +81,14 @@ export const Router = createBrowserRouter([
 	{
 		path: '/problema',
 		element: <Problemas />
-	}
+	},
+	{
+		path: '/problema/novo',
+		element: <ProblemaNovo />
+	},
+	{
+		path: '/problema/casos_de_teste',
+		element: <CasosDeTeste />
+	},
 ]);
 
