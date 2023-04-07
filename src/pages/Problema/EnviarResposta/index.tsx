@@ -4,8 +4,12 @@ import { useState } from 'react';
 
 function EnviarResposta() {
 	const [code, setCode] = useState(
-		'# adicione o seu codigo python aqui'
+		'# adicione o seu codigo python aqui\n'
 	);
+
+	function handleEnviaResposta() {
+		alert('Deve enviar a reposta corretamente para o backend');
+	}
 
 	return (
 		<div style={{
@@ -25,7 +29,12 @@ function EnviarResposta() {
 					marginBottom: 8,
 				}}
 			/>
-			<Button size='large'>Enviar Submissão</Button>
+			<Button 
+				size='large'
+				onClick={handleEnviaResposta}
+			>
+				Enviar Submissão
+			</Button>
 		</div>
 	);
 }
