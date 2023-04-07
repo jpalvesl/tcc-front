@@ -1,12 +1,23 @@
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
-import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { Button, Input, Table } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ColumnsType } from 'antd/es/table';
+import { ReactElement, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FailIcon } from '../../assets/icons/FailIcon';
 import { NavBar } from '../../components/NavBar';
+import ProblemaService from '../../services/ProblemaService';
+import { Problema } from '../../types/Problema';
 import { ProblemasContainer, SearchRow } from './styles';
 
-const columns = [
+interface TableProblemas {
+	key: string;
+	nome: string;
+	autor: string;
+	dificuldade: string;
+	resolvido: ReactElement;
+}
+
+const columns: ColumnsType<any> = [
 	{
 		title: 'Nome',
 		dataIndex: 'nome',
@@ -21,45 +32,55 @@ const columns = [
 		title: 'Dificuldade',
 		dataIndex: 'dificuldade',
 		key: 'dificuldade',
+		align: 'center'
 	},
 	{
 		title: 'Resolvido',
 		dataIndex: 'resolvido',
 		key: 'resolvido',
-	},
-];
-
-const dataSource = [
-	{
-		key: '1',
-		nome: 'Fibonacci',
-		autor: 'Henrique Cunha',
-		dificuldade: 2,
-		resolvido: <CheckCircle size={32} />
-	},
-	{
-		key: '1',
-		nome: 'Acidez de uma solução',
-		autor: 'Henrique Cunha',
-		dificuldade: 1,
-		resolvido: <XCircle size={32} />
-	},
-	{
-		key: '1',
-		nome: 'Fatorial',
-		autor: 'Jorge Luiz',
-		dificuldade: 1,
+		align: 'center'
 	},
 ];
 
 function Problemas() {
 	const [searchText, setSearchText] = useState('');
+	const [problemas, setProblemas] = useState<Problema[]>([]);
 
 	const navigate = useNavigate();
+
+
+	const problemasFiltradosToColumns = problemas
+		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
+		.map(problema => {
+			return {
+				...problema,
+				key: problema.id,
+				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+				nome: (
+					<Link 
+						to={`/problema/${problema.id}`}
+						style={{ fontWeight: 'bold' }}
+					>
+						{problema.nome}
+					</Link>
+				)
+			};
+
+		});
 
 	function handleAddNovoProblema() {
 		navigate('novo');
 	}
+
+	useEffect(() => {
+		async function buscaProblemas() {
+			const { data: problemasResponse } = await ProblemaService.findAll();
+
+			console.log(problemasResponse);
+			setProblemas(problemasResponse);
+		}
+		buscaProblemas();
+	}, []);
 
 	return (
 		<>
@@ -91,7 +112,7 @@ function Problemas() {
 				<Table 
 					style={{ margin: 16 }} 
 					columns={columns} 
-					dataSource={dataSource}
+					dataSource={problemasFiltradosToColumns}
 					pagination={false}
 				/>
 			</ProblemasContainer>

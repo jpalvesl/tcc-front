@@ -5,7 +5,7 @@ const localDefaultEndpoint = 'problema';
 class ProblemaService {
 	
 	findAll() {
-		return api.get(`${localDefaultEndpoint}/`);
+		return api.get(`${localDefaultEndpoint}`);
 	}
 
 	findById(problemaId: number) {

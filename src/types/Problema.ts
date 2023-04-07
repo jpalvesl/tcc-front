@@ -8,4 +8,5 @@ export interface Problema {
   textoSaida: string;
   criadorId: string;
   topicos: number[];
+  autor?: string;
 }
