@@ -1,5 +1,7 @@
 import { Table } from 'antd';
 import { Divider } from '../../../components/Divider';
+import { ICasosDeTeste } from '../../../types/CasosDeTeste';
+import { Problema } from '../../../types/Problema';
 import { Section } from './styles';
 
 const columns = [
@@ -15,29 +17,27 @@ const columns = [
 	},
 ];
 
-const dataCasosDeTeste = [
-	{
-		key: '1',
-		entrada: 5.66,
-		saida: 'Acida'
-	},
-	{
-		key: '2',
-		entrada: 7,
-		saida: 'Neutra'
-	},
-];
+interface DescricaoProps {
+	problema: Problema;
+	casosTeste: ICasosDeTeste[];
+}
 
-function Descricao() {
+function Descricao({ problema, casosTeste }: DescricaoProps) {
+	const casoFormatado = casosTeste.map(caso => {
+		const casoEmParagrafos = caso.entrada.split('\n').map(item => (<p key={item.id}>{item}</p>));
+
+		return {
+			...caso,
+			entrada: casoEmParagrafos, 
+		};
+	});
+
 	return (
 		<>
 			<Section>
 				<h1>Descrição</h1>
 				<p>
-              Escreva um programa que leia o valor do índice de acidez (pH) de uma solução e informe se ela é ácida, básica ou neutra. <br /><br />
-              A solução é ácida quando o pH é menor que 7 <br /><br />
-              A solução é básica quando o pH é maior que 7
-              Caso contrário a solução é neutra
+					{problema.descricao}
 				</p>
 			</Section>
 
@@ -46,7 +46,7 @@ function Descricao() {
 			<Section>
 				<h1>Entrada</h1>
 				<p>
-              O valor do pH (entre 1.0 e 14.0)
+					{problema.textoEntrada}
 				</p>
 			</Section>
 
@@ -55,9 +55,7 @@ function Descricao() {
 			<Section>
 				<h1>Saída</h1>
 				<p>
-              Caso a solução seja básica, escreva "Basica" na saída <br/><br/>
-              Caso a solução seja ácida, escreva "Acida" na saída <br/><br/>
-              Caso a solução seja neutra, escreva "Neutra" na saída
+					{problema.textoSaida}
 				</p>
 			</Section>
 
@@ -67,7 +65,7 @@ function Descricao() {
 				<h1>Casos de teste</h1>
 				<Table
 					columns={columns}
-					dataSource={dataCasosDeTeste}
+					dataSource={casoFormatado}
 					pagination={false}
 				/>
 			</Section>
