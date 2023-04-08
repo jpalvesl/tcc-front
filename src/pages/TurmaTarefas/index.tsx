@@ -1,14 +1,17 @@
 import { FilterOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Clipboard, Exam } from '@phosphor-icons/react';
-import { Button, Input, Table } from 'antd';
+import { Avatar, Button, Card, Col, Input, Row, Table } from 'antd';
+import Meta from 'antd/es/card/Meta';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import TarefaService from '../../services/TarefaService';
 import TurmaService from '../../services/TurmaService';
+import UsuarioService from '../../services/UsuarioService';
 import { Tarefa } from '../../types/Tarefa';
 import { Turma } from '../../types/Turma';
+import { Usuario } from '../../types/Usuario';
 import { TurmaTarefasContainer, 
 	DescriptionContainer, 
 	DescriptionLeft, 
@@ -104,7 +107,7 @@ function TurmaTarefas() {
 	const [roteiros, setRoteiros] = useState<Tarefa[]>([]);
 	const [provas, setProvas] = useState<Tarefa[]>([]);
 	const [showMembros, setShowMembros] = useState(false);
-	const [membros, setMembros] = useState([1, 2]);
+	const [membros, setMembros] = useState<Usuario[]>([]);
 
 	
 	const { turma_id } = useParams();
@@ -122,6 +125,9 @@ function TurmaTarefas() {
 
 			const { data: roteirosData } = await TarefaService.findByTurma(turma_id);
 			setRoteiros(roteirosData);
+
+			const { data: membrosData } = await UsuarioService.findByTurma(turma_id);
+			setMembros(membrosData);
 		}
 
 		loadTurma();
@@ -141,17 +147,21 @@ function TurmaTarefas() {
 							<span>Criado em: {turma?.dtAbertura} | Encerra em {turma?.dtEncerramento}</span>
 						</p>
 						<p>
-							<strong>Professor: </strong> Henrique do Nascimento Cunha
+							<strong>Professor: </strong> {turma?.professores.map((professor, idx) => professor)}
 						</p>
 					</DescriptionLeft>
 
 					<DescriptionRight>
 						<p>
-							<strong>Instituição: </strong> Instituto Federal da Paraíba
+							<strong>Instituição: </strong> {turma?.instituicaoTitulo}
 						</p>
-						<p>
-							<strong>Monitor: </strong> Allan Bispo
-						</p>
+						{turma?.monitores.length === 0
+							? null
+							: (
+								<p>
+									<strong>Monitor: </strong> {turma?.monitores.map((monitor, idx) => monitor)}
+								</p>)}
+						
 					</DescriptionRight>
 				</DescriptionContainer>
 
@@ -208,16 +218,27 @@ function TurmaTarefas() {
 
 					<MembrosSection>
 						<h2 onClick={() => setShowMembros(!showMembros)} style={{ cursor: 'pointer' }}>
-							{showMembros ? <PlusOutlined /> : <MinusOutlined />} Membros
+							{showMembros ? <MinusOutlined /> : <PlusOutlined />} Membros
 						</h2>
-						{showMembros 
-							? membros.map((membro, idx) => (
-								<div key={`${membro?.id}-${idx}`}>
-									<img src="" alt="" />
-									<span>Nome</span>
-								</div>
-							)) 
-							: null}
+						<Row gutter={[16, 16]}>
+							{showMembros 
+								? membros.map((membro, idx) => (
+									<Col 
+										key={`${membro?.id}-${idx}`}
+										span={6}
+									>
+										<Card
+											style={{ width: 300, marginTop: 16 }}
+										>
+											<Meta
+												avatar={<Avatar src={membro.imagemUrl} />}
+												title={membro.nome}
+											/>
+										</Card>
+									</Col>
+								)) 
+								: null}
+						</Row>
 					</MembrosSection>
 				</ContentContainer>
 
