@@ -3,7 +3,7 @@ import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Avatar, Button, Card, Col, Input, Row, Table } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import TarefaService from '../../services/TarefaService';
@@ -23,27 +23,6 @@ import { TurmaTarefasContainer,
 	MembrosSection,
 } from './styles';
 
-const dataSourceProvas = [
-	{
-		key: '1',
-		name: (
-			<div>
-				<Exam size={16}/> Prova 3 - Operações matemáticas
-			</div>),
-		pontuacao: '16/17',
-		prazo: '31/12/2022',
-	},
-	{
-		key: '2',
-		name: (
-			<div>
-				<Exam size={16}/> Prova 1 - Laço While
-			</div>),
-		pontuacao: '7/10',
-		prazo: '31/12/2022',
-	},
-];
-
 const columnsProvas = [
 	{
 		title: '',
@@ -59,28 +38,6 @@ const columnsProvas = [
 		title: 'Prazo',
 		dataIndex: 'prazo',
 		key: 'prazo',
-	},
-];
-
-
-const dataSourceRoteiros = [
-	{
-		key: '1',
-		name: (
-			<div>
-				<Clipboard size={16}/> Roteiro 5 - Funções
-			</div>),
-		pontuacao: '16/17',
-		prazo: '31/12/2022',
-	},
-	{
-		key: '2',
-		name: (
-			<div>
-				<Clipboard size={16}/> Roteiro 7 - Recursividade
-			</div>),
-		pontuacao: '7/10',
-		prazo: '31/12/2022',
 	},
 ];
 
@@ -103,6 +60,7 @@ const columnsRoteiros = [
 ];
 
 function TurmaTarefas() {
+	const [searchText, setSearchText] = useState('');
 	const [turma, setTurma] = useState<Turma>();
 	const [roteiros, setRoteiros] = useState<Tarefa[]>([]);
 	const [provas, setProvas] = useState<Tarefa[]>([]);
@@ -111,6 +69,29 @@ function TurmaTarefas() {
 
 	
 	const { turma_id } = useParams();
+
+	function tarefasToColumns(tarefas: Tarefa[]) {
+		return tarefas.map(tarefa => {
+			const dtEncerramentoFormatado = tarefa.dtEncerramento.replaceAll('-', '/');
+
+			return {
+				...tarefa,
+				key: tarefa.id,
+				name: (
+					<Link to={`/tarefa/${tarefa.id}`}>
+						{tarefa.ehProva 
+							? <Exam size={16}/> 
+							: <Clipboard size={16}/>} {tarefa.titulo}
+					</Link>),
+				pontuacao: `0/${tarefa.qtdProblemas}`,
+				prazo: dtEncerramentoFormatado
+			};
+		});
+	}
+
+	function buscaTarefas(tarefas: Tarefa[]) {
+		return tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(searchText.toLowerCase().trim()));
+	}
 	
 
 	useEffect(() => {
@@ -119,12 +100,13 @@ function TurmaTarefas() {
 			setTurma(turmasData);
 
 			const user = JSON.parse(localStorage.getItem('@Auth:user'));
-			console.log('user', user);
 
 			if (!user) return;
 
-			const { data: roteirosData } = await TarefaService.findByTurma(turma_id);
-			setRoteiros(roteirosData);
+			const { data: tarefasData } = await TarefaService.findByTurma(turma_id);
+			setRoteiros(tarefasData.roteiros);
+			setProvas(tarefasData.provas);
+			
 
 			const { data: membrosData } = await UsuarioService.findByTurma(turma_id);
 			setMembros(membrosData);
@@ -166,7 +148,12 @@ function TurmaTarefas() {
 				</DescriptionContainer>
 
 				<SearchRow>
-					<Input size='large' placeholder='Buscar tarefa' />
+					<Input 
+						size='large' 
+						placeholder='Buscar tarefa' 
+						value={searchText}
+						onChange={(evt => setSearchText(evt.target.value))}
+					/>
 
 					<Button size='large' >
 						<FilterOutlined />
@@ -179,14 +166,7 @@ function TurmaTarefas() {
 						<Table 
 							size='middle'
 							bordered
-							dataSource={provas.map((prova, idx) => (
-								{
-									key: idx,
-									name: 'Teste',
-									pontuacao: '1',
-									prazo: '10/10/2023'
-								}
-							))}
+							dataSource={tarefasToColumns(buscaTarefas(provas))}
 							columns={columnsProvas}
 							pagination={false}
 						/>
@@ -199,18 +179,7 @@ function TurmaTarefas() {
 						<Table
 							size='middle'
 							bordered
-							dataSource={roteiros.map((roteiro, idx) => (
-								{
-									key: idx,
-									name: (
-										<>
-											<Clipboard size={16} key={idx}/> {roteiro.descricao}
-										</>
-									),
-									pontuacao: 'x',
-									prazo: roteiro.dtEncerramento.replaceAll('-', '/')
-								}
-							))}
+							dataSource={tarefasToColumns(buscaTarefas(roteiros))}
 							columns={columnsRoteiros}
 							pagination={false}
 						/>
