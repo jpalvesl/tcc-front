@@ -75,7 +75,7 @@ export default function Login() {
 							name='senha'
 							rules={[{required: true, message: 'Por favor digite sua senha!'}]}
 						>
-							<Input size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} value={senha} onChange={(e) => [setSenha(e.target.value)]}/>
+							<Input type='password' size='large' style={{backgroundColor: `${themes.default.slate[200]}`}} value={senha} onChange={(e) => [setSenha(e.target.value)]}/>
 						</Form.Item>
 
                         

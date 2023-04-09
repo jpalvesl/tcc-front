@@ -7,4 +7,6 @@ export interface Turma {
   nomeTurma: string;
   instituicaoId?: number;
   instituicaoTitulo?: string;
+  professores: string[];
+  monitores: string[];
 }
