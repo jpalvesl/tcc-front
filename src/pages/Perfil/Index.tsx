@@ -77,7 +77,11 @@ export default function Perfil(){
 	
 	useEffect(() => {
 		async function loadUsuario() {
-			const { data } = await UsuarioService.findById(2);
+			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+
+			if (!user) return;
+
+			const { data } = await UsuarioService.findById(user.id);
 			setUsuario(data);
 			console.log(data);
 		}

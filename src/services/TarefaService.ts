@@ -7,7 +7,9 @@ class TurmaService {
 		return api.get(`${localDefaultEndpoint}/usuario/${usuarioId}`);
 	}
 
-	findByTurma() {}
+	findByTurma(turmaId: number) {
+		return api.get(`${localDefaultEndpoint}/turma/${turmaId}`);
+	}
 
 	add() {}
 

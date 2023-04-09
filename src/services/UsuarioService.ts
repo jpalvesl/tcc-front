@@ -13,7 +13,7 @@ class UsuarioService {
 	}
   
 	findByTurma(turmaId: number) {
-		return api.get(`${localDefaultEndpoint}/usuario/${turmaId}`);
+		return api.get(`${localDefaultEndpoint}/turma/${turmaId}`);
 
 	}
 
