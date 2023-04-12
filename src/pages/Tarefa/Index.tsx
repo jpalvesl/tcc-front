@@ -87,16 +87,11 @@ export default function TarefaProblemas() {
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
-		console.log('turma',data);
-		console.log('datat',response.data);
 	
 		
 	}
 
-	function editTask(id: number){
-		console.log('aqui ele entrou na função');
-		navigate(`/tarefas/nova/${id}`);
-	}
+
   
 
 	return(
@@ -129,14 +124,10 @@ export default function TarefaProblemas() {
 
 					<DescriptionRight>
 						<Link to={`/tarefas/nova/${id}`}>
-							<Button size='large' style={{float: 'right'	}} onClick={()=> console.log('cu')}>
+							<Button size='large' style={{float: 'right'	}} >
 								<EditOutlined />
 							</Button>
 						</Link>
-						{/* <Button size='large' style={{float: 'right'	}} onClick={() => console.log('cu')}>
-							<EditOutlined />
-						</Button> */}
-						{/* problema quando uso o navigate não sei pq */}
 						<p>
 							<strong>Status: </strong> Resolvida
 						</p>

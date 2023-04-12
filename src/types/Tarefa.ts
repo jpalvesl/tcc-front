@@ -5,7 +5,7 @@ export interface Tarefa {
   ehProva: boolean;
   descricao: string;
   titulo: string;
-  criadorId: string;
+  criadorId: number;
   turmaId: string;
   qtdProblemas: number;
 }

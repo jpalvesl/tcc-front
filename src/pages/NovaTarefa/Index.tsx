@@ -31,20 +31,19 @@ function TarefaNova() {
 	async function findTask(id:number) {
 		const {data} = await TarefaService.findById(id);
 		const dates = [data.dtEncerramento, data.dtAbertura];
-		console.log('dates',dates);
+		
 
 	
 		
 		setTitulo(data.titulo);
 		setDescricao(data.descricao);
 		setDatas(dates);
-		console.log(datas);
+		
 		
 		
 	}
 
 	async function handleOnFinish(criadorId: number) {
-		console.log(datas);
 		const tarefa: Tarefa = {
 
 			dtAbertura: datas[0],
@@ -54,14 +53,11 @@ function TarefaNova() {
 			criadorId: criadorId,
 			turmaId: '1',
 		};
-		console.log('tarefa',tarefa);
 		if (id !== undefined) {
 			TarefaService.edit(tarefa, criadorId);
-			console.log('editou');
 		}
 		else{
 			TarefaService.add(tarefa).then(() => toast('Tarefa Criada com sucesso.')).catch(() => toast('Erro ao criar tarefa'));
-			console.log('criou');
 
 		}
 	}
@@ -72,6 +68,7 @@ function TarefaNova() {
 			<TurmaNovaContainer>
 				<h1>Criar Tarefa</h1>
 				<Divider />
+				{datas.length > 0 && 
 				<Form 
 					layout='vertical'
 					onFinish={() => handleOnFinish(50003)}
@@ -92,13 +89,12 @@ function TarefaNova() {
 						/>
 					</Form.Item>
 					<Form.Item label="Datas">
-					
+						
 						<RangePicker 
 							defaultValue={[dayjs(datas[0],'YYYY-MM-DD'),dayjs(datas[1],'YYYY-MM-DD')]}
 							size='large'
 							locale={locale} 
 							onChange={(datas) => {
-								console.log('datinha',datas);
 								const datasFormatadas = datas?.map((dateDayJs) => dateDayJs?.toISOString().substring(0,10));								
 								setDatas(datasFormatadas);
 							}}
@@ -149,7 +145,7 @@ function TarefaNova() {
 					<Button size='large' style={{ width: '100%' }} htmlType='submit'>
           Criar Tarefa
 					</Button>
-				</Form>
+				</Form>}
 			</TurmaNovaContainer>
 		</>
 	);

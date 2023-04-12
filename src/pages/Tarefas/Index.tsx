@@ -1,33 +1,14 @@
 import { Button, Divider, Input, Table } from 'antd';
 import { NavBar } from '../../components/NavBar';
 import { ContentContainer, ProvasSection, RoteirosSection, SearchRow, TarefasContainer, TarefasTitle } from './styles';
-import { FilterOutlined, KeyOutlined, PlusOutlined } from '@ant-design/icons';
+import { FilterOutlined,  PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { Tarefa } from '../../types/Tarefa';
 import TarefaService from '../../services/TarefaService';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const dataSourceProvas = [
-	{
-		key: '1',
-		name: (
-			<div>
-				<Exam size={16}/> Prova 3 - Operações matemáticas
-			</div>),
-		pontuacao: '16/17',
-		prazo: '31/12/2022',
-	},
-	{
-		key: '2',
-		name: (
-			<div>
-				<Exam size={16}/> Prova 1 - Laço While
-			</div>),
-		pontuacao: '7/10',
-		prazo: '31/12/2022',
-	},
-];
+
 
 const columnsProvas = [
 	{
@@ -44,28 +25,6 @@ const columnsProvas = [
 		title: 'Prazo',
 		dataIndex: 'prazo',
 		key: 'prazo',
-	},
-];
-
-
-const dataSourceRoteiros = [
-	{
-		key: '1',
-		name: (
-			<div>
-				<Clipboard size={16}/> Roteiro 5 - Funções
-			</div>),
-		pontuacao: '16/17',
-		prazo: '31/12/2022',
-	},
-	{
-		key: '2',
-		name: (
-			<div>
-				<Clipboard size={16}/> Roteiro 7 - Recursividade
-			</div>),
-		pontuacao: '7/10',
-		prazo: '31/12/2022',
 	},
 ];
 
@@ -93,16 +52,46 @@ function Tarefas() {
 	const [roteiros, setRoteiros] = useState<Tarefa[]>([]);
 	const [provas, setProvas] = useState<Tarefa[]>([]);
 	const [searchText, setSearchText] = useState('');
-	const [tarefas, setTarefas] = useState<Array<Tarefa>>([]);
 	const navigate = useNavigate();
+
+	function tarefasToColumns(tarefas: Tarefa[]) {
+		return tarefas.map(tarefa => {
+			const dtEncerramentoFormatado = tarefa.dtEncerramento.replaceAll('-', '/');
+
+			return {
+				...tarefa,
+				key: tarefa.id,
+				name: (
+					<Link to={`/tarefa/${tarefa.id}`}>
+						{tarefa.ehProva 
+							? <Exam size={16}/> 
+							: <Clipboard size={16}/>} {tarefa.titulo}
+					</Link>),
+				pontuacao: `0/${tarefa.qtdProblemas}`, 
+				prazo: dtEncerramentoFormatado
+			};
+		});
+	}
+
+	function buscaTarefas(tarefas: Tarefa[]) {
+		return tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(searchText.toLowerCase().trim()));
+	}
 	
-	const tarefasFiltradas = tarefas.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 
 	useEffect(() => {
 		async function loadTarefas() {
 
-			const { data: roteirosData } = await TarefaService.findByAluno(199952);
-			setRoteiros(roteirosData);
+			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+			console.log('user', user);
+			if (!user) return;
+
+
+
+			const { data: tarefasData } = await TarefaService.findByAluno(user.id);
+			console.log('data',tarefasData);
+			setRoteiros(tarefasData.roteiros);
+			setProvas(tarefasData.provas);
+			
 		}
 
 		loadTarefas();
@@ -122,7 +111,12 @@ function Tarefas() {
 				<Divider />
 
 				<SearchRow>
-					<Input size='large' placeholder='Buscar tarefa' />
+					<Input 
+						size='large' 
+						placeholder='Buscar tarefa' 
+						value={searchText}
+						onChange={(evt => setSearchText(evt.target.value))}
+					/>
 					<Button size='large' style={{ width: '150px' }} onClick={handleCriarTarefa} >
 						<PlusOutlined />
 						Nova Tarefa
@@ -138,17 +132,11 @@ function Tarefas() {
 						<Table 
 							size='middle'
 							bordered
-							dataSource={provas.map((prova, idx) => (
-								{
-									key: idx,
-									name: 'Teste',
-									pontuacao: '1',
-									prazo: '10/10/2023'
-								}
-							))}
+							dataSource={tarefasToColumns(buscaTarefas(provas))}
 							columns={columnsProvas}
 							pagination={false}
 						/>
+						
 					</ProvasSection>
 
 					<Divider />
@@ -158,21 +146,11 @@ function Tarefas() {
 						<Table
 							size='middle'
 							bordered
-							dataSource={roteiros.map((roteiro, idx) => (
-								{
-									key: idx,
-									name: (
-										<>
-											<Clipboard size={16} key={idx}/> <Link to={`/tarefa/${roteiro.id}`}>{roteiro.descricao}</Link>
-										</>
-									),
-									pontuacao: 'x',
-									prazo: roteiro.dtEncerramento.replaceAll('-', '/')
-								}
-							))}
+							dataSource={tarefasToColumns(buscaTarefas(roteiros))}
 							columns={columnsRoteiros}
 							pagination={false}
 						/>
+						
 					</RoteirosSection>
 
 					

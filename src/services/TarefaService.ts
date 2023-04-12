@@ -11,9 +11,17 @@ class TurmaService {
 		return api.get(`${localDefaultEndpoint}/turma/${turmaId}`);
 	}
 
-	add() {}
+	findById(tarefaId: number) {
+		return api.get(`${localDefaultEndpoint}/${tarefaId}`);
+	}
 
-	edit() {}
+	add(payload: Tarefa) {
+		return api.post(`${localDefaultEndpoint}`, payload);
+	}
+
+	edit(payload: Tarefa, criadorId: number) {
+		return api.patch(`${localDefaultEndpoint}/usuario/${criadorId}`, payload);
+	}
 
 	delete() {}
   
