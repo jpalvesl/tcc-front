@@ -35,8 +35,8 @@ class TurmaService {
 		return api.delete(`${localDefaultEndpoint}/${turmaId}/professor/${professorId}/professor_adicionado/${professorAdicionadoId}`);
 	}
 
-	edit(turmaId: number, usuarioId: number, payload: Turma) {
-		return api.patch(`${localDefaultEndpoint}/${turmaId}/usuario/${usuarioId}`, payload);
+	edit(usuarioId: number, payload: Turma) {
+		return api.patch(`${localDefaultEndpoint}/usuario/${usuarioId}`, payload);
 	}
 
 	delete(turmaId: number, usuarioId: number) {

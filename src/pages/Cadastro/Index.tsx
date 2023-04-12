@@ -4,21 +4,10 @@ import { NavBar } from '../../components/NavBar';
 import { ActionsRegistro, CadastroContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerRegistro } from './styles';
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
-import api from '../../services/api';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import UsuarioService from '../../services/UsuarioService';
-
-interface Usuario {
-	id?: number;
-	ehAdm?: boolean;
-	ehProfessor?: boolean;
-	email: string;
-	nome: string;
-	usuario: string;
-	senha: string;
-	instituicaoAtualId?: number;
-}
+import { Usuario } from '../../types/Usuario';
 
 export default function Cadastro() {
 	const [email, setEmail] = useState('');
@@ -32,7 +21,7 @@ export default function Cadastro() {
 
 	function handleOnFinish() {
 		if (senha !== confirmacaoSenha) {
-			console.log('Senha errada');
+			toast.warning('As senhas informadas não estão iguais');
 			return;
 		} 
 		
@@ -44,7 +33,7 @@ export default function Cadastro() {
 			instituicaoAtualId,
 		};
 
-		api.post('/usuario', usuarioPayload)
+		UsuarioService.cadastrar(usuarioPayload)
 			.then(response => {
 				if (response.status === 201) {
 					toast.success('Usuário criado com sucesso');
@@ -58,7 +47,6 @@ export default function Cadastro() {
 
 	function handleOnFinishFailed() {
 		toast.warning('Não foi possível criar usuário pois houve erro nos dados');
-		UsuarioService.findByInstituicao(1).then(response => console.log(response));
 	}
 
 	return (
@@ -83,7 +71,6 @@ export default function Cadastro() {
 					<Form
 						name="basic"
 						layout='vertical'
-						initialValues={{ remember: true }}
 						onFinish={handleOnFinish}
 						onFinishFailed={handleOnFinishFailed}
 						autoComplete="off"

@@ -5,6 +5,7 @@ export interface Usuario {
 	email: string;
 	nome: string;
 	usuario: string;
-	senha: string;
+	senha?: string;
 	instituicaoAtualId?: number;
+	imagemUrl: string;
 }
