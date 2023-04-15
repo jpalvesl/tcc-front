@@ -9,4 +9,5 @@ export interface Problema {
   criadorId: string;
   topicos: number[];
   autor?: string;
+  problemaDeProva: boolean;
 }

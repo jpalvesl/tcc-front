@@ -54,13 +54,6 @@ const itemsDropDown = [
 	},
 ];
 
-
-const onChange = (key: string) => {
-	console.log(key);
-};
-
-
-
 function Problema() {
 	const [problema, setProblema] = useState<IProblema>({} as IProblema);
 	const [casosTeste, setCasosTeste] = useState([]);
@@ -151,8 +144,8 @@ function Problema() {
 							centered
 							defaultActiveKey="1" 
 							items={items} 
-							onChange={onChange} 
 							style={{margin: 16, display: 'block'}}
+							destroyInactiveTabPane={true}
 						/>
 					</HeaderContainer>
 				)}
