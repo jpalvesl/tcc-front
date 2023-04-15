@@ -46,8 +46,8 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 		.map((submissao: ISubmissaoResponse) => ({
 			...submissao,
 			key: submissao.id,
-			tempo_execucao: submissao.tempoMedio,
-			linguagem: 'Python',
+			tempo_execucao: `${(submissao.tempoMedio * 1000).toFixed(2)} ms`,
+			linguagem: submissao.linguagem,
 			avaliacao: submissao.status === 'ok'
 				? <CorrectIcon size={32} />
 				: <FailIcon size={32} />,

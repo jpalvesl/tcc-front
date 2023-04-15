@@ -10,4 +10,5 @@ export interface ISubmissaoResponse {
   status: string;
   data: string;
   tempoMedio: string;
+  linguagem: string;
 }
