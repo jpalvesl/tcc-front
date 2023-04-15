@@ -9,10 +9,10 @@ export interface Turma {
   instituicaoTitulo?: string;
   professores: {
     id: number;
-    nome: string;
+    nome?: string;
   }[];
   monitores: {
     id: number;
-    nome: string;
+    nome?: string;
   }[];
 }
