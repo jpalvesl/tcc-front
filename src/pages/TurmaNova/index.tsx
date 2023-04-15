@@ -12,6 +12,10 @@ import { Turma } from '../../types/Turma';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
+import UsuarioService from '../../services/UsuarioService';
+import InstituicaoService from '../../services/InstituicaoService';
+import { Instituicao } from '../../types/Instituicao';
+import { Usuario } from '../../types/Usuario';
 
 const { RangePicker } = DatePicker;
 
@@ -20,63 +24,118 @@ interface TurmaNovaState {
 	turmaAtual?: Turma;
 }
 
+interface TurmaState {
+	nome: string;
+	semestre: string;
+	instituicao: number;
+	professores: [];
+	monitores: [];
+	datas: [never, never];
+}
+
 dayjs.extend(customParseFormat);
 
 
 
 function TurmaNova() {
+	const [turma, setTurma] = useState<Turma>({} as Turma);
+
 	const [nome, setNome] = useState('');
 	const [semestre, setSemestre] = useState('');
-	const [instituicao, setInstituicao] = useState('');
-	const [professor, setProfessor] = useState([]);
+	const [instituicao, setInstituicao] = useState(0);
+	const [professores, setProfessores] = useState([]);
 	const [monitores, setMonitores] = useState([]);
-	const [datas, setDatas] = useState([]);
+	const [datas, setDatas] = useState<[never, never]>([]);
+
+	const [professoresOptions, setProfessoresOptions] = useState([]);
+	const [monitoresOptions, setMonitoresOptions] = useState([]);
+	const [instituicoesOptions, setInstituicoesOptions] = useState([]);
 
 	const navigate = useNavigate();
 	const { state } = useLocation();
 	
 	const { actionType, turmaAtual } = state as TurmaNovaState;
 	const { user } = useContext(AuthContext);
-	console.log(actionType, turmaAtual);
 	
 
+	useEffect(() => {
+		async function loadInstituicoes() {
+			const { data } = await InstituicaoService.findAll();
+
+			const dadosFormatados = data.map((instituicao: Instituicao) => ({
+				value: instituicao.id,
+				label: `${instituicao.nome} - ${instituicao.campus}`
+			}));
+			
+			setInstituicoesOptions(dadosFormatados);
+
+			loadProfessoresEAlunos(user.instituicaoAtualId);
+			// setTurma({
+			// 	...turmaAtual,
+			// 	instituicaoId: user.instituicaoAtualId
+			// });
+		}
+
+		loadInstituicoes();
+	}, []);
+
 	const formataData = () => {
-		const dtAbertura = dayjs(turmaAtual?.dtAbertura, 'YYYY-MM-DD');
-		const dtEncerramento = dayjs(turmaAtual?.dtEncerramento, 'YYYY-MM-DD');
+		const dtAbertura = dayjs(turmaAtual?.dtAbertura);
+		const dtEncerramento = dayjs(turmaAtual?.dtEncerramento);
 
 		return [dtAbertura, dtEncerramento];
 	};
-
-	console.log(formataData());
-	
 	
 
-	useEffect(() => {}, []);
-
-	async function handleOnFinish(criadorId: number) {
-		const turma: Turma = {
-			...turmaAtual,
-			nomeTurma: nome,
-			semestre: semestre,
-			dtAbertura: datas[0],
-			dtEncerramento: datas[1],
-			instituicaoId: 1, 
-		};
+	async function loadProfessoresEAlunos(instituicaoId: number) {
+		const { data } = await UsuarioService.findAlunoByInstituicao(instituicaoId);
 		
+		setMonitoresOptions(data.map((aluno: Usuario) => ({
+			value: aluno.id,
+			label: aluno.nome
+		})));
+		
+		const { data: data2 } = await UsuarioService.findProfessorByInstituicao(instituicaoId);
+		
+		setProfessoresOptions(data2
+			.filter(professor => professor.id !== user.id)
+			.map((professor: Usuario) => ({
+				value: professor.id,
+				label: professor.nome
+			})));
+	}
+
+	function handleChangeInstituicao(instituicaoId: number) {
+		setInstituicao(instituicaoId);
+		
+
+		loadProfessoresEAlunos(instituicaoId);
+	}
+
+	function handleChangeProfessores(professores) {
+		setProfessores(professores);
+	}
+	
+	function handleChangeMonitores(alunos) {
+		setMonitores(alunos);
+	}
+	
+	
+	async function handleOnFinish(criadorId: number) {
 		if (actionType === 'CREATE'){
 			TurmaService.add(criadorId, turma)
 				.then(() => {
 					toast('Turma Criada com sucesso.');
 					navigate('/turma');
 				})
-				.catch(() => toast('Erro ao criar conta'));
+				.catch((err) => toast(`Erro ao criar Turma\n${err.response.data.message}`));
 		} else {
 			TurmaService.edit(criadorId, turma)
 				.then(() => {
 					toast('Turma Criada com sucesso.');
 					navigate('/turma');
 				})
-				.catch(() => toast('Erro ao criar conta'));
+				.catch(() => toast('Erro ao criar Turma'));
 		}
 		
 	}
@@ -92,8 +151,16 @@ function TurmaNova() {
 					initialValues={{
 						...turmaAtual,
 						nome: turmaAtual?.nomeTurma,
-						instituicao: turmaAtual?.instituicaoId,
-						// datas: formataData()
+						instituicao: user.instituicaoAtualId,
+						datas: formataData(),
+						professores: turmaAtual?.professores.map(professor => ({
+							value: professor.id,
+							label: professor.nome
+						})),
+						monitores: turmaAtual?.monitores.map(monitor => ({
+							label: monitor.nome,
+							value: monitor.id
+						})),
 					}}
 					onFinish={() => handleOnFinish(user.id)}
 				>
@@ -125,27 +192,38 @@ function TurmaNova() {
 					>
 						<Select
 							size='large'
+							// disabled
 							value={instituicao}
-							onChange={(value) => setInstituicao(value)}
-							options={[{ value: 'ifpb-cg', label: 'IFPB - Campina Grande' }, { value: 'ifpb-es', label: 'IFPB - Esperança' }]}
+							onChange={(value) => handleChangeInstituicao(value)}
+							options={instituicoesOptions}
 						/>
 					</Form.Item>
 
-					<Form.Item label="Professores">
+					<Form.Item 
+						label="Professores"
+						name='professores'
+					>
 						<Select
 							size='large'
-							value={professor}
-							onChange={(value) => setProfessor(value)}							
-							options={[{ value: '1', label: 'Henrique Cunha' }, { value: '2', label: 'Iana' }]}
+							mode='multiple'
+							allowClear
+							value={professores}
+							onChange={(value) => handleChangeProfessores(value)}							
+							options={professoresOptions}
 						/>
 					</Form.Item>
 
-					<Form.Item label="Monitores">
+					<Form.Item 
+						label="Monitores" 
+						name='monitores'
+					>
 						<Select
 							size='large'
-							// value={professor}
-							// onChange={(value) => setProfessor(value)}							
-							options={[{ value: '1', label: 'João Pedro' }, { value: '2', label: 'Myrlla Lucas' }]}
+							mode='multiple'
+							allowClear
+							value={monitores}
+							onChange={(value) => handleChangeMonitores(value)}							
+							options={monitoresOptions}
 						/>
 					</Form.Item>
 
@@ -157,8 +235,8 @@ function TurmaNova() {
 							<RangePicker 
 								size='large'
 								locale={locale}
+								value={datas}
 								onChange={(datas) => {
-									console.log(datas);
 									const datasFormatadas = datas?.map((dateDayJs) => {
 										
 										return dateDayJs?.toISOString().substring(0,10);
