@@ -10,4 +10,6 @@ export interface Problema {
   topicos: number[];
   autor?: string;
   problemaDeProva: boolean;
+  tempoLimite: number;
+  limiteDeMemoria: number;
 }
