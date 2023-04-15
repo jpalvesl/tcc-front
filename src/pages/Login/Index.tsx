@@ -20,9 +20,8 @@ export default function Login() {
 
 	const handleSubmit = async () => {
 		const data = {
-			email,
-			senha,
-			
+			usernameOrEmail: email,
+			password: senha,
 		};
 		console.log('datinha',data);
 		await signIn(data);
