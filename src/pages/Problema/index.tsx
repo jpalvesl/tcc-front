@@ -6,6 +6,7 @@ import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import CasosDeTesteService from '../../services/CasosDeTesteService';
 import ProblemaService from '../../services/ProblemaService';
+import { ICasosDeTeste } from '../../types/CasosDeTeste';
 import { Problema as IProblema } from '../../types/Problema';
 import { Descricao } from './Descricao';
 import { Editar } from './Editar';
@@ -20,6 +21,12 @@ import { CriadorContainer,
 	ProblemaWrapper
 } from './styles';
 import { Submissoes } from './Submissao';
+
+export interface ProblemaTabProps {
+	problemaId?: number;
+	problema?: IProblema;
+	casosTeste?: ICasosDeTeste[];
+}
 
 const tags = [
 	{
@@ -60,6 +67,7 @@ function Problema() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const { id } = useParams();
+	const numericId = Number(id);
 
 	const items = [
 		{
@@ -70,12 +78,12 @@ function Problema() {
 		{
 			key: '2',
 			label: 'Enviar Resposta',
-			children: <EnviarResposta problemaId={id} />,
+			children: <EnviarResposta problemaId={numericId} />,
 		},
 		{
 			key: '3',
 			label: 'Submissões',
-			children: <Submissoes problemaId={id} />,
+			children: <Submissoes problemaId={numericId} />,
 		},
 		{
 			key: '4',
@@ -87,24 +95,23 @@ function Problema() {
 					</Space>
 				</Dropdown>
 			),
-			children: <Editar />,
+			children: <Editar problema={problema} />,
 		},
 	];
 	
 
 	useEffect(() => {
 		async function loadProblema() {
-			const numberId = Number(id);
-			if (Number.isNaN(numberId)) {
+			if (Number.isNaN(numericId)) {
 				alert('O id passado não é um número');
 				return;
 			}
 
 
-			const { data: problema } = await ProblemaService.findById(numberId);
+			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
-			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numberId);
+			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
 			
 			setIsLoading(false);

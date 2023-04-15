@@ -1,7 +1,8 @@
 import { Button, Checkbox, Form, Input, Select } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { ProblemaTabProps } from '..';
 
-function Editar() {
+function Editar({ problema }: ProblemaTabProps) {
 	return (
 		<Form
 			name="basic"

@@ -1,14 +1,11 @@
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Button } from 'antd';
 import { useState } from 'react';
+import { ProblemaTabProps } from '..';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoRequest } from '../../../types/Submissao';
 
-interface EnviarRepostaProps {
-	problemaId: number;
-}
-
-function EnviarResposta({ problemaId }: EnviarRepostaProps) {
+function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	const [code, setCode] = useState(
 		'# adicione o seu codigo python aqui\n'
 	);

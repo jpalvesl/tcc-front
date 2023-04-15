@@ -1,5 +1,6 @@
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
+import { ProblemaTabProps } from '../';
 import { CorrectIcon } from '../../../assets/icons/CorrectIcon';
 import { FailIcon } from '../../../assets/icons/FailIcon';
 import { VisualizeIcon } from '../../../assets/icons/VisualizeIcon';
@@ -36,11 +37,7 @@ const columns = [
 	},
 ];
 
-interface SubmissoesProps {
-	problemaId: number;
-}
-
-function Submissoes({ problemaId }: SubmissoesProps) {
+function Submissoes({ problemaId }: ProblemaTabProps) {
 	const [submissoesProblemaAluno, setSubmissoesProblemaAluno] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));

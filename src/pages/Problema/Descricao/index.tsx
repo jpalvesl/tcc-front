@@ -1,7 +1,6 @@
 import { Table } from 'antd';
+import { ProblemaTabProps } from '..';
 import { Divider } from '../../../components/Divider';
-import { ICasosDeTeste } from '../../../types/CasosDeTeste';
-import { Problema } from '../../../types/Problema';
 import { Section } from './styles';
 
 const columns = [
@@ -17,14 +16,9 @@ const columns = [
 	},
 ];
 
-interface DescricaoProps {
-	problema: Problema;
-	casosTeste: ICasosDeTeste[];
-}
-
-function Descricao({ problema, casosTeste }: DescricaoProps) {
-	const casoFormatado = casosTeste.map(caso => {
-		const casoEmParagrafos = caso.entrada.split('\n').map(item => (<p key={item.id}>{item}</p>));
+function Descricao({ problema, casosTeste }: ProblemaTabProps) {
+	const casoFormatado = casosTeste?.map(caso => {
+		const casoEmParagrafos = caso.entrada.split('\n').map((item, idx) => (<p key={`item-${idx}`}>{item}</p>));
 
 		return {
 			...caso,
@@ -37,7 +31,7 @@ function Descricao({ problema, casosTeste }: DescricaoProps) {
 			<Section>
 				<h1>Descrição</h1>
 				<p>
-					{problema.descricao}
+					{problema?.descricao}
 				</p>
 			</Section>
 
@@ -46,7 +40,7 @@ function Descricao({ problema, casosTeste }: DescricaoProps) {
 			<Section>
 				<h1>Entrada</h1>
 				<p>
-					{problema.textoEntrada}
+					{problema?.textoEntrada}
 				</p>
 			</Section>
 
@@ -55,7 +49,7 @@ function Descricao({ problema, casosTeste }: DescricaoProps) {
 			<Section>
 				<h1>Saída</h1>
 				<p>
-					{problema.textoSaida}
+					{problema?.textoSaida}
 				</p>
 			</Section>
 
