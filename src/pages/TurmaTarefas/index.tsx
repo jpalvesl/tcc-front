@@ -129,7 +129,7 @@ function TurmaTarefas() {
 							<span>Criado em: {turma?.dtAbertura} | Encerra em {turma?.dtEncerramento}</span>
 						</p>
 						<p>
-							<strong>Professor: </strong> {turma?.professores.map((professor, idx) => professor)}
+							<strong>Professor: </strong> {turma?.professores.map((professor, idx) => <p>{professor.nome}</p>)}
 						</p>
 					</DescriptionLeft>
 
@@ -141,7 +141,7 @@ function TurmaTarefas() {
 							? null
 							: (
 								<p>
-									<strong>Monitor: </strong> {turma?.monitores.map((monitor, idx) => monitor)}
+									<strong>Monitor: </strong> {turma?.monitores.map((monitor, idx) => <p>{monitor.nome}</p> )}
 								</p>)}
 						
 					</DescriptionRight>
