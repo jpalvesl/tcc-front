@@ -70,12 +70,12 @@ function Problema() {
 		{
 			key: '2',
 			label: 'Enviar Resposta',
-			children: <EnviarResposta />,
+			children: <EnviarResposta problemaId={id} />,
 		},
 		{
 			key: '3',
 			label: 'Submissões',
-			children: <Submissoes />,
+			children: <Submissoes problemaId={id} />,
 		},
 		{
 			key: '4',

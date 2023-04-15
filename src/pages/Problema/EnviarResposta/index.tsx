@@ -1,14 +1,26 @@
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Button } from 'antd';
 import { useState } from 'react';
+import SubmissaoService from '../../../services/SubmissaoService';
+import { ISubmissaoRequest } from '../../../types/Submissao';
 
-function EnviarResposta() {
+interface EnviarRepostaProps {
+	problemaId: number;
+}
+
+function EnviarResposta({ problemaId }: EnviarRepostaProps) {
 	const [code, setCode] = useState(
 		'# adicione o seu codigo python aqui\n'
 	);
 
-	function handleEnviaResposta() {
-		alert('Deve enviar a reposta corretamente para o backend');
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+
+	async function handleEnviaResposta() {
+		await SubmissaoService.realizaSubmissao(user.id, problemaId, {
+			codigoResposta: code
+		} as ISubmissaoRequest)
+			.then(() => alert('Realizou a submissao'))
+			.catch(() => alert('Ocorreu um erro na submissao'));
 	}
 
 	return (
