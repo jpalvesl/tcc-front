@@ -82,13 +82,11 @@ function Tarefas() {
 		async function loadTarefas() {
 
 			const user = JSON.parse(localStorage.getItem('@Auth:user'));
-			console.log('user', user);
 			if (!user) return;
 
 
 
 			const { data: tarefasData } = await TarefaService.findByAluno(user.id);
-			console.log('data',tarefasData);
 			setRoteiros(tarefasData.roteiros);
 			setProvas(tarefasData.provas);
 			

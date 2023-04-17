@@ -23,9 +23,13 @@ class TurmaService {
 		return api.patch(`${localDefaultEndpoint}/usuario/${criadorId}`, payload);
 	}
 
-	delete() {}
+	delete(id: number, usuarioId: number) {
+		return api.delete(`${localDefaultEndpoint}/${id}/usuario/${usuarioId}`);
+	}
   
-	addProblemaEmTarefa() {}
+	addProblemaEmTarefa(problemaId: number, id: number, usuarioId: number) {
+		return api.post(`${localDefaultEndpoint}/${id}/problema/${problemaId}/usuario/${usuarioId}`);
+	}
 
 }
 

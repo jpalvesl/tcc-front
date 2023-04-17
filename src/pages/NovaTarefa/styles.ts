@@ -20,5 +20,37 @@ export const TurmaNovaContainer = styled.div`
 `;
 
 export const ListaProblemas = styled.div`
+
+  margin-top: 10px;
+  
+`;
+
+export const ProblemaRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+  
+  margin-bottom: 24px;
+`;
+
+export const ProblemaInfo = styled.div`
+  p {
+    margin-bottom: 8px;
+  }
+`;
+
+export const ProblemaActions = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+export const ProblemasAdicionados = styled.div`
+  height: calc(90px);
+  overflow-y: scroll;
+  p {
+    
+  }
   
 `;

@@ -6,6 +6,6 @@ export interface Tarefa {
   descricao: string;
   titulo: string;
   criadorId: number;
-  turmaId: string;
+  turmaId: number;
   qtdProblemas: number;
 }

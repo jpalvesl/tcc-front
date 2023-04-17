@@ -106,8 +106,8 @@ export const Router = createBrowserRouter([
 		element: <TarefaNova/>
 	},
 	{
-		path: '/tarefas/nova/:id',
-		element: <TarefaNova/>
-	}
+		path: '/tarefa/:id/editar',
+		element: <TarefaNova />,
+	},
 ]);
 

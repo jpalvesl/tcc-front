@@ -16,35 +16,35 @@ import { Turma } from '../../types/Turma';
 import TurmaService from '../../services/TurmaService';
 import { Button, Input, Table } from 'antd';
 import { CheckCircleOutlined, CloseCircleFilled, EditOutlined, FilterOutlined } from '@ant-design/icons';
+import { ColumnsType } from 'antd/es/table';
+import ProblemaService from '../../services/ProblemaService';
+import { Problema } from '../../types/Problema';
+import { FailIcon } from '../../assets/icons/FailIcon';
 
 
-
-const columnsProblemas = [
+const columns: ColumnsType<any> = [
 	{
-		title: 'Problema',
-		dataIndex: 'problema',
-		key: 'problema',
+		title: 'Nome',
+		dataIndex: 'nome',
+		key: 'nome',
+	},
+	{
+		title: 'Autor',
+		dataIndex: 'autor',
+		key: 'autor',
 	},
 	{
 		title: 'Dificuldade',
 		dataIndex: 'dificuldade',
 		key: 'dificuldade',
+		align: 'center'
 	},
 	{
-		title: 'Pontuação',
-		dataIndex: 'pontuacao',
-		key: 'pontuacao',
+		title: 'Resolvido',
+		dataIndex: 'resolvido',
+		key: 'resolvido',
+		align: 'center'
 	},
-	{
-		title: 'Submissões',
-		dataIndex: 'submissoes',
-		key: 'submissoes',
-	},
-	{
-		title: 'Status',
-		dataIndex: 'status',
-		key: 'status',
-	}
 ];
 
 const dataSourceProblemas = [
@@ -72,12 +72,48 @@ export default function TarefaProblemas() {
 	const [tarefa, setTarefa] = useState<Tarefa>();
 	const [turma, setTurma] = useState<Turma>();
 	const navigate = useNavigate();
+	const [problemas, setProblemas] = useState<Problema[]>([]);
+	const [searchText, setSearchText] = useState('');
+
+	const problemasFiltradosToColumns = problemas
+		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
+		.map(problema => {
+			return {
+				...problema,
+				key: problema.id,
+				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+				nome: (
+					<Link 
+						to={`/problema/${problema.id}`}
+						style={{ fontWeight: 'bold' }}
+					>
+						{problema.nome}
+					</Link>
+				)
+			};
+
+		});
+
+	function handleEditarTarefa(actionType: string, tarefa: Tarefa) {
+		navigate('editar', {
+			state: {
+				actionType,
+				tarefaAtual: tarefa
+			}
+		});
+	}
 
 	useEffect(()=> {
 		if(id !== undefined){
 			findTask(id);
 			
 		}
+		async function buscaProblemas() {
+			const { data: problemasResponse } = await ProblemaService.findByTarefa(id);
+			setProblemas(problemasResponse);
+		}
+		buscaProblemas();
+		
 		
 		
 	},[id]);
@@ -122,12 +158,11 @@ export default function TarefaProblemas() {
 						</p>
 					</DescriptionLeft>
 
-					<DescriptionRight>
-						<Link to={`/tarefas/nova/${id}`}>
-							<Button size='large' style={{float: 'right'	}} >
-								<EditOutlined />
-							</Button>
-						</Link>
+					<DescriptionRight> 
+						
+						<Button size='large' style={{float: 'right'	}} onClick={() => handleEditarTarefa('UPDATE', tarefa)} >
+							<EditOutlined />
+						</Button>
 						<p>
 							<strong>Status: </strong> Resolvida
 						</p>
@@ -141,17 +176,21 @@ export default function TarefaProblemas() {
 					</DescriptionRight>
 				</DescriptionContainer>
 				<SearchRow>
-					<Input size='large' placeholder='Buscar problema' />
+					<Input 
+						size='large' 
+						placeholder='Digite o nome do problema que está procurando...' 
+						value={searchText}
+						onChange={(evt) => setSearchText(evt.target.value)}
+					/>
 
 					<Button size='large' >
 						<FilterOutlined />
 					</Button>
 				</SearchRow>
-				<Table
-					size='middle'
-					bordered
-					dataSource={dataSourceProblemas}
-					columns={columnsProblemas}
+				<Table 
+					style={{ margin: 16 }} 
+					columns={columns} 
+					dataSource={problemasFiltradosToColumns}
 					pagination={false}
 				/>
 			</TarefaContainer>
