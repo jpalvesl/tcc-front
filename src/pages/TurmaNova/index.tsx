@@ -30,7 +30,6 @@ dayjs.extend(customParseFormat);
 function TurmaNova() {
 	const [turma, setTurma] = useState<Turma>({} as Turma);
 
-	const [datas, setDatas] = useState<[never, never]>([]);
 	const [professoresOptions, setProfessoresOptions] = useState([]);
 	const [monitoresOptions, setMonitoresOptions] = useState([]);
 	const [instituicoesOptions, setInstituicoesOptions] = useState([]);
@@ -67,8 +66,6 @@ function TurmaNova() {
 	}, []);
 
 	function formataData() {
-		if (!turmaAtual) return null;
-
 		const dtAbertura = dayjs(turmaAtual?.dtAbertura);
 		const dtEncerramento = dayjs(turmaAtual?.dtEncerramento);
 
@@ -94,9 +91,6 @@ function TurmaNova() {
 		};
 	}
 
-	function formataPayload(turma: Turma) {
-		console.log(turma);
-	}
 
 	async function loadProfessoresEAlunos(instituicaoId: number) {
 		const { data: alunosInstituicao } = await UsuarioService.findAlunoByInstituicao(instituicaoId);
@@ -254,15 +248,18 @@ function TurmaNova() {
 								size='large'
 								name='datas'
 								locale={locale}
-								value={datas}
-								// onChange={(datas) => {
-								// 	const datasFormatadas = datas?.map((dateDayJs) => {
+								onChange={(datas) => {
+									const datasFormatadas = datas?.map((dateDayJs) => {
 										
-								// 		return dateDayJs?.toISOString().substring(0,10);
-								// 	});								
+										return dateDayJs?.toISOString().substring(0,10);
+									});								
 									
-								// 	setDatas(datasFormatadas);
-								// }}
+									setTurma({
+										...turma,
+										dtAbertura: datasFormatadas[0],
+										dtEncerramento: datasFormatadas[1]
+									});
+								}}
 							/>
 						</Form.Item>
 
