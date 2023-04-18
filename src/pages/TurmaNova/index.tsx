@@ -111,11 +111,6 @@ function TurmaNova() {
 	}
 
 	function updateTurmaInput(evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-		console.log({
-			...turma,
-			[evt.target.name]: evt.target.value
-		});
-		
 		setTurma({
 			...turma,
 			[evt.target.name]: evt.target.value
