@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input, Select } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ProblemaTabProps } from '..';
 import ProblemaService from '../../../services/ProblemaService';
@@ -11,6 +12,8 @@ import { Topico } from '../../../types/Topico';
 function Editar({ problema }: ProblemaTabProps) {
 	const [problemaEditado, setProblemaEditado] = useState({ ...problema } as Problema);
 	const [topicosOptions, setTopicosOptions] = useState([]);
+
+	const navigate = useNavigate();
 
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
@@ -31,6 +34,7 @@ function Editar({ problema }: ProblemaTabProps) {
 		try {
 			ProblemaService.edit(problemaEditado, user.id);
 			toast('Problema alterado com sucesso');
+			navigate('/problema');
 		} catch (error) {
 			toast.error('Ocorreu um erro ao tentar editar o problema');
 		}
@@ -43,14 +47,30 @@ function Editar({ problema }: ProblemaTabProps) {
 		});
 	}
 
+	function formatInitialValues() {
+		return {
+			...problema,
+			topicos: problema?.topicos.map(topico => ({
+				label: topico.nome,
+				value: topico.id
+			}))
+		};
+	}
+
+	function handleChangeTopicos(topicos: number[]) {
+		setProblemaEditado({
+			...problemaEditado,
+			topicos: topicos.map(id => ({
+				id
+			}))
+		});
+	}
 
 	return (
 		<Form
 			name="basic"
 			layout='vertical'
-			initialValues={{
-				...problema
-			}}
+			initialValues={formatInitialValues()}
 			onFinish={handleOnFinish}
 			autoComplete="off"
 		>
@@ -85,6 +105,8 @@ function Editar({ problema }: ProblemaTabProps) {
 					mode='multiple'
 					allowClear
 					options={topicosOptions}
+					value={problema?.topicos}
+					onChange={(value) => handleChangeTopicos(value)}
 				/>
 			</Form.Item>
 
@@ -119,7 +141,6 @@ function Editar({ problema }: ProblemaTabProps) {
 			>
 				<TextArea
 					rows={5}
-
 					name='textoEntrada'
 					value={problemaEditado.textoEntrada}
 					onChange={(evt) => updateProblemaEditatoInput(evt)}
@@ -139,6 +160,8 @@ function Editar({ problema }: ProblemaTabProps) {
 
 			<Form.Item>
 				<Checkbox 
+					name='problemaDeProva'
+					checked={problema?.problemaDeProva}
 					onChange={(evt) => setProblemaEditado({
 						...problemaEditado,
 						problemaDeProva: evt.target.checked
