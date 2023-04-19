@@ -28,21 +28,6 @@ export interface ProblemaTabProps {
 	casosTeste?: ICasosDeTeste[];
 }
 
-const tags = [
-	{
-		id: 1,
-		nome: 'String'
-	},
-	{
-		id: 2,
-		nome: 'Lista'
-	},
-	{
-		id: 1,
-		nome: 'Teste'
-	},
-];
-
 const itemsDropDown = [
 	{
 		key: '1',
@@ -123,13 +108,13 @@ function Problema() {
 						<HeaderInfo>Nível {problema?.dificuldade} | Tempo limite base: 1 segundo | Limite de memória 200MB</HeaderInfo>
 
 						<Divider />
-
+						
 						<ProblemaWrapper>
 							<ProblemaInfo>
 								<HeaderTitle>{problema?.nome}</HeaderTitle>
 								<Space size={[0, 8]} wrap style={{marginLeft: 16}}>
-									{tags.map(tag => (
-										<Tag key={`tag-${tag.id}`}>{tag.nome}</Tag>
+									{problema.topicos.map(topico => (
+										<Tag key={`topico-${topico.id}`}>{topico.nome}</Tag>
 									))}
 								</Space>
 							</ProblemaInfo>

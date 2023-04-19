@@ -7,7 +7,10 @@ export interface Problema {
   textoEntrada: string;
   textoSaida: string;
   criadorId: string;
-  topicos: number[];
+  topicos: {
+    id: number;
+    nome?: string;
+  }[];
   autor?: string;
   problemaDeProva: boolean;
   tempoLimite: number;
