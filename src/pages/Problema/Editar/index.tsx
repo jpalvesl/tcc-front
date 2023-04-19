@@ -15,6 +15,10 @@ function Editar({ problema }: ProblemaTabProps) {
 
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		document.title = 'Problema - Edição';
+	}, []);
+
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	useEffect(() => {

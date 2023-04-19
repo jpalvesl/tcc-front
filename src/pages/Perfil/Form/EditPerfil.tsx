@@ -29,7 +29,7 @@ function EditarPerfil (){
 			
 		}
 		
-		
+		document.title = 'Editar perfil';
 	},[id]);
 
 	function updateUser(e: ChangeEvent<HTMLInputElement>) {

@@ -1,6 +1,6 @@
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Button } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProblemaTabProps } from '..';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoRequest } from '../../../types/Submissao';
@@ -9,6 +9,10 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	const [code, setCode] = useState(
 		'# adicione o seu codigo python aqui\n'
 	);
+
+	useEffect(() => {
+		document.title = 'Problema - Enviar resposta';
+	}, []);
 
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 

@@ -1,10 +1,15 @@
 import { Button, Form, Input } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { useEffect } from 'react';
 import { NavBar } from '../../components/NavBar';
 import { CampoContato, CampoForm, CampoInfo, ContatoContainer } from './styles';
 
 
 export default function Contato(){
+	useEffect(() => {
+		document.title = 'Contato';
+	}, []);
+
 	return (
 		<>
 			<NavBar></NavBar>

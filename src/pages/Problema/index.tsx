@@ -8,6 +8,7 @@ import CasosDeTesteService from '../../services/CasosDeTesteService';
 import ProblemaService from '../../services/ProblemaService';
 import { ICasosDeTeste } from '../../types/CasosDeTeste';
 import { Problema as IProblema } from '../../types/Problema';
+import { CasosDeTeste } from './CasosDeTeste';
 import { Descricao } from './Descricao';
 import { Editar } from './Editar';
 import { EnviarResposta } from './EnviarResposta';
@@ -28,24 +29,26 @@ export interface ProblemaTabProps {
 	casosTeste?: ICasosDeTeste[];
 }
 
-const itemsDropDown = [
-	{
-		key: '1',
-		label: 'Problema',
-	},
-	{
-		key: '2',
-		label: 'Casos de teste',
-	},
-];
-
 function Problema() {
 	const [problema, setProblema] = useState<IProblema>({} as IProblema);
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
+
 	const { id } = useParams();
 	const numericId = Number(id);
+
+	const itemsDropDown = [
+		{
+			key: '1',
+			label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
+		},
+		{
+			key: '2',
+			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
+		},
+	];
 
 	const items = [
 		{
@@ -73,7 +76,9 @@ function Problema() {
 					</Space>
 				</Dropdown>
 			),
-			children: <Editar problema={problema} />,
+			children: isCasoDeTeste
+				? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
+				: <Editar problema={problema} />,
 		},
 	];
 	
@@ -95,6 +100,7 @@ function Problema() {
 			setIsLoading(false);
 		}		
 		
+		document.title = 'Problema';
 		loadProblema();
 	}, []);
 	

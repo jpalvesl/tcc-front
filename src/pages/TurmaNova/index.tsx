@@ -50,6 +50,10 @@ function TurmaNova() {
 				label: `${instituicao.nome} - ${instituicao.campus}`
 			}));
 			
+			document.title = actionType === 'CREATE'
+				? 'Criação de Turma'
+				: 'Edição de Turma';
+
 			setInstituicoesOptions(dadosFormatados);
 
 			loadProfessoresEAlunos(user.instituicaoAtualId);

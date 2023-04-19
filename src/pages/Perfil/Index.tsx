@@ -37,9 +37,9 @@ export default function Perfil(){
 			const { data } = await TurmaService.findByUsuario(2);
 			
 			setTurmas(data.aluno);
-			
 		}
 
+		document.title = 'Perfil';
 		initializeData();
 	}, []);
 	

@@ -96,7 +96,10 @@ function TurmaTarefas() {
 
 	useEffect(() => {
 		async function loadTurma() {
+			document.title = 'Turmas';
+
 			const { data: turmasData } = await TurmaService.findById(turma_id);
+			document.title = turmasData.titulo;
 			setTurma(turmasData);
 
 			const user = JSON.parse(localStorage.getItem('@Auth:user'));

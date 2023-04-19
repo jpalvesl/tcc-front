@@ -1,4 +1,5 @@
 import { Table } from 'antd';
+import { useEffect } from 'react';
 import { ProblemaTabProps } from '..';
 import { Divider } from '../../../components/Divider';
 import { Section } from './styles';
@@ -17,6 +18,10 @@ const columns = [
 ];
 
 function Descricao({ problema, casosTeste }: ProblemaTabProps) {
+	useEffect(() => {
+		document.title = 'Problema - Descrição';
+	}, []);
+	
 	const casoFormatado = casosTeste?.map(caso => {
 		const casoEmParagrafos = caso.entrada.split('\n').map((item, idx) => (<p key={`item-${idx}`}>{item}</p>));
 

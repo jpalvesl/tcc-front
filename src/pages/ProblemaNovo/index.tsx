@@ -36,6 +36,7 @@ function ProblemaNovo() {
 				label: topico.nome
 			}));
 
+			document.title = 'Criação de problema';
 			setTopicosOptions(dataFormatada);
 		})();
 	}, []);

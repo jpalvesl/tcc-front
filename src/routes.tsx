@@ -86,9 +86,5 @@ export const Router = createBrowserRouter([
 		path: '/problema/novo',
 		element: <ProblemaNovo />
 	},
-	{
-		path: '/problema/casos_de_teste',
-		element: <CasosDeTeste />
-	},
 ]);
 

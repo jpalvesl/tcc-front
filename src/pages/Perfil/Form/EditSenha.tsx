@@ -29,7 +29,7 @@ function AlterarSenha (){
 			
 		}
 		
-		
+		document.title = 'Alterar senha';
 	},[id]);
 
 	function updateUser(e: ChangeEvent<HTMLInputElement>) {

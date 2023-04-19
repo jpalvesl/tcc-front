@@ -40,6 +40,10 @@ const columns = [
 function Submissoes({ problemaId }: ProblemaTabProps) {
 	const [submissoesProblemaAluno, setSubmissoesProblemaAluno] = useState([]);
 
+	useEffect(() => {
+		document.title = 'Problema - Submissões';
+	}, []);
+
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	const submissoesToColumns = submissoesProblemaAluno
