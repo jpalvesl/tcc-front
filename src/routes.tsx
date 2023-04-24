@@ -16,6 +16,9 @@ import Sobre from './pages/Sobre/Index';
 import { TurmaNova } from './pages/TurmaNova';
 import { Turmas } from './pages/Turmas';
 import { TurmaTarefas } from './pages/TurmaTarefas';
+import { Tarefas } from './pages/Tarefas/Index';
+import TarefaProblemas from './pages/Tarefa/Index';
+import { TarefaNova } from './pages/NovaTarefa/Index';
 
 const Private = ({Item}) => {
 
@@ -85,6 +88,26 @@ export const Router = createBrowserRouter([
 	{
 		path: '/problema/novo',
 		element: <ProblemaNovo />
+	},
+	{
+		path: '/problema/casos_de_teste',
+		element: <CasosDeTeste />
+	},
+	{
+		path: '/tarefas',
+		element: <Tarefas />
+	},
+	{
+		path: '/tarefa/:id',
+		element: <TarefaProblemas/>
+	},
+	{
+		path: '/tarefas/nova',
+		element: <TarefaNova/>
+	},
+	{
+		path: '/tarefa/:id/editar',
+		element: <TarefaNova />,
 	},
 ]);
 
