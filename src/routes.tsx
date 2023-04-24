@@ -19,6 +19,7 @@ import { TurmaTarefas } from './pages/TurmaTarefas';
 import { Tarefas } from './pages/Tarefas/Index';
 import TarefaProblemas from './pages/Tarefa/Index';
 import { TarefaNova } from './pages/NovaTarefa/Index';
+import { LandingPage } from './pages/LandingPage';
 
 const Private = ({Item}) => {
 
@@ -31,7 +32,7 @@ export const Router = createBrowserRouter([
 
 	{
 		path: '/',
-		element: <Home />
+		element: <LandingPage />
 	},
 	{
 		path: '/cadastro',
