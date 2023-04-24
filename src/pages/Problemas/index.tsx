@@ -79,6 +79,8 @@ function Problemas() {
 			console.log(problemasResponse);
 			setProblemas(problemasResponse);
 		}
+
+		document.title = 'Listagem de problemas';
 		buscaProblemas();
 	}, []);
 

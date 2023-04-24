@@ -89,6 +89,7 @@ export default function Perfil(){
 			setSubmissoes(dataSubmissao);
 			
 		}
+		document.title = 'Perfil';
 
 		loadUsuario();
 	}, []);

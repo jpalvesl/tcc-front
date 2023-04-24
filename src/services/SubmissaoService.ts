@@ -2,7 +2,7 @@ import { ISubmissaoRequest } from '../types/Submissao';
 import api from './api';
 const localDefaultEndpoint = 'submissao';
 
-class CasosDeTesteService {
+class SubmissaoService {
 	findAll() {
 		return api.get(`${localDefaultEndpoint}`);
 	}
@@ -15,12 +15,14 @@ class CasosDeTesteService {
 		return api.get(`${localDefaultEndpoint}/problema/${problemaId}`);
 	}
 
-	findByUsuarioAndProblema(usuarioId: number, problemaId: number) {}
+	findByUsuarioAndProblema(usuarioId: number, problemaId: number) {
+		return api.get(`${localDefaultEndpoint}/usuario/${usuarioId}/problema/${problemaId}`);
+	}
 
-	realizaSubmissao(usuarioId: number, submissao: ISubmissaoRequest) {
-		return api.post(`${localDefaultEndpoint}/usuario/${usuarioId}`, submissao);
+	realizaSubmissao(problemaId:number, usuarioId: number, submissao: ISubmissaoRequest) {
+		return api.post(`${localDefaultEndpoint}/problema/${problemaId}/usuario/${usuarioId}`, submissao);
 	}
 
 }
 
-export default new CasosDeTesteService();
+export default new SubmissaoService();

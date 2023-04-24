@@ -8,4 +8,7 @@ export interface ISubmissaoResponse {
   problemaId: number;
   usuarioId: number;
   status: string;
+  data: string;
+  tempoMedio: string;
+  linguagem: string;
 }

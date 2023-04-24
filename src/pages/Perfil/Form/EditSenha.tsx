@@ -32,7 +32,7 @@ function AlterarSenha (){
 			
 		}
 		
-		
+		document.title = 'Alterar senha';
 	},[id]);
 
 

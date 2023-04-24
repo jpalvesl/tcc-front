@@ -35,6 +35,7 @@ function Turmas() {
 
 	useEffect(() => {
 		async function initializeData() {
+			document.title = 'Turmas';
 
 			const { data } = await TurmaService.findByUsuario(user.id);
 			

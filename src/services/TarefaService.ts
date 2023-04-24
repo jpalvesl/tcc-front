@@ -11,13 +11,25 @@ class TurmaService {
 		return api.get(`${localDefaultEndpoint}/turma/${turmaId}`);
 	}
 
-	add() {}
+	findById(tarefaId: number) {
+		return api.get(`${localDefaultEndpoint}/${tarefaId}`);
+	}
 
-	edit() {}
+	add(payload: Tarefa) {
+		return api.post(`${localDefaultEndpoint}`, payload);
+	}
 
-	delete() {}
+	edit(payload: Tarefa, criadorId: number) {
+		return api.patch(`${localDefaultEndpoint}/usuario/${criadorId}`, payload);
+	}
+
+	delete(id: number, usuarioId: number) {
+		return api.delete(`${localDefaultEndpoint}/${id}/usuario/${usuarioId}`);
+	}
   
-	addProblemaEmTarefa() {}
+	addProblemaEmTarefa(problemaId: number, id: number, usuarioId: number) {
+		return api.post(`${localDefaultEndpoint}/${id}/problema/${problemaId}/usuario/${usuarioId}`);
+	}
 
 }
 

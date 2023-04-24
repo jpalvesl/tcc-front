@@ -4,7 +4,7 @@ import { ActionsLogin, LoginContainer, ChamadaContainer, ChamadaImage, ChamadaTe
 import BannerLogin from '../../assets/icons/BannerLogin';
 import { Button, Form, Input } from 'antd';
 import { themes } from '../../styles/themes';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/auth';
 
 
@@ -18,11 +18,14 @@ export default function Login() {
 	
 	const { signIn, signed } = useContext(AuthContext);
 
+	useEffect(() => {
+		document.title = 'Login';
+	}, []);
+
 	const handleSubmit = async () => {
 		const data = {
-			email,
-			senha,
-			
+			usernameOrEmail: email,
+			password: senha,
 		};
 		console.log('datinha',data);
 		await signIn(data);
