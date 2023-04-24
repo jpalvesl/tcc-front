@@ -172,7 +172,7 @@ function EditarPerfil (){
 										type='email'
 										value={model.email}
 										name="email"
-										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+										onChange={(e)=> updateUser(e)}
 									
 									/>
 								</Form.Item>
@@ -186,7 +186,7 @@ function EditarPerfil (){
 										size='large'
 										value={model.nome}
 										name="nome"
-										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+										onChange={(e)=> updateUser(e)}
 									
 									/>
 								</Form.Item>
@@ -200,7 +200,7 @@ function EditarPerfil (){
 										size='large'
 										value='teste'
 										name="usuario"
-										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+										onChange={(e)=> updateUser(e)}
 									/>
 								</Form.Item>
 
