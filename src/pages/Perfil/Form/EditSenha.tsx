@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {  useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import PhotoPerfil from '../../../assets/icons/PhotoPerfil';
 
 import { Divider } from '../../../components/Divider';
@@ -22,6 +22,9 @@ function AlterarSenha (){
 		ehProfessor: false,
 		ehAdm: false
 	});
+	const [senha, setSenha] = useState('');
+	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
+	const [novaSenha, setNovaSenha] = useState('');
 	
 	useEffect(()=> {
 		if(id !== undefined){
@@ -32,18 +35,9 @@ function AlterarSenha (){
 		document.title = 'Alterar senha';
 	},[id]);
 
-	function updateUser(e: ChangeEvent<HTMLInputElement>) {
-		setModel({
-			... model,
-			[e.target.name]: e.target.value
-		});
-		
-		
-	}
 
 	async function findTask(id:number) {
 		const response = await UsuarioService.findById(id);
-		console.log('datat',response.data);
 		
 		setModel( {
 			id,
@@ -65,12 +59,23 @@ function AlterarSenha (){
 
 	
 	async function handleOnFinish(id: number){
-		console.log('id', id);
-		console.log('modelzin', model);
-		await UsuarioService.edit(id,model);
-		const resposta = await UsuarioService.findById(id);
+		if(senha !== model.senha){
+			console.log('Senha errada');
+			return;
+		}
+		if(novaSenha !== confirmacaoSenha){
+			console.log('As senhas não correspondem');
+			return;
+		}
+		else{
+			
+			model.senha = novaSenha;
+			
+			await UsuarioService.edit(id,model);
+			
+			
+		}
 		
-		console.log(resposta);
 	}
 
 
@@ -92,7 +97,6 @@ function AlterarSenha (){
 						{model.email && <Form
 							name="basic"
 							layout='vertical'
-							initialValues={model}
 							onFinish={()=> handleOnFinish(id)}
 							onFinishFailed={()=>console.log('aqui')}
 							
@@ -103,27 +107,27 @@ function AlterarSenha (){
 
 							<Form.Item
 								label='Senha atual'
-								name='senhaAtual'
+								name='senha'
 								rules={[{required: true, message: 'Por favor digite a senha atual!'}]}
 							>
 								<Input 
 									size='large'
 									type='password'
-						
-									onChange={()=>console.log('aq')}
+									value={senha}
+									onChange={(evt) => setSenha(evt.target.value)}
 								/>
 							</Form.Item>
 
 							<Form.Item
 								label='Nova senha'
-								name='senha'
+								name='novaSenha'
 								rules={[{required: true, message: 'Por favor digite a nova senha!'}]}
 							>
 								<Input 
 									size='large'
 									type='password'
-						
-									onChange={()=>console.log('aq')}
+									value={novaSenha}
+									onChange={(evt) => setNovaSenha(evt.target.value)}
 								/>
 							</Form.Item>
 							<Form.Item
@@ -134,19 +138,29 @@ function AlterarSenha (){
 								<Input 
 									size='large'
 									type='password'
-						
-									onChange={()=>console.log('aq')}
+									value={confirmacaoSenha}
+									onChange={(evt) => setConfirmacaoSenha(evt.target.value)}
 								/>
 							</Form.Item>
 
 							<Form.Item>
 								<Button 
-									style={{width: '100%'}} 
+									style={{float: 'right'}} 
 									size='large' type="primary" 
 									htmlType="submit"
 								>
 								Salvar
 								</Button>
+								<Link to={`/perfil/${id}`}>
+									<Button 
+										style={{float: 'right', marginRight: '5px'}} 
+										size='large'>
+								Cancelar
+									</Button></Link>
+								
+							</Form.Item>
+							<Form.Item>
+								
 							</Form.Item>
 						</Form>}
 						

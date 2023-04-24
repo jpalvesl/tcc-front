@@ -50,11 +50,26 @@ export const CampoImage = styled.div`
   
 
   div.imagem{
+    border-radius: 100%;
+    overflow: hidden;
     padding: 8px;
-    height:150px;
+    height:250px;
+    width: 250px;
+    margin: 0 auto;
+    background: black;
+    
   
   }
+
+  div.imagem > img {
+    width: 100%;
+   
+  }
   
+  div.formImg {
+    width: 250px;
+    margin: 0 auto;
+  }
   
   
   
@@ -72,7 +87,9 @@ export const CampoImage = styled.div`
 export const CampoForm = styled.div`
   
   width: 70%;
-  
+  a {
+    color: ${themes.default.blue['600']};
+  }
 
   
   
