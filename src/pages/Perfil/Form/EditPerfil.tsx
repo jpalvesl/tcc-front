@@ -1,7 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import PhotoPerfil from '../../../assets/icons/PhotoPerfil';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Divider } from '../../../components/Divider';
 import { NavBar } from '../../../components/NavBar';
@@ -9,6 +8,8 @@ import UsuarioService from '../../../services/UsuarioService';
 import { Usuario } from '../../../types/Usuario';
 import { CampoForm, CampoImage, PerfilContainer } from './styles';
 import { toast } from 'react-toastify';
+import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import {storage} from '../../../firebase';
 
 
 
@@ -21,8 +22,41 @@ function EditarPerfil (){
 		instituicaoAtualId: 1,
 		email: '',
 		ehProfessor: false,
-		ehAdm: false
+		ehAdm: false,
+		imagemUrl: ''
 	});
+
+	const navigate = useNavigate();
+	const [imgUrl,setImgUrl] = useState('');
+	const [progress,setProgress] = useState(0);
+
+	const handleUpload= (event) => {
+		event.preventDefault();
+
+		const file = event.target[0]?.files[0];
+		if(!file) return;
+
+
+		const storageRef = ref(storage, `imagens/${file.name}`);
+		const uploadTaks = uploadBytesResumable(storageRef, file);
+
+		uploadTaks.on(
+			'state_changed',
+			snapshot => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				setProgress(progress);
+			},
+			error => {
+				alert(error);
+			},
+			() => {
+				getDownloadURL(uploadTaks.snapshot.ref).then(url => {
+					setImgUrl(url);
+				}) ;
+			}
+		);
+	};
+
 	
 	useEffect(()=> {
 		if(id !== undefined){
@@ -53,8 +87,10 @@ function EditarPerfil (){
 			instituicaoAtualId: 1,
 			email: response.data.email,
 			ehProfessor: response.data.ehProfessor,
-			ehAdm: response.data.ehAdm
+			ehAdm: response.data.ehAdm,
+			imagemUrl: response.data.imagemUrl
 		});
+		setImgUrl(response.data.imagemUrl);
 		
 		
 	}
@@ -65,16 +101,15 @@ function EditarPerfil (){
 
 	
 	async function handleOnFinish(id: number){
+		model.imagemUrl = imgUrl;
+		
 		await UsuarioService.edit(id,model);
 		const resposta = await UsuarioService.findById(id);
 		
 		console.log(resposta);
 	}
 
-	function handleOnFinishFailed(id: number) {
-		toast.warning('Não foi possível criar usuário pois houve erro nos dados');
-		UsuarioService.edit(id,model).then(response => console.log(response));
-	}
+	
 
 
 	return(
@@ -87,86 +122,118 @@ function EditarPerfil (){
 				<div className='container'>
 					<CampoImage>
 						<div className='imagem'>
-							<PhotoPerfil/>
+							
+							{imgUrl && <img src={imgUrl} alt="Imagem" />}
 						</div>
+						{!imgUrl && <progress value={progress} max='100'/>}
+						<div className='formImg'>
+							<Form onSubmitCapture={handleUpload}>
+								
+								<Input 
+									name="img"
+									type='file'
+								/>
+								
+								
+								<Button 
+									type="primary" 
+									htmlType="submit"
+									style={{float: 'right'}}
+								>Enviar</Button>
+						
+								
+									
+								
+							</Form>
+						</div>
+						
+						
 						
 					</CampoImage>
 					<CampoForm>
-						{model.email && <Form
-							name="basic"
-							layout='vertical'
-							initialValues={model}
-							onFinish={()=> handleOnFinish(id)}
-							onFinishFailed={handleOnFinish(id)}
+						{model.email && <>
+							<Form
+								name="basic"
+								layout='vertical'
+								initialValues={model}
+								onFinish={()=> handleOnFinish(id)}
 							
-						>
-							<Form.Item
-								label='Email'
-								name='email'
-								
-								rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
 							>
+								<Form.Item
+									label='Email'
+									name='email'
 								
-								
-								<Input 
-									size='large'
-									type='email'
-									value={model.email}
-									name="email"
-									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
-									
-								/>
-							</Form.Item>
-
-							<Form.Item
-								label='Nome'
-								name='nome'
-								rules={[{required: true, message: 'Por favor digite o nome!'}]}
-							>
-								<Input 
-									size='large'
-									value={model.nome}
-									name="nome"
-									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
-									
-								/>
-							</Form.Item>
-
-							<Form.Item
-								label='Usuario'
-								name='usuario'
-								rules={[{required: true, message: 'Por favor digite o usuario!'}]}
-							>
-								<Input 
-									size='large'
-									value='teste'
-									name="usuario"
-									onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
-								/>
-							</Form.Item>
-
-							<Form.Item>
-								<p><Link to={`/perfil/${id}/password`}>Alterar senha</Link></p>
-							</Form.Item>
-
-							<Form.Item>
-								
-								<Button 
-									style={{float: 'right'}} 
-									size='large' type="primary" 
-									htmlType="submit"
+									rules={[{required: true, message: 'Por favor digite o seu e-mail!'}]}
 								>
-								Salvar
-								</Button>
-								<Link to={'/perfil'}>
-									<Button 
-										style={{float: 'right', marginRight: '5px'}} 
-										size='large' >
-								Cancelar
-									</Button></Link>
 								
-							</Form.Item>
-						</Form>}
+								
+									<Input 
+										size='large'
+										type='email'
+										value={model.email}
+										name="email"
+										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+									
+									/>
+								</Form.Item>
+
+								<Form.Item
+									label='Nome'
+									name='nome'
+									rules={[{required: true, message: 'Por favor digite o nome!'}]}
+								>
+									<Input 
+										size='large'
+										value={model.nome}
+										name="nome"
+										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+									
+									/>
+								</Form.Item>
+
+								<Form.Item
+									label='Usuario'
+									name='usuario'
+									rules={[{required: true, message: 'Por favor digite o usuario!'}]}
+								>
+									<Input 
+										size='large'
+										value='teste'
+										name="usuario"
+										onChange={(e: ChangeEvent<HTMLInputElement>)=> updateUser(e)}
+									/>
+								</Form.Item>
+
+								<Form.Item>
+									<p><Link to={`/perfil/${id}/password`}>Alterar senha</Link></p>
+								</Form.Item>
+
+								<Form.Item>
+									
+									<Button 
+										style={{float: 'right'}} 
+										size='large' type="primary" 
+										htmlType="submit"
+										
+									>
+								Salvar
+									</Button>
+								
+									<Link to={'/perfil'}>
+										<Button 
+											style={{float: 'right', marginRight: '5px'}} 
+											size='large' >
+								Cancelar
+										</Button></Link>
+								
+								</Form.Item>
+								<Form.Item>
+									
+								</Form.Item>
+							</Form>
+							
+						</>}
+						
 						
 					</CampoForm>
 				</div>

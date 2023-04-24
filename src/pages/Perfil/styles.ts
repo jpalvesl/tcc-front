@@ -87,6 +87,23 @@ export const CampoFoto = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 
+
+  div.imagem{
+    border-radius: 100%;
+    overflow: hidden;
+    padding: 8px;
+    height:200px;
+    width: 200px;
+    margin: 0 auto;
+    background: black;
+    
+  
+  }
+
+  div.imagem > img {
+    width: 100%;
+   
+  }
   
   
   
