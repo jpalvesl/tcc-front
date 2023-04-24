@@ -3,6 +3,8 @@ import { HeaderContainer, Actions, Action, UserActions, UserIcon } from './style
 import { themes } from '../../styles/themes';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
+import { SignActions } from '../SignActions';
+import { UserIconComponent } from '../UserIconComponent';
 
 export const NavBar = () => {
 	const { signed } = useContext(AuthContext);
@@ -27,7 +29,9 @@ export const NavBar = () => {
 
 
 			<UserActions>
-				<UserIcon />
+				{signed
+					? <UserIconComponent />
+					: <SignActions />}
 			</UserActions>
 		</HeaderContainer>
 	);

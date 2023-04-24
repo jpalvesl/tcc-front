@@ -27,12 +27,17 @@ const Private = ({Item}) => {
 	return signed ? <Item /> : <Navigate to="/login" />;
 };
 
+const Teste = ({Item}) => {
+	const { signed } = useContext(AuthContext);
+	return signed ? <Home /> : <Item />;
+};
+
 
 export const Router = createBrowserRouter([
 
 	{
 		path: '/',
-		element: <LandingPage />
+		element: <Teste Item={LandingPage} />
 	},
 	{
 		path: '/cadastro',

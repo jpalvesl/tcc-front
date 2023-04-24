@@ -25,23 +25,27 @@ export const LandingPageContainer = styled.div`
 export const WellcomeContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding-left: 16px;
+
 
   h1 {
     font-size: 40px;
     margin-bottom: 16px;
+    font-family: 'Poppins', sans-serif;
   }
 
   p {
     font-size: 16px;
     margin-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
   }
 
   button {
-    width: 100%;
+    width: 400px;
     background-color: ${themes.default.green['500']};
     color: ${themes.default.white};
+
   }
 `;
 
