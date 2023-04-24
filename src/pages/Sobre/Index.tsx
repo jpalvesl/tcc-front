@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { NavBar } from '../../components/NavBar';
 import { SobreContainer } from './styles';
 
 export default function Sobre(){
+	useEffect(() => {
+		document.title = 'Sobre';
+	}, []);
+	
 	return (
 		<>
 			<NavBar></NavBar>

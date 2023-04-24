@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavBar } from '../../components/NavBar';
 import { ActionsRegistro, CadastroContainer, ChamadaContainer, ChamadaImage, ChamadaTexto, ContainerRegistro } from './styles';
@@ -18,6 +18,10 @@ export default function Cadastro() {
 	const instituicaoAtualId = 1;
 
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		document.title = 'Cadastro';
+	}, []);
 
 	function handleOnFinish() {
 		if (senha !== confirmacaoSenha) {

@@ -8,6 +8,14 @@ class UsuarioService {
 		return api.get(`${localDefaultEndpoint}/instituicao/${instituicaoId}`);
 	}
 
+	findAlunoByInstituicao(instituicaoId: number) {
+		return api.get(`${localDefaultEndpoint}/aluno/instituicao/${instituicaoId}`);
+	}
+
+	findProfessorByInstituicao(instituicaoId: number) {
+		return api.get(`${localDefaultEndpoint}/professor/instituicao/${instituicaoId}`);
+	}
+
 	findById(usuarioId: number) {
 		return api.get(`${localDefaultEndpoint}/${usuarioId}`);
 	}

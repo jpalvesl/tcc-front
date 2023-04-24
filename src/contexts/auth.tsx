@@ -1,10 +1,12 @@
+import { isObject } from 'lodash';
 import { createContext } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import api from '../services/api';
-import UsuarioService from '../services/UsuarioService';
+import AuthService from '../services/AuthService';
 
 
 export const AuthContext = createContext(null);
@@ -24,32 +26,26 @@ export const AuthProvider = ({ children }) => {
 		loadingStoreData();
 	}, []);
 
-	const signIn = async ({ email , senha }: {email: string, senha: string}) => {
+	const signIn = async ({ usernameOrEmail , password }: {usernameOrEmail: string, password: string}) => {
 		try {
-			const { data } = await UsuarioService.findByInstituicao(1);
-			const response = await UsuarioService.findByInstituicao(1);
-			
+			const { data: usuarioRetornado } = await AuthService.login(usernameOrEmail, password);
 
-			const filtragem_email = data.filter(usuario => usuario.email == email );
-			
-			const filtragem_senha = filtragem_email.filter(usuario => usuario.senha == senha);
 			const token = Math.random().toString(36).substring(2);
-			
 
-			if (filtragem_senha.length==0) {
+			if (!isObject(usuarioRetornado)) {
 				alert('usuário não existe');
 			} else {
-				setUser(filtragem_senha);
+				setUser(usuarioRetornado);
 				api.defaults.headers.common[
 					'Authorization'
 				] = `Bearer ${token}`;
 
-				localStorage.setItem('@Auth:user', JSON.stringify(filtragem_senha[0]));
-				
+				localStorage.setItem('@Auth:user', JSON.stringify(usuarioRetornado));
 				localStorage.setItem('@Auth:token', token);
 			}
 		} catch (error) {
-			console.log(error);
+			toast.warn('Usuário ou senha não encontrado');
+			console.error(error);
 		}
 	};
 
