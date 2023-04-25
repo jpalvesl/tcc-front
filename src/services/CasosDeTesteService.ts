@@ -16,7 +16,11 @@ class CasosDeTesteService {
 	}
 
 	edit(usuarioId: number, casoTeste: ICasosDeTeste) {
-		return api.patch(`${localDefaultEndpoint}/usuario/${usuarioId}`);
+		return api.patch(`${localDefaultEndpoint}/usuario/${usuarioId}`, casoTeste);
+	}
+
+	editEmLote(problemaId: number, usuarioId: number, casosTeste: ICasosDeTeste[]) {
+		return api.patch(`${localDefaultEndpoint}/problema/${problemaId}/usuario/${usuarioId}`, casosTeste);
 	}
 
 	delete(casoTesteId: number, criadorId: number) {
