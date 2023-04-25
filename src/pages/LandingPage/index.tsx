@@ -49,7 +49,11 @@ function LandingPage() {
 						<p>
 							<Link to='/problema'>Resolva nossos problemas agora</Link>.
 						</p>
-						<img src="https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image-300x225.png" alt="" />
+						<img 
+							src="https://cdn.discordapp.com/attachments/677312142692581415/1100475446614818970/image.png" 
+							alt="" 
+							style={{ marginTop: 8, width: 450 }}
+						/>
 					</VerticalTimelineElement>
 					<VerticalTimelineElement
 						className="vertical-timeline-element--work"
@@ -64,7 +68,11 @@ function LandingPage() {
 						<p>
               Crie turmas de estudos e classes para alunos. A turma facilita a gestão de provas e tarefas para os estudantes além de avaliar automaticamente o desempenho de cada um.
 						</p>
-						<img src="https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image-300x225.png" alt="" />
+						<img 
+							src="https://cdn.discordapp.com/attachments/677312142692581415/1100476492057681940/image.png" 
+							alt="" 
+							style={{ marginTop: 8, width: 450 }}
+						/>
 					</VerticalTimelineElement>
 					<VerticalTimelineElement
 						className="vertical-timeline-element--work"
