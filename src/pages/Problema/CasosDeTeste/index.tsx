@@ -71,8 +71,6 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 	}
 
 	async function handleSaveCasosTeste() {
-		console.log(casosTeste);
-
 		try {
 			await CasosDeTesteService.editEmLote(problemaId, user.id, casosTeste);
 			toast('Casos de teste editados');

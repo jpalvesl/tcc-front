@@ -4,7 +4,7 @@ const localDefaultEndpoint = 'caso_teste';
 
 class CasosDeTesteService {
 	findBySubmissao(submissaoId: number) {
-		return api.get(`${localDefaultEndpoint}/${submissaoId}`);
+		return api.get(`${localDefaultEndpoint}/submissao/${submissaoId}`);
 	}
 
 	findByProblema(problemaId: number) {
