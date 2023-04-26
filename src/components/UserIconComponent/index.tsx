@@ -5,8 +5,6 @@ import { UserIcon } from '../NavBar/styles';
 
 function UserIconComponent() {
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
-	console.log('user', user);
-  
 
 	function handleSair() {
 		localStorage.removeItem('@Auth:user');

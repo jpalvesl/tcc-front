@@ -54,6 +54,8 @@ function Tarefas() {
 	const [searchText, setSearchText] = useState('');
 	const navigate = useNavigate();
 
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+
 	function tarefasToColumns(tarefas: Tarefa[]) {
 		return tarefas.map(tarefa => {
 			const dtEncerramentoFormatado = tarefa.dtEncerramento.replaceAll('-', '/');
@@ -80,16 +82,11 @@ function Tarefas() {
 
 	useEffect(() => {
 		async function loadTarefas() {
-
-			const user = JSON.parse(localStorage.getItem('@Auth:user'));
 			if (!user) return;
-
-
 
 			const { data: tarefasData } = await TarefaService.findByAluno(user.id);
 			setRoteiros(tarefasData.roteiros);
 			setProvas(tarefasData.provas);
-			
 		}
 
 		loadTarefas();
@@ -115,10 +112,12 @@ function Tarefas() {
 						value={searchText}
 						onChange={(evt => setSearchText(evt.target.value))}
 					/>
-					<Button size='large' style={{ width: '150px' }} onClick={handleCriarTarefa} >
-						<PlusOutlined />
+					{user?.ehProfessor && (
+						<Button size='large' style={{ width: '150px' }} onClick={handleCriarTarefa} >
+							<PlusOutlined />
 						Nova Tarefa
-					</Button>
+						</Button>
+					)}
 					<Button size='large' >
 						<FilterOutlined />
 					</Button>
