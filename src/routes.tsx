@@ -19,6 +19,7 @@ import { TurmaTarefas } from './pages/TurmaTarefas';
 import { Tarefas } from './pages/Tarefas/Index';
 import TarefaProblemas from './pages/Tarefa/Index';
 import { TarefaNova } from './pages/NovaTarefa/Index';
+import { LandingPage } from './pages/LandingPage';
 
 const Private = ({Item}) => {
 
@@ -26,12 +27,17 @@ const Private = ({Item}) => {
 	return signed ? <Item /> : <Navigate to="/login" />;
 };
 
+const Teste = ({Item}) => {
+	const { signed } = useContext(AuthContext);
+	return signed ? <Home /> : <Item />;
+};
+
 
 export const Router = createBrowserRouter([
 
 	{
 		path: '/',
-		element: <Home />
+		element: <Teste Item={LandingPage} />
 	},
 	{
 		path: '/cadastro',

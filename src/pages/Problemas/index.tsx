@@ -1,21 +1,12 @@
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FailIcon } from '../../assets/icons/FailIcon';
 import { NavBar } from '../../components/NavBar';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { ProblemasContainer, SearchRow } from './styles';
-
-interface TableProblemas {
-	key: string;
-	nome: string;
-	autor: string;
-	dificuldade: string;
-	resolvido: ReactElement;
-}
 
 const columns: ColumnsType<any> = [
 	{
@@ -55,7 +46,7 @@ function Problemas() {
 			return {
 				...problema,
 				key: problema.id,
-				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+				resolvido: '',
 				nome: (
 					<Link 
 						to={`/problema/${problema.id}`}
@@ -76,7 +67,6 @@ function Problemas() {
 		async function buscaProblemas() {
 			const { data: problemasResponse } = await ProblemaService.findAll();
 
-			console.log(problemasResponse);
 			setProblemas(problemasResponse);
 		}
 

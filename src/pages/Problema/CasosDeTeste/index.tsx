@@ -2,15 +2,19 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Collapse, Popover, Row, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { ProblemaTabProps } from '..';
+import CasosDeTesteService from '../../../services/CasosDeTesteService';
 import { ICasosDeTeste } from '../../../types/CasosDeTeste';
 import { Actions, Caso, CasosDeTesteCadastradosContainer, CasosDeTesteContainer } from './styles';
 const { Panel } = Collapse;
 
 const content = 'Para importar os casos de teste, você precisa fornecer um arquivo .json no padrão';
 
-function CasosDeTeste({ problemaId, casosTeste: casosTesteProps } :ProblemaTabProps) {
-	const [casosTeste, setCasosTeste] = useState<ICasosDeTeste[]>([...casosTesteProps]); 
+function CasosDeTeste({ problemaId } :ProblemaTabProps) {
+	const [casosTeste, setCasosTeste] = useState<ICasosDeTeste[]>([]); 
+
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	function removeCasoDeTeste(caso: number) {
 		const novosCasos = casosTeste
@@ -19,8 +23,6 @@ function CasosDeTeste({ problemaId, casosTeste: casosTesteProps } :ProblemaTabPr
 				...casoTeste,
 				caso: idx+1
 			}));
-
-		console.log(novosCasos);
 
 		setCasosTeste(novosCasos);
 	}
@@ -45,6 +47,12 @@ function CasosDeTeste({ problemaId, casosTeste: casosTesteProps } :ProblemaTabPr
 
 	useEffect(() => {
 		document.title = 'Problema - Casos de teste';
+
+		(async () => {
+			const { data: casosTesteData } = await CasosDeTesteService.findByProblema(problemaId);
+
+			setCasosTeste(casosTesteData);
+		})();
 	}, []);
 
 	function handleAddNewCasoTeste() {
@@ -62,8 +70,14 @@ function CasosDeTeste({ problemaId, casosTeste: casosTesteProps } :ProblemaTabPr
 		alert('Deve abrir um dialog para envio de arquivo');
 	}
 
-	function handleSaveCasosTeste() {
-		alert('Deve fazer a requisição para o endpoint correto');    
+	async function handleSaveCasosTeste() {
+		try {
+			await CasosDeTesteService.editEmLote(problemaId, user.id, casosTeste);
+			toast('Casos de teste editados');
+		} catch (error) {
+			toast('Erro ao editar casos de teste');
+		}
+
 	}
 
 	return (

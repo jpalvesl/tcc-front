@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/auth';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-vertical-timeline-component/style.min.css';
 
 function App() {
 	return (
