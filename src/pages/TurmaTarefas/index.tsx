@@ -1,9 +1,9 @@
-import { FilterOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, FilterOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Clipboard, Exam } from '@phosphor-icons/react';
-import { Avatar, Button, Card, Col, Input, Row, Table } from 'antd';
+import { Avatar, Button, Card, Col, Input, Modal, Row, Table } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
 import { NavBar } from '../../components/NavBar';
 import TarefaService from '../../services/TarefaService';
@@ -22,6 +22,7 @@ import { TurmaTarefasContainer,
 	RoteirosSection, 
 	MembrosSection,
 } from './styles';
+import { toast } from 'react-toastify';
 
 const columnsProvas = [
 	{
@@ -38,6 +39,11 @@ const columnsProvas = [
 		title: 'Prazo',
 		dataIndex: 'prazo',
 		key: 'prazo',
+	},
+	{
+		title: '',
+		dataIndex: 'botao',
+		key: 'botao',
 	},
 ];
 
@@ -57,6 +63,11 @@ const columnsRoteiros = [
 		dataIndex: 'prazo',
 		key: 'prazo',
 	},
+	{
+		title: '',
+		dataIndex: 'botao',
+		key: 'botao',
+	},
 ];
 
 function TurmaTarefas() {
@@ -66,6 +77,12 @@ function TurmaTarefas() {
 	const [provas, setProvas] = useState<Tarefa[]>([]);
 	const [showMembros, setShowMembros] = useState(false);
 	const [membros, setMembros] = useState<Usuario[]>([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [tarefaDeletadaId, setTarefaDeletadaId] = useState<number>();
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	
+
+	const navigate = useNavigate();
 
 	
 	const { turma_id } = useParams();
@@ -84,7 +101,12 @@ function TurmaTarefas() {
 							: <Clipboard size={16}/>} {tarefa.titulo}
 					</Link>),
 				pontuacao: `0/${tarefa.qtdProblemas}`,
-				prazo: dtEncerramentoFormatado
+				prazo: dtEncerramentoFormatado,
+				botao:<>{user?.ehProfessor && (<><Button size='large' onClick={() => showModal(tarefa.id)}>
+					<DeleteOutlined /> 
+				</Button><Button size='large' onClick={() => handleEditarTatefa('UPDATE', tarefa)} >
+					<EditOutlined />
+				</Button></>)}</> 
 			};
 		});
 	}
@@ -92,7 +114,23 @@ function TurmaTarefas() {
 	function buscaTarefas(tarefas: Tarefa[]) {
 		return tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(searchText.toLowerCase().trim()));
 	}
-	
+
+	function handleCriarTarefa(turmaId) {
+		navigate(`/tarefas/nova/${turmaId}`, {
+			state: {
+				actionType: 'CREATE',
+				tarefa: {}
+			}
+		});
+	}
+	function handleEditarTatefa(actionType: string, tarefa: Tarefa) {
+		navigate(`/tarefa/${tarefa.id}/editar`, {
+			state: {
+				actionType,
+				tarefaAtual: tarefa
+			}
+		});
+	}
 
 	useEffect(() => {
 		async function loadTurma() {
@@ -101,8 +139,6 @@ function TurmaTarefas() {
 			const { data: turmasData } = await TurmaService.findById(turma_id);
 			document.title = turmasData.titulo;
 			setTurma(turmasData);
-
-			const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 			if (!user) return;
 
@@ -117,6 +153,42 @@ function TurmaTarefas() {
 
 		loadTurma();
 	}, []);
+
+	function showModal(turmaId?: number) {
+		setTarefaDeletadaId(turmaId);
+		setIsModalOpen(true);
+	}
+
+	function closeModal() {
+		setIsModalOpen(false);
+	}
+
+	async function deleteTarefa() {
+		try {
+			const {data: tarefaDeletada} = await TarefaService.findById(tarefaDeletadaId);
+			
+			await TarefaService.delete(tarefaDeletadaId, user.id);
+			
+			if (!tarefaDeletada.ehProva){
+				const roteirosAtuais = roteiros.filter(({ id }) => id !== tarefaDeletadaId);
+
+				setRoteiros(roteirosAtuais);
+			}
+			else{
+				const provasAtuais = provas.filter(({ id }) => id !== tarefaDeletadaId);
+
+				setProvas(provasAtuais);
+			}
+		
+			
+
+			toast.info('Tarefa exlcuida com sucesso');
+		} catch (error) {
+			toast.info('Erro ao excluir tarefa');
+		} finally {
+			closeModal();
+		}
+	}
 	return (
 		<>
 			<NavBar />    
@@ -157,6 +229,10 @@ function TurmaTarefas() {
 						value={searchText}
 						onChange={(evt => setSearchText(evt.target.value))}
 					/>
+					{user?.ehProfessor && (<Button size='large' style={{ width: '150px' }} onClick={()=> handleCriarTarefa(turma?.id)} >
+						<PlusOutlined />
+						Nova Tarefa
+					</Button>)}
 
 					<Button size='large' >
 						<FilterOutlined />
@@ -165,7 +241,7 @@ function TurmaTarefas() {
 
 				<ContentContainer>
 					<ProvasSection>
-						<h2>Provas</h2>
+						<h2>Provas</h2> 
 						<Table 
 							size='middle'
 							bordered
@@ -215,6 +291,7 @@ function TurmaTarefas() {
 				</ContentContainer>
 
 			</TurmaTarefasContainer>
+			<Modal title='Apagar tarefa' open={isModalOpen} onOk={deleteTarefa} onCancel={closeModal}/>
 		</>
 	);
 }

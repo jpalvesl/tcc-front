@@ -31,6 +31,10 @@ class TurmaService {
 		return api.post(`${localDefaultEndpoint}/${id}/problema/${problemaId}/usuario/${usuarioId}`);
 	}
 
+	removerProblemaEmTarefa(id: number, problemaId: number, usuarioId: number) {
+		return api.delete(`${localDefaultEndpoint}/${id}/problema/${problemaId}/usuario/${usuarioId}`);
+	}
+
 }
 
 export default new TurmaService;
