@@ -8,6 +8,10 @@ class ProblemaService {
 		return api.get(`${localDefaultEndpoint}`);
 	}
 
+	findProblemasTentadosERespondidos(usuarioId: number) {
+		return api.get(`${localDefaultEndpoint}/usuarioBuscado/${usuarioId}`);
+	}
+
 	findById(problemaId: number) {
 		return api.get(`${localDefaultEndpoint}/${problemaId}`);
 	}

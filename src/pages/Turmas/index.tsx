@@ -106,10 +106,12 @@ function Turmas() {
 						onChange={(evt) => setSearchText(evt.target.value)}
 					/>
 
-					<Button size='large' style={{ width: '150px' }} onClick={handleCriarTurma} >
-						<PlusOutlined />
+					{ user?.ehProfessor && (
+						<Button size='large' style={{ width: '150px' }} onClick={handleCriarTurma} >
+							<PlusOutlined />
 						Nova Turma
-					</Button>
+						</Button>
+					)}
 
 					<Button size='large' >
 						<KeyOutlined />

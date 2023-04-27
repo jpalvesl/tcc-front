@@ -39,6 +39,7 @@ function Problemas() {
 
 	const navigate = useNavigate();
 
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	const problemasFiltradosToColumns = problemas
 		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
@@ -87,14 +88,14 @@ function Problemas() {
 						onChange={(evt) => setSearchText(evt.target.value)}
 					/>
 
-					<Button 
+					{user?.ehProfessor && <Button 
 						size='large' 
 						style={{ width: '170px' }} 
 						onClick={handleAddNovoProblema} 
 					>
 						<PlusOutlined />
 						Novo Problema
-					</Button>
+					</Button>}
 
 					<Button size='large' >
 						<FilterOutlined />
