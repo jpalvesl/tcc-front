@@ -112,12 +112,7 @@ function Tarefas() {
 						value={searchText}
 						onChange={(evt => setSearchText(evt.target.value))}
 					/>
-					{user?.ehProfessor && (
-						<Button size='large' style={{ width: '150px' }} onClick={handleCriarTarefa} >
-							<PlusOutlined />
-						Nova Tarefa
-						</Button>
-					)}
+					
 					<Button size='large' >
 						<FilterOutlined />
 					</Button>

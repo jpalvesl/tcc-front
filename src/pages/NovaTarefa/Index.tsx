@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import { Button, Form, Input, Select, DatePicker, Table } from 'antd';
 import { Divider } from '../../components/Divider';
@@ -9,7 +11,6 @@ import { toast } from 'react-toastify';
 import { Tarefa } from '../../types/Tarefa';
 import TarefaService from '../../services/TarefaService';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { Problema } from '../../types/Problema';
 import ProblemaService from '../../services/ProblemaService';
 import { AuthContext } from '../../contexts/auth';
@@ -25,13 +26,14 @@ interface TarefaNovaState {
 
 function TarefaNova() {
 	const { id } = useParams();
+	const {turmaId} = useParams();
 	const { user } = useContext(AuthContext);
 	const { state } = useLocation();
 	const navigate = useNavigate();
 	const { actionType, tarefaAtual } = state as TarefaNovaState;
 	const [titulo, setTitulo] = useState('');
 	const [descricao, setDescricao] = useState('');
-	const [turmaId, setTuraId] = useState(Number);
+	
 	const [datas, setDatas] = useState([]);
 	const [problemasTarefa, setProblemasTarefa] = useState<Problema[]>([]);
 	const [roteiroPorTurma, setRoteirosPorTurma] = useState([]);
@@ -43,6 +45,8 @@ function TarefaNova() {
 	const [optionsRoteiros, setOptionsRoteiros] = useState([]);
 	const [optionsProvas, setOptionsProvas] = useState([]);
 
+	dayjs.extend(customParseFormat);
+
 	useEffect(()=> {
 		if(id !== undefined){
 			findTask(id);
@@ -52,6 +56,7 @@ function TarefaNova() {
 	},[id]);
 
 	async function findTask(id:number) {
+
 		const {data} = await TarefaService.findById(id);
 		const dates = [data.dtEncerramento, data.dtAbertura];
 		const {data: problemas} = await ProblemaService.findAll();
@@ -61,7 +66,6 @@ function TarefaNova() {
 		setTitulo(data.titulo);
 		setDescricao(data.descricao);
 		setDatas(dates);
-		setTuraId(data.turmaId);
 
 		setProblemasTarefa(problemasTarefa.map((problemas)=> {
 			return {
@@ -93,10 +97,12 @@ function TarefaNova() {
 		
 		
 	}
-	async function findProblema(id: number) {
-		const {data} = await ProblemaService.findById(id);
-		return data.nome;
-		
+
+	function formataData() {
+		const dtAbertura = dayjs(tarefaAtual?.dtAbertura);
+		const dtEncerramento = tarefaAtual?.dtEncerramento !== undefined? dayjs(tarefaAtual?.dtEncerramento): console.log('CU');
+
+		return [dtAbertura, dtEncerramento];
 	}
 
 	async function tarefasPorTurma(value){
@@ -157,8 +163,7 @@ function TarefaNova() {
 			<TurmaNovaContainer>
 				<h1>{actionType === 'CREATE' ? 'Criar Tarefa' : 'Editar Tarefa'}</h1>
 				<Divider />
-				{datas.length > 0 &&  
-				<Form 
+				{<Form 
 				
 					layout='vertical'
 					onFinish={() => handleOnFinish(user.id)}
@@ -172,19 +177,23 @@ function TarefaNova() {
 							/>
 						</Form.Item>
 						<Form.Item label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
-						
+					
 							<RangePicker 
-								defaultValue={[dayjs(datas[0],'YYYY-MM-DD'),dayjs(datas[1],'YYYY-MM-DD')]}
+								defaultValue={formataData()}
 								size='large'
 								locale={locale} 
 								onChange={(datas) => {
-									const datasFormatadas = datas?.map((dateDayJs) => dateDayJs?.toISOString().substring(0,10));								
+									const datasFormatadas = datas?.map((dateDayJs) => {
+										
+										return dateDayJs?.toISOString().substring(0,10);
+									});								
+									
 									setDatas(datasFormatadas);
-								}}
+								}}				
 							/>
 						</Form.Item>
 					</Form.Item>
-					
+				
 
 					<Form.Item label="Descrição">
 						<Input 
@@ -193,9 +202,9 @@ function TarefaNova() {
 							onChange={(evt) => setDescricao(evt.target.value)}
 						/>
 					</Form.Item>
-					
+				
 					<Divider/>
-					
+				
 					<Form.Item label="Adicionar Problemas">
 						<Select
 							mode='multiple'
@@ -206,24 +215,24 @@ function TarefaNova() {
 						/>
 					</Form.Item>
 					<ListaProblemas>
-						
+					
 						<strong><p>Problemas Adicionados</p></strong>
 						<ProblemasAdicionados>
 							{problemasTarefa?.map((problem, idx) => (
-							
-								<p  key={idx}>{problem.label}</p>
 						
+								<p  key={idx}>{problem.label}</p>
+					
 							))}
 						</ProblemasAdicionados>
-						
-						
+					
+					
 					</ListaProblemas>
 					<Divider/>
 					<p>Importar Atividade</p>
 					<Form.Item label="Turma">
 						<Select
 							size='large'
-							
+						
 							onChange={(value,turma) => {setTurma(turma); tarefasPorTurma(value);}}							
 							options={optionsTurma}
 						/>
@@ -247,7 +256,7 @@ function TarefaNova() {
 												</ProblemaInfo>
 
 												<ProblemaActions>
-									
+								
 													<Button size='large' onClick={() => { const idDeletado = problema.id;
 														const problemasAtuais = problemasPorRoteiro.filter(({ id }) => id !== idDeletado);
 														setProblemasPorRoteiro(problemasAtuais);}}>
@@ -259,9 +268,9 @@ function TarefaNova() {
 										)}
 									</>
 								)}
-							
 						
-						
+					
+					
 							</ListaProblemas>
 						</Form.Item>
 						<Form.Item label="Provas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
@@ -272,19 +281,19 @@ function TarefaNova() {
 								options={optionsProvas}
 							/>
 							<ListaProblemas>
-						
+					
 								{problemasPorProva?.length === 0 ? null : (
 									<>
 										<h3>Provas por Tarefa</h3>
 										{problemasPorProva?.map((problema,idx) => (
 											<ProblemaRow key={`${problema.id}-${idx}`}>
 												<ProblemaInfo>
-								
+							
 													<p>{problema.nome}</p>
 												</ProblemaInfo>
 
 												<ProblemaActions>
-								
+							
 													<Button size='large'
 														onClick={()=>{ const idDeletado = problema.id;
 															const problemasAtuais = problemasPorProva.filter(({ id }) => id !== idDeletado);
@@ -295,32 +304,32 @@ function TarefaNova() {
 											</ProblemaRow>
 										)
 										)}
-										
-							
+									
+						
 									</>
 								) 
 								}
-					
-					
+				
+				
 							</ListaProblemas>
 						</Form.Item>
-						
+					
 					</Form.Item>
 					<Divider/>
-					
+				
 					<Form.Item>
 						<Button size='large' type="primary" 
 							htmlType="submit" style={{float: 'right'}}>
 							{actionType === 'CREATE' ? 'Criar Tarefa' : 'Editar Tarefa'}
 						</Button>
-						<Link to={`/tarefa/${id}`}>
+						<Link to={actionType==='UPDATE'?`/tarefa/${id}`: `/turma/${turmaId}`}>
 							<Button 
 								style={{float: 'right', marginRight: '5px'}} 
 								size='large' >
-								Cancelar
+							Cancelar
 							</Button></Link>
 					</Form.Item>
-					
+				
 				</Form>}
 			</TurmaNovaContainer>
 		</>

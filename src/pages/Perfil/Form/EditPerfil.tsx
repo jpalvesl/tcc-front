@@ -29,8 +29,10 @@ function EditarPerfil (){
 	const navigate = useNavigate();
 	const [imgUrl,setImgUrl] = useState('');
 	const [progress,setProgress] = useState(0);
+	const [login, setLogin] = useState(false);
 
 	const handleUpload= (event) => {
+		setLogin(true);
 		event.preventDefault();
 
 		const file = event.target[0]?.files[0];
@@ -52,7 +54,8 @@ function EditarPerfil (){
 			() => {
 				getDownloadURL(uploadTaks.snapshot.ref).then(url => {
 					setImgUrl(url);
-				}) ;
+					setLogin(false);
+				}) ;	
 			}
 		);
 	};
@@ -124,9 +127,10 @@ function EditarPerfil (){
 						<div className='imagem'>
 							
 							{imgUrl && <img src={imgUrl} alt="Imagem" />}
+							
 						</div>
-						{!imgUrl && <progress value={progress} max='100'/>}
 						<div className='formImg'>
+							{login && <progress value={progress} max='100'/>}
 							<Form onSubmitCapture={handleUpload}>
 								
 								<Input 
