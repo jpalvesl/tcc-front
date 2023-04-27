@@ -17,7 +17,7 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	async function handleEnviaResposta() {
-		await SubmissaoService.realizaSubmissao(user.id, problemaId, {
+		await SubmissaoService.realizaSubmissao(problemaId, user.id, {
 			codigoResposta: code
 		} as ISubmissaoRequest)
 			.then(() => alert('Realizou a submissao'))

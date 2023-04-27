@@ -34,6 +34,7 @@ export default function Perfil(){
 	const [problemas, setProblemas] = useState<Problema[]>([]);
 
 	const [submissoes, setSubmissoes] = useState([]);
+	const [mapProblemas, setMapProblemas] = useState({ tentados: [], resolvidos: [] });
 
 	interface DataType {
 		key: string;
@@ -62,16 +63,9 @@ export default function Perfil(){
 		}
 	];
 
-	const data: DataType[] = [
-		
-	];
-
-
 	function editTask(id: number){
 		navigate(`/perfil/${id}`);
 	}
-
-	
 	
 	useEffect(() => {
 		async function loadUsuario() {
@@ -82,12 +76,16 @@ export default function Perfil(){
 			const { data } = await UsuarioService.findById(user.id);
 			const { data: dataTurma} = await TurmaService.findByUsuario(user.id);
 			const { data: dataProblema} = await ProblemaService.findAll();
-			const {data: dataSubmissao} = await SubmissaoService.findByUsuario(user.id);
+			const { data: dataSubmissao } = await SubmissaoService.findByUsuario(user.id);
+			const { data: mapProblemasData } = await ProblemaService.findProblemasTentadosERespondidos(user.id);
+
+			console.log(mapProblemasData);
+
 			setUsuario(data);
 			setTurmas(dataTurma.aluno);
 			setProblemas(dataProblema);
 			setSubmissoes(dataSubmissao);
-			
+			setMapProblemas(mapProblemasData);
 		}
 		document.title = 'Perfil';
 
@@ -171,10 +169,10 @@ export default function Perfil(){
 							Submissões: {submissoes.length}
 						</p>
 						<p className='problemas'>
-							Problemas tentados: 136
+							Problemas tentados: {mapProblemas.tentados}
 						</p>
 						<p className='problemas'>
-							Problemas resolvidos: 132
+							Problemas resolvidos: {mapProblemas.resolvidos}
 						</p>
 						
 

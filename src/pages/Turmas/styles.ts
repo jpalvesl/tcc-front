@@ -30,7 +30,7 @@ export const SearchRow = styled.div`
   gap: 8px;
 
   input {
-    max-width: 80%;
+    max-width: 100%;
     background-color: ${themes.default.gray['800']};
     color: ${themes.default.gray['500']};
 

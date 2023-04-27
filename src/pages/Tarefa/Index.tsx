@@ -15,7 +15,7 @@ import TarefaService from '../../services/TarefaService';
 import { Turma } from '../../types/Turma';
 import TurmaService from '../../services/TurmaService';
 import { Button, Input, Table } from 'antd';
-import { CheckCircleOutlined, CloseCircleFilled, EditOutlined, FilterOutlined } from '@ant-design/icons';
+import { EditOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
@@ -46,26 +46,6 @@ const columns: ColumnsType<any> = [
 		align: 'center'
 	},
 ];
-
-const dataSourceProblemas = [
-	{
-		key: '1',
-		problema:'Problema 1',
-		dificuldade: '1',
-		pontuacao: '16/17',
-		submissoes: (<Button className='buttonSubmissao' style={{ width: '240px' }}>Visualizar submissões</Button>),
-		status: <CloseCircleFilled />,
-	},
-	{
-		key: '2',
-		problema:'Problema 2',
-		dificuldade: '1',
-		pontuacao: '16/17',
-		submissoes: (<Button className='buttonSubmissao' style={{ width: '240px' }}>Visualizar submissões</Button>),
-		status: <CheckCircleOutlined />,
-	},
-];
-
 
 export default function TarefaProblemas() {
 	const { id } = useParams();
