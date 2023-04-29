@@ -75,11 +75,9 @@ export default function Perfil(){
 
 			const { data } = await UsuarioService.findById(user.id);
 			const { data: dataTurma} = await TurmaService.findByUsuario(user.id);
-			const { data: dataProblema} = await ProblemaService.findAll();
+			const { data: dataProblema} = await ProblemaService.findProblemasTentados(user.id);
 			const { data: dataSubmissao } = await SubmissaoService.findByUsuario(user.id);
 			const { data: mapProblemasData } = await ProblemaService.findProblemasTentadosERespondidos(user.id);
-
-			console.log(mapProblemasData);
 
 			setUsuario(data);
 			setTurmas(dataTurma.aluno);
