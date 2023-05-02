@@ -64,6 +64,12 @@ function TurmaNova() {
 				...turmaAtual,
 				instituicaoId: user.instituicaoAtualId
 			});
+
+			console.log({
+				...turmaAtual,
+				instituicaoId: user.instituicaoAtualId
+			});
+			
 		}
 
 		loadInstituicoes();
@@ -115,6 +121,12 @@ function TurmaNova() {
 	}
 
 	function updateTurmaInput(evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+		console.log({
+			...turma,
+			[evt.target.name]: evt.target.value
+		});
+		
+		
 		setTurma({
 			...turma,
 			[evt.target.name]: evt.target.value
@@ -242,6 +254,7 @@ function TurmaNova() {
 					<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
 						<Form.Item 
 							label="Datas"
+							name='datas'
 						>
 							<RangePicker 
 								size='large'
@@ -252,6 +265,8 @@ function TurmaNova() {
 										
 										return dateDayJs?.toISOString().substring(0,10);
 									});								
+									
+									console.log(datasFormatadas);
 									
 									setTurma({
 										...turma,
