@@ -1,6 +1,7 @@
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { ProblemaTabProps } from '..';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoRequest } from '../../../types/Submissao';
@@ -21,7 +22,10 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 			codigoResposta: code
 		} as ISubmissaoRequest)
 			.then(() => alert('Realizou a submissao'))
-			.catch(() => alert('Ocorreu um erro na submissao'));
+			.catch((err) => {
+				console.error(err);
+				toast(err.response.data.message);
+			});
 	}
 
 	return (

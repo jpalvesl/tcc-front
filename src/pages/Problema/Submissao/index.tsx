@@ -1,13 +1,12 @@
-import { Button, List, Modal, Table, Tooltip } from 'antd';
+import { Button, Card, Col, List, Modal, Row, Table, Tooltip } from 'antd';
 import CodeEditor from '@uiw/react-textarea-code-editor';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProblemaTabProps } from '../';
 import { CorrectIcon } from '../../../assets/icons/CorrectIcon';
 import { FailIcon } from '../../../assets/icons/FailIcon';
 import { VisualizeIcon } from '../../../assets/icons/VisualizeIcon';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoResponse } from '../../../types/Submissao';
-import { ICasosDeTeste } from '../../../types/CasosDeTeste';
 import CasosDeTesteService from '../../../services/CasosDeTesteService';
 
 const columns = [
@@ -49,6 +48,10 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 		respostas: []
 	});
 	const [modalRespostaOpen, setModalRespostaOpen] = useState(false);
+	const [casoMostrado, setCasoMostrado] = useState({
+		caso: {},
+		resposta: {}
+	});
 
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
@@ -61,6 +64,14 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 		const { data: casosTesteData } = await CasosDeTesteService.findBySubmissao(submissaoId);
 		
 		setCasosTeste(casosTesteData);
+	}
+
+	function handleShowModalResposta(idx) {
+		setCasoMostrado({
+			caso: casosTeste.casos[idx],
+			resposta: casosTeste.respostas[idx]
+		});
+		setModalRespostaOpen(true);
 	}
 
 	const submissoesToColumns = submissoesProblemaAluno
@@ -98,17 +109,20 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 					grid={{ gutter: 2 }}
 					dataSource={casosTeste?.respostas}
 					renderItem={(item, idx) => {
-
-						
-
 						return (
 							<List.Item key={`item-${idx}`}>
 								<p>
 									{item.status === 'OK'
-										? <CorrectIcon size={25}/>
+										? <CorrectIcon size={25} onClick={() => handleShowModalResposta(idx)} />
 										: (
-											<Tooltip placement="bottom" title={item.status}>
-												<FailIcon size={25}/>
+											<Tooltip 
+												placement="bottom" 
+												title={item.status}
+											>
+												<FailIcon 
+													size={25}
+													onClick={() => handleShowModalResposta(idx)}
+												/>
 											</Tooltip>
 										)}
 								</p>
@@ -127,9 +141,8 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 				title="Código resposta"
 				centered
 				open={modalOpen}
-				onOk={() => setModalOpen(false)}
 				onCancel={() => setModalOpen(false)}
-				closable={false}
+				footer={[]}
 				width={700}
 			>
 				<CodeEditor
@@ -147,6 +160,37 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 						height: 500
 					}}
 				/>
+			</Modal>
+			<Modal
+				title="Código resposta"
+				centered
+				open={modalRespostaOpen}
+				onCancel={() => setModalRespostaOpen(false)}
+				footer={[]}
+				width={700}
+			>
+				<Row gutter={16}>
+					<Col span={8}>
+						<Card title="Entrada">
+							{casoMostrado.caso?.entrada?.split('\n')?.map((linha, idx: number) => (<p key={`linha-entrada=${idx}`}>{linha}</p>))}
+						</Card>
+					</Col>
+					<Col span={8}>
+						<Card title="Resposta esperada">
+							{casoMostrado.caso.saida}
+						</Card>
+					</Col>
+					<Col span={8}>
+						<Card title={
+							['ERRO DE APRESENTAÇÃO', 'OK'].includes(casoMostrado.resposta.status)
+								? 'Resposta obtida'
+								: 'Erro Obtido'}>
+							{['ERRO DE APRESENTAÇÃO', 'OK'].includes(casoMostrado.resposta.status)
+								? casoMostrado.resposta.saida
+								: casoMostrado.resposta.status}
+						</Card>
+					</Col>
+				</Row>
 			</Modal>
 		</>
 		

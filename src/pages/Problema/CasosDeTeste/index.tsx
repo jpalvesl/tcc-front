@@ -1,5 +1,5 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Collapse, Popover, Row, Upload } from 'antd';
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Col, Collapse, Divider, Popover, Row, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -13,6 +13,8 @@ const content = 'Para importar os casos de teste, você precisa fornecer um arqu
 
 function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 	const [casosTeste, setCasosTeste] = useState<ICasosDeTeste[]>([]); 
+	const [activeKey, setActiveKey] = useState<string[]>([]); 
+
 
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
@@ -31,7 +33,6 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 		return (
 			<div style={{
 				display: 'flex',
-				alignItems: 'center',
 				justifyContent: 'space-between'
 			}}>
 				{`Caso ${caso}`}
@@ -80,6 +81,20 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 
 	}
 
+	function onChange(key: string | string[]) {
+		setActiveKey(key);
+	}
+
+	function toggleCollapse() {
+		if (activeKey.length === 0) {
+			setActiveKey(casosTeste.map((caso, idx) => String(idx)));
+			return;
+		}
+
+		setActiveKey([]);
+		return;
+	}
+
 	return (
 		<CasosDeTesteContainer>
 			<h1>Casos de Teste</h1>
@@ -110,10 +125,33 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 				</Popover>
 			</Actions>
 
+			<Divider />
+
+			<Button 
+				type='text'
+				size='large'
+				onClick={toggleCollapse}
+				style={{
+					fontWeight: 'bold'
+				}}
+			>
+				<PlusOutlined />
+				{activeKey.length === 0 ? 'Mostrar todos': 'Colapsar todos'}
+			</Button>
 			<CasosDeTesteCadastradosContainer>
 				{casosTeste.map((caso, idx) => (
-					<Collapse key={idx} bordered={false} style={{backgroundColor: 'transparent'}}>
-						<Panel key={idx} header={CasosHeader(caso.caso)}>
+					<Collapse 
+						collapsible='icon' 
+						key={idx} bordered={false} 
+						style={{backgroundColor: 'transparent'}}
+						activeKey={activeKey}
+						onChange={onChange}
+					>
+						<Panel 
+							key={idx} 
+							header={CasosHeader(caso.caso)}
+							forceRender
+						>
 							<Caso>
 								<Row gutter={[16, 8]}>
 									<Col span={12}>
