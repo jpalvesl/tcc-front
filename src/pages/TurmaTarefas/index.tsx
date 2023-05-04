@@ -209,6 +209,11 @@ function TurmaTarefas() {
 					</DescriptionLeft>
 
 					<DescriptionRight>
+						{turma?.professores.map(professor => professor.id).includes(user.id) && (
+							<p>
+								<strong>Chave: </strong> {turma?.chave}
+							</p>
+						)}
 						<p>
 							<strong>Instituição: </strong> {turma?.instituicaoTitulo}
 						</p>

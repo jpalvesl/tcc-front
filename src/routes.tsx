@@ -20,6 +20,7 @@ import { Tarefas } from './pages/Tarefas/Index';
 import TarefaProblemas from './pages/Tarefa/Index';
 import { TarefaNova } from './pages/NovaTarefa/Index';
 import { LandingPage } from './pages/LandingPage';
+import { Permissoes } from './pages/Permissoes';
 
 const Private = ({Item}) => {
 
@@ -114,6 +115,10 @@ export const Router = createBrowserRouter([
 	{
 		path: '/tarefa/:id/editar',
 		element: <TarefaNova />,
+	},
+	{
+		path: '/permissoes',
+		element: <Permissoes />,
 	},
 ]);
 

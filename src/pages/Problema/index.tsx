@@ -1,5 +1,6 @@
 import { DownOutlined } from '@ant-design/icons';
 import { Space, Tag, Tabs, Dropdown, Spin } from 'antd';
+import { isUndefined } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
@@ -33,11 +34,14 @@ function Problema() {
 	const [problema, setProblema] = useState<IProblema>({} as IProblema);
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [items, setItems] = useState([]);
 
 	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
 
 	const { id } = useParams();
 	const numericId = Number(id);
+
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	const itemsDropDown = [
 		{
@@ -48,9 +52,9 @@ function Problema() {
 			key: '2',
 			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
 		},
-	];
+	];	
 
-	const items = [
+	const allItems = [
 		{
 			key: '1',
 			label: 'Descrição',
@@ -82,6 +86,9 @@ function Problema() {
 		},
 	];
 	
+	
+
+
 
 	useEffect(() => {
 		async function loadProblema() {
@@ -90,9 +97,21 @@ function Problema() {
 				return;
 			}
 
-
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
+
+			if (user === null) {
+				setItems(allItems.filter(item => item.key === '1'));
+			}
+			else if (!user.ehProfessor) {
+				setItems(allItems.filter(item => item.key !== '4'));
+			}
+			else if (user.ehProfessor && user.id === problema.criadorId) {
+				setItems(allItems);
+			}
+			else {
+				setItems(allItems.filter(item => item.key === '1'));
+			}
 
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
@@ -134,7 +153,7 @@ function Problema() {
 							size='large'
 							centered
 							defaultActiveKey="1" 
-							items={items} 
+							items={allItems} 
 							style={{margin: 16, display: 'block'}}
 							destroyInactiveTabPane={true}
 						/>

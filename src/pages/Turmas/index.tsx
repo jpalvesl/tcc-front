@@ -23,6 +23,8 @@ function Turmas() {
 	const [turmas, setTurmas] = useState<Array<Turma>>([]);
 	const [turmasProfessor, setTurmasProfessor] = useState<Array<Turma>>([]);
 	const [turmaDeletadaId, setTurmaDeletadaId] = useState<number>();
+	const [isModalKeyOpen, setIsModalKeyOpen] = useState(false);
+	const [chave, setChave] = useState('');
 
 	const navigate = useNavigate();
 	const { user } = useContext(AuthContext);
@@ -33,16 +35,16 @@ function Turmas() {
 	const turmasProfessorFiltradas = turmasProfessor.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 
 
+	async function initializeData() {
+		document.title = 'Turmas';
+
+		const { data } = await TurmaService.findByUsuario(user.id);
+		
+		setTurmas(data.aluno);
+		setTurmasProfessor(data.professor);
+	}
+
 	useEffect(() => {
-		async function initializeData() {
-			document.title = 'Turmas';
-
-			const { data } = await TurmaService.findByUsuario(user.id);
-			
-			setTurmas(data.aluno);
-			setTurmasProfessor(data.professor);
-		}
-
 		initializeData();
 	}, []);
 
@@ -89,6 +91,24 @@ function Turmas() {
 		}
 	}
 
+	function handleOpenModalKey() {
+		setChave('');
+		setIsModalKeyOpen(true);
+	}
+
+	async function handleEntraEmTurma() {
+		try {
+			await TurmaService.entrarEmTurma(user.id, {
+				chave
+			});
+
+			setIsModalKeyOpen(false);
+			initializeData();
+		} catch (error) {
+			toast(error.response.data.message);
+			console.error(error.response.data.message);
+		}
+	}
 
 	return (
 		<>
@@ -113,7 +133,10 @@ function Turmas() {
 						</Button>
 					)}
 
-					<Button size='large' >
+					<Button 
+						size='large'
+						onClick={handleOpenModalKey}
+					>
 						<KeyOutlined />
 					</Button>
 
@@ -170,6 +193,22 @@ function Turmas() {
 
 			</TurmasContainer>
 			<Modal title='Apagar turma' open={isModalOpen} onOk={deleteTurma} onCancel={closeModal}/>
+			<Modal
+				title="Coloque a sua chave da turma"
+				centered
+				open={isModalKeyOpen}
+				onCancel={() => setIsModalKeyOpen(false)}
+				onOk={handleEntraEmTurma}
+				width={700}
+			>
+				<Input 
+					size='large'
+					type='text'
+					name='Chave'
+					value={chave}
+					onChange={(evt) => setChave(evt.target.value)}
+				/>
+			</Modal>
 		</>
 	);
 }

@@ -1,3 +1,4 @@
+import { EntrarEmTurmaPayload } from '../types/EntrarEmTurmaPayload';
 import { Turma } from '../types/Turma';
 import api from './api';
 const localDefaultEndpoint = 'turma';
@@ -41,6 +42,10 @@ class TurmaService {
 
 	delete(turmaId: number, usuarioId: number) {
 		return api.delete(`${localDefaultEndpoint}/${turmaId}/usuario/${usuarioId}`);
+	}
+
+	entrarEmTurma(usuarioId: number, entrarEmTurmaPayload: EntrarEmTurmaPayload) {
+		return api.post(`${localDefaultEndpoint}/entrar_em_turma/usuario/${usuarioId}`, entrarEmTurmaPayload);
 	}
 }
 

@@ -1,3 +1,4 @@
+import { EditSenha } from '../types/EditSenha';
 import { Usuario } from '../types/Usuario';
 import api from './api';
 const localDefaultEndpoint = 'usuario';
@@ -36,6 +37,10 @@ class UsuarioService {
 
 	delete(usuarioId: number) {
 		return api.delete(`${localDefaultEndpoint}/${usuarioId}`);
+	}
+
+	editarSenha(usuarioId: number, editSenhaPayload: EditSenha) {
+		return api.put(`${localDefaultEndpoint}/${usuarioId}/editar_senha`, editSenhaPayload);
 	}
 }
 
