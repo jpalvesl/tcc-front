@@ -19,6 +19,10 @@ class SubmissaoService {
 		return api.get(`${localDefaultEndpoint}/usuario/${usuarioId}/problema/${problemaId}`);
 	}
 
+	findByTurma(turmaId: number) {
+		return api.get(`${localDefaultEndpoint}/turma/${turmaId}`);
+	}
+
 	realizaSubmissao(problemaId:number, usuarioId: number, submissao: ISubmissaoRequest) {
 		return api.post(`${localDefaultEndpoint}/problema/${problemaId}/usuario/${usuarioId}`, submissao);
 	}

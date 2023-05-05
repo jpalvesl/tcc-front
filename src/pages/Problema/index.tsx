@@ -1,6 +1,6 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Space, Tag, Tabs, Dropdown, Spin } from 'antd';
-import { isUndefined } from 'lodash';
+import { Space, Tag, Tabs, Dropdown, Spin, TabsProps } from 'antd';
+import { isNumber, isObject, isUndefined } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
@@ -54,41 +54,6 @@ function Problema() {
 		},
 	];	
 
-	const allItems = [
-		{
-			key: '1',
-			label: 'Descrição',
-			children: <Descricao problema={problema} casosTeste={casosTeste} />,
-		},
-		{
-			key: '2',
-			label: 'Enviar Resposta',
-			children: <EnviarResposta problemaId={numericId} />,
-		},
-		{
-			key: '3',
-			label: 'Submissões',
-			children: <Submissoes problemaId={numericId} />,
-		},
-		{
-			key: '4',
-			label: (
-				<Dropdown menu={{ items: itemsDropDown }}>
-					<Space>
-						Editar
-						<DownOutlined />
-					</Space>
-				</Dropdown>
-			),
-			children: isCasoDeTeste
-				? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
-				: <Editar problema={problema} />,
-		},
-	];
-	
-	
-
-
 
 	useEffect(() => {
 		async function loadProblema() {
@@ -100,22 +65,87 @@ function Problema() {
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
+
+			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
+			setCasosTeste(casosTeste);
+			
+			const allItems = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao 
+						problema={problema} 
+						casosTeste={casosTeste}
+					/>,
+					forceRender: true
+				},
+				{
+					key: '2',
+					label: 'Enviar Resposta',
+					children: <EnviarResposta problemaId={numericId} />,
+				},
+				{
+					key: '3',
+					label: 'Submissões',
+					children: <Submissoes problemaId={numericId} />,
+				},
+				{
+					key: '4',
+					label: (
+						<Dropdown menu={{ items: itemsDropDown }}>
+							<Space>
+								Editar
+								<DownOutlined />
+							</Space>
+						</Dropdown>
+					),
+					children: isCasoDeTeste
+						? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
+						: <Editar problema={problema} />,
+				},
+			];
+		
+			const itemsUserNull = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao problema={problema} casosTeste={casosTeste} />,
+					forceRender: true
+				}
+			];
+		
+			const itemsDefault = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao problema={problema} casosTeste={casosTeste} />,
+					forceRender: true
+				},
+				{
+					key: '2',
+					label: 'Enviar Resposta',
+					children: <EnviarResposta problemaId={numericId} />,
+				},
+				{
+					key: '3',
+					label: 'Submissões',
+					children: <Submissoes problemaId={numericId} />,
+				}
+			];
+
 			if (user === null) {
-				setItems(allItems.filter(item => item.key === '1'));
+				setItems(itemsUserNull);
 			}
-			else if (!user.ehProfessor) {
-				setItems(allItems.filter(item => item.key !== '4'));
+			else if (user.id !== problema.criadorId) {
+				setItems(itemsDefault);
 			}
 			else if (user.ehProfessor && user.id === problema.criadorId) {
 				setItems(allItems);
 			}
 			else {
-				setItems(allItems.filter(item => item.key === '1'));
+				setItems(itemsUserNull);
 			}
 
-			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
-			setCasosTeste(casosTeste);
-			
 			setIsLoading(false);
 		}		
 		
@@ -152,11 +182,13 @@ function Problema() {
 						<Tabs 
 							size='large'
 							centered
-							defaultActiveKey="1" 
-							items={allItems} 
+							defaultActiveKey="1"
+							items={items} 
 							style={{margin: 16, display: 'block'}}
 							destroyInactiveTabPane={true}
+								
 						/>
+						
 					</HeaderContainer>
 				)}
 				
