@@ -347,18 +347,9 @@ function TurmaTarefas() {
 
 					<Divider />
 
+					<h2 style={{ marginBottom: 16 }}>Submissões dos alunos</h2>
 					{turma?.professores.map(professor => professor.id).includes(user.id) && (
 						<SubmissoesAlunos>
-							<SearchRow style={{ padding: 0 }}>
-								<Input 
-									size='large' 
-									placeholder='Buscar submissões' 
-									value={searchText}
-									onChange={(evt => setSearchText(evt.target.value))}
-								/>
-
-							</SearchRow>
-
 							<Table 
 								size='middle'
 								bordered
