@@ -1,5 +1,6 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Space, Tag, Tabs, Dropdown, Spin } from 'antd';
+import { Space, Tag, Tabs, Dropdown, Spin, TabsProps } from 'antd';
+import { isNumber, isObject, isUndefined } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider } from '../../components/Divider';
@@ -33,11 +34,14 @@ function Problema() {
 	const [problema, setProblema] = useState<IProblema>({} as IProblema);
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [items, setItems] = useState([]);
 
 	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
 
 	const { id } = useParams();
 	const numericId = Number(id);
+
+	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 
 	const itemsDropDown = [
 		{
@@ -48,40 +52,8 @@ function Problema() {
 			key: '2',
 			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
 		},
-	];
+	];	
 
-	const items = [
-		{
-			key: '1',
-			label: 'Descrição',
-			children: <Descricao problema={problema} casosTeste={casosTeste} />,
-		},
-		{
-			key: '2',
-			label: 'Enviar Resposta',
-			children: <EnviarResposta problemaId={numericId} />,
-		},
-		{
-			key: '3',
-			label: 'Submissões',
-			children: <Submissoes problemaId={numericId} />,
-		},
-		{
-			key: '4',
-			label: (
-				<Dropdown menu={{ items: itemsDropDown }}>
-					<Space>
-						Editar
-						<DownOutlined />
-					</Space>
-				</Dropdown>
-			),
-			children: isCasoDeTeste
-				? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
-				: <Editar problema={problema} />,
-		},
-	];
-	
 
 	useEffect(() => {
 		async function loadProblema() {
@@ -90,13 +62,90 @@ function Problema() {
 				return;
 			}
 
-
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
+
 
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
 			
+			const allItems = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao 
+						problema={problema} 
+						casosTeste={casosTeste}
+					/>,
+					forceRender: true
+				},
+				{
+					key: '2',
+					label: 'Enviar Resposta',
+					children: <EnviarResposta problemaId={numericId} />,
+				},
+				{
+					key: '3',
+					label: 'Submissões',
+					children: <Submissoes problemaId={numericId} />,
+				},
+				{
+					key: '4',
+					label: (
+						<Dropdown menu={{ items: itemsDropDown }}>
+							<Space>
+								Editar
+								<DownOutlined />
+							</Space>
+						</Dropdown>
+					),
+					children: isCasoDeTeste
+						? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
+						: <Editar problema={problema} />,
+				},
+			];
+		
+			const itemsUserNull = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao problema={problema} casosTeste={casosTeste} />,
+					forceRender: true
+				}
+			];
+		
+			const itemsDefault = [
+				{
+					key: '1',
+					label: 'Descrição',
+					children: <Descricao problema={problema} casosTeste={casosTeste} />,
+					forceRender: true
+				},
+				{
+					key: '2',
+					label: 'Enviar Resposta',
+					children: <EnviarResposta problemaId={numericId} />,
+				},
+				{
+					key: '3',
+					label: 'Submissões',
+					children: <Submissoes problemaId={numericId} />,
+				}
+			];
+
+			if (user === null) {
+				setItems(itemsUserNull);
+			}
+			else if (user.id !== problema.criadorId) {
+				setItems(itemsDefault);
+			}
+			else if (user.ehProfessor && user.id === problema.criadorId) {
+				setItems(allItems);
+			}
+			else {
+				setItems(itemsUserNull);
+			}
+
 			setIsLoading(false);
 		}		
 		
@@ -133,11 +182,13 @@ function Problema() {
 						<Tabs 
 							size='large'
 							centered
-							defaultActiveKey="1" 
+							defaultActiveKey="1"
 							items={items} 
 							style={{margin: 16, display: 'block'}}
 							destroyInactiveTabPane={true}
+								
 						/>
+						
 					</HeaderContainer>
 				)}
 				

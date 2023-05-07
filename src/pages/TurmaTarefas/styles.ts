@@ -121,4 +121,8 @@ export const RoteirosSection = styled.section`
 
 export const MembrosSection = styled.section``;
 
+export const SubmissoesAlunos = styled.section`
+  
+`;
+
 

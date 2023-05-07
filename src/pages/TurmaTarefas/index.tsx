@@ -21,8 +21,12 @@ import { TurmaTarefasContainer,
 	ProvasSection, 
 	RoteirosSection, 
 	MembrosSection,
+	SubmissoesAlunos,
 } from './styles';
 import { toast } from 'react-toastify';
+import SubmissaoService from '../../services/SubmissaoService';
+import { CorrectIcon } from '../../assets/icons/CorrectIcon';
+import { FailIcon } from '../../assets/icons/FailIcon';
 
 const columnsProvas = [
 	{
@@ -70,6 +74,29 @@ const columnsRoteiros = [
 	},
 ];
 
+const columnsSubmissoes = [
+	{
+		title: 'Aluno',
+		dataIndex: 'aluno',
+		key: 'aluno',
+	},
+	{
+		title: 'Problema',
+		dataIndex: 'problema',
+		key: 'problema',
+	},
+	{
+		title: 'Dificuldade',
+		dataIndex: 'dificuldade',
+		key: 'dificuldade',
+	},
+	{
+		title: 'Status',
+		dataIndex: 'status',
+		key: 'status',
+	},
+];
+
 function TurmaTarefas() {
 	const [searchText, setSearchText] = useState('');
 	const [turma, setTurma] = useState<Turma>();
@@ -79,6 +106,8 @@ function TurmaTarefas() {
 	const [membros, setMembros] = useState<Usuario[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [tarefaDeletadaId, setTarefaDeletadaId] = useState<number>();
+	const [submissoesAlunos, setSubmissoesAlunos] = useState([]);
+
 	const user = JSON.parse(localStorage.getItem('@Auth:user'));
 	
 
@@ -111,6 +140,24 @@ function TurmaTarefas() {
 		});
 	}
 
+	function submissoesToColumns(submissoes) {
+		return submissoes.map(submissao => {
+			return {
+				...submissao,
+				key: submissao.id,
+				aluno: <strong>{submissao.aluno}</strong>,
+				problema: (
+					<Link to={`/problema/${submissao.problemaId}`}>{submissao.problema}</Link>
+				),
+				status: (
+					submissao.status === 'OK'
+						? <CorrectIcon size={32} />
+						: <FailIcon size={32} />
+				)
+			};		
+		});
+	}
+
 	function buscaTarefas(tarefas: Tarefa[]) {
 		return tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(searchText.toLowerCase().trim()));
 	}
@@ -123,6 +170,7 @@ function TurmaTarefas() {
 			}
 		});
 	}
+
 	function handleEditarTatefa(actionType: string, tarefa: Tarefa) {
 		navigate(`/tarefa/${tarefa.id}/editar`, {
 			state: {
@@ -149,6 +197,9 @@ function TurmaTarefas() {
 
 			const { data: membrosData } = await UsuarioService.findByTurma(turma_id);
 			setMembros(membrosData);
+
+			const { data: submissoesData } = await SubmissaoService.findByTurma(turma_id);
+			setSubmissoesAlunos(submissoesData);
 		}
 
 		loadTurma();
@@ -209,6 +260,11 @@ function TurmaTarefas() {
 					</DescriptionLeft>
 
 					<DescriptionRight>
+						{turma?.professores.map(professor => professor.id).includes(user.id) && (
+							<p>
+								<strong>Chave: </strong> {turma?.chave}
+							</p>
+						)}
 						<p>
 							<strong>Instituição: </strong> {turma?.instituicaoTitulo}
 						</p>
@@ -288,6 +344,21 @@ function TurmaTarefas() {
 								: null}
 						</Row>
 					</MembrosSection>
+
+					<Divider />
+
+					<h2 style={{ marginBottom: 16 }}>Submissões dos alunos</h2>
+					{turma?.professores.map(professor => professor.id).includes(user.id) && (
+						<SubmissoesAlunos>
+							<Table 
+								size='middle'
+								bordered
+								dataSource={submissoesToColumns(submissoesAlunos)}
+								columns={columnsSubmissoes}
+								pagination={false}
+							/>
+						</SubmissoesAlunos>
+					)}
 				</ContentContainer>
 
 			</TurmaTarefasContainer>

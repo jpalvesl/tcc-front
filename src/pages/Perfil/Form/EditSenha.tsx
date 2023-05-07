@@ -1,88 +1,51 @@
 import { Button, Form, Input } from 'antd';
 import {  useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import PhotoPerfil from '../../../assets/icons/PhotoPerfil';
 
 import { Divider } from '../../../components/Divider';
 import { NavBar } from '../../../components/NavBar';
 import UsuarioService from '../../../services/UsuarioService';
-import { Usuario } from '../../../types/Usuario';
 import { CampoForm, CampoImage, PerfilContainer } from './styles';
 
 
 
 function AlterarSenha (){
 	const { id } = useParams();
-	const [model,setModel] = useState<Usuario>({
-		nome: '',
-		usuario: '',
-		senha: '',
-		instituicaoAtualId: 1,
-		email: '',
-		ehProfessor: false,
-		ehAdm: false
-	});
 	const [senha, setSenha] = useState('');
 	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
 	const [novaSenha, setNovaSenha] = useState('');
 	
 	useEffect(()=> {
-		if(id !== undefined){
-			findTask(id);
-			
-		}
-		
 		document.title = 'Alterar senha';
 	},[id]);
 
 
-	async function findTask(id:number) {
-		const response = await UsuarioService.findById(id);
-		
-		setModel( {
-			id,
-			nome: response.data.nome,
-			usuario: response.data.usuario,
-			senha: response.data.senha,
-			instituicaoAtualId: 1,
-			email: response.data.email,
-			ehProfessor: response.data.ehProfessor,
-			ehAdm: response.data.ehAdm
-		});
-		
-		
-	}
-
-	
-
-	
 
 	
 	async function handleOnFinish(id: number){
-		if(senha !== model.senha){
-			console.log('Senha errada');
-			return;
-		}
 		if(novaSenha !== confirmacaoSenha){
-			console.log('As senhas não correspondem');
+			toast('As senhas não correspondem');
 			return;
 		}
-		else{
-			
-			model.senha = novaSenha;
-			
-			await UsuarioService.edit(id,model);
-			
-			
-		}
-		
-	}
 
+		const payload = {
+			senhaAtual: senha,
+			novaSenha,
+		};
+
+		try {
+			await UsuarioService.editarSenha(id, payload);
+			toast('Senha editada com sucesso');
+		} catch (error) {
+			toast('Erro ao alterar senha, tente novamente');
+		}
+	}
 
 	return(
 		<>
-			
-			<NavBar></NavBar>
+			<NavBar />
 			<PerfilContainer>
 				<h2>Perfil</h2>
 				<Divider/>
@@ -94,17 +57,12 @@ function AlterarSenha (){
 						
 					</CampoImage>
 					<CampoForm>
-						{model.email && <Form
+						<Form
 							name="basic"
 							layout='vertical'
 							onFinish={()=> handleOnFinish(id)}
 							onFinishFailed={()=>console.log('aqui')}
-							
 						>
-							
-
-							
-
 							<Form.Item
 								label='Senha atual'
 								name='senha'
@@ -162,7 +120,7 @@ function AlterarSenha (){
 							<Form.Item>
 								
 							</Form.Item>
-						</Form>}
+						</Form>
 						
 					</CampoForm>
 				</div>

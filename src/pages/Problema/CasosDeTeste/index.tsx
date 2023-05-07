@@ -76,6 +76,7 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 			await CasosDeTesteService.editEmLote(problemaId, user.id, casosTeste);
 			toast('Casos de teste editados');
 		} catch (error) {
+			console.error(error);
 			toast('Erro ao editar casos de teste');
 		}
 
