@@ -20,6 +20,9 @@ import { ColumnsType } from 'antd/es/table';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { FailIcon } from '../../assets/icons/FailIcon';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragSortingTable } from '../../components/DragSortingTable';
+import Column from 'antd/es/table/Column';
 
 
 const columns: ColumnsType<any> = [
@@ -48,6 +51,7 @@ const columns: ColumnsType<any> = [
 ];
 
 export default function TarefaProblemas() {
+	const {turmaId} = useParams();
 	const { id } = useParams();
 	const [tarefa, setTarefa] = useState<Tarefa>();
 	const [turma, setTurma] = useState<Turma>();
@@ -55,24 +59,27 @@ export default function TarefaProblemas() {
 	const [problemas, setProblemas] = useState<Problema[]>([]);
 	const [searchText, setSearchText] = useState('');
 
-	const problemasFiltradosToColumns = problemas
-		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
-		.map(problema => {
-			return {
-				...problema,
-				key: problema.id,
-				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
-				nome: (
-					<Link 
-						to={`/problema/${problema.id}`}
-						style={{ fontWeight: 'bold' }}
-					>
-						{problema.nome}
-					</Link>
-				)
-			};
-
-		});
+	const problemasFiltradosToColumns =  
+				problemas
+					.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
+					.map(problema => {
+				
+						return {
+							...problema,
+							key: problema.id,
+							resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+							nome: (
+								<Link 
+									to={`/problema/${problema.id}`}
+									style={{ fontWeight: 'bold' }}
+								>
+									{problema.nome}
+								</Link>
+							)
+						};
+	
+					});
+			
 
 	function handleEditarTarefa(actionType: string, tarefa: Tarefa) {
 		navigate('editar', {
@@ -99,12 +106,13 @@ export default function TarefaProblemas() {
 	},[id]);
 
 	async function findTask(id:number) {
+
+
 		const response = await TarefaService.findById(id);
+		
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
-	
-		
 	}
 
 

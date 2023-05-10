@@ -124,7 +124,7 @@ function TurmaTarefas() {
 				...tarefa,
 				key: tarefa.id,
 				name: (
-					<Link to={`/tarefa/${tarefa.id}`}>
+					<Link to={`/tarefa/${tarefa.id}/${turma?.id}`}>
 						{tarefa.ehProva 
 							? <Exam size={16}/> 
 							: <Clipboard size={16}/>} {tarefa.titulo}
@@ -172,7 +172,7 @@ function TurmaTarefas() {
 	}
 
 	function handleEditarTatefa(actionType: string, tarefa: Tarefa) {
-		navigate(`/tarefa/${tarefa.id}/editar`, {
+		navigate(`/tarefa/${tarefa.id}/${turma?.id}/editar`, {
 			state: {
 				actionType,
 				tarefaAtual: tarefa
