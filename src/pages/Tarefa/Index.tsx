@@ -20,6 +20,7 @@ import { ColumnsType } from 'antd/es/table';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { FailIcon } from '../../assets/icons/FailIcon';
+import { decrypt } from '../../utils/crypto';
 
 
 const columns: ColumnsType<any> = [
@@ -50,10 +51,13 @@ const columns: ColumnsType<any> = [
 export default function TarefaProblemas() {
 	const { id } = useParams();
 	const [tarefa, setTarefa] = useState<Tarefa>();
+	const [statusTarefa, setStatusTarefa] = useState('');
 	const [turma, setTurma] = useState<Turma>();
 	const navigate = useNavigate();
 	const [problemas, setProblemas] = useState<Problema[]>([]);
 	const [searchText, setSearchText] = useState('');
+
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	const problemasFiltradosToColumns = problemas
 		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
@@ -103,8 +107,9 @@ export default function TarefaProblemas() {
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
-	
-		
+
+		const { data: statusTarefa } = await TarefaService.statusTarefa(id, user.id);
+		setStatusTarefa(statusTarefa);
 	}
 
 
@@ -144,7 +149,7 @@ export default function TarefaProblemas() {
 							<EditOutlined />
 						</Button>
 						<p>
-							<strong>Status: </strong> Resolvida
+							<strong>Status: </strong> {statusTarefa}
 						</p>
 						<p>
 							<strong>Encerra em: </strong> {tarefa?.dtEncerramento}

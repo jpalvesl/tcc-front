@@ -35,6 +35,9 @@ class TurmaService {
 		return api.delete(`${localDefaultEndpoint}/${id}/problema/${problemaId}/usuario/${usuarioId}`);
 	}
 
+	statusTarefa(tarefaId: number, usuarioId: number) {
+		return api.get(`${localDefaultEndpoint}/${tarefaId}/usuario/${usuarioId}/status`);
+	}
 }
 
 export default new TurmaService;

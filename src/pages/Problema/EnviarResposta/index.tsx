@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { ProblemaTabProps } from '..';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoRequest } from '../../../types/Submissao';
+import { decrypt } from '../../../utils/crypto';
 
 function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	const [code, setCode] = useState(
