@@ -106,12 +106,13 @@ export default function TarefaProblemas() {
 	},[id]);
 
 	async function findTask(id:number) {
+
+
 		const response = await TarefaService.findById(id);
+		
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
-	
-		
 	}
 
 

@@ -35,7 +35,7 @@ function TarefaNova() {
 	const [titulo, setTitulo] = useState('');
 	const [descricao, setDescricao] = useState('');
 	const [datas, setDatas] = useState([]);
-	const [problemasTarefa, setProblemasTarefa] = useState<Problema[]>([]);
+	const [problemasTarefa, setProblemasTarefa] = useState([]);
 	const [problemasTarefaInicial, setProblemasTarefaInicial] = useState<Problema[]>([]);
 	const [roteiroPorTurma, setRoteirosPorTurma] = useState([]);
 	const [provasPorTurma, setProvasPorTurma] = useState([]);
@@ -62,6 +62,7 @@ function TarefaNova() {
 	async function findTask(id:number) {
 
 		const {data} = await TarefaService.findById(id);
+		setEhProva(data.ehProva);
 		const dates = [data.dtEncerramento, data.dtAbertura];
 		const {data: problemasTarefa} = await ProblemaService.findByTarefa(id);
 
@@ -104,11 +105,8 @@ function TarefaNova() {
 	}
 
 	async function addProblemaTarefa(idTarefa: number) {
-		problemasTarefa.map((problemas)=> TarefaService.addProblemaEmTarefa(problemas.value,idTarefa, user.id));
 		problemasPorProva.map((problemas) => TarefaService.addProblemaEmTarefa(problemas.value,idTarefa, user.id));
 		problemasPorRoteiro.map((problemas)=> TarefaService.addProblemaEmTarefa(problemas.value,idTarefa, user.id));
-		
-		
 	}
 
 	async function removerProblemaTarefa() {
@@ -125,18 +123,23 @@ function TarefaNova() {
 
 	async function tarefasPorTurma(value){
 		const {data: listTarefas} = await TarefaService.findByTurma(value);
-		setOptionsProvas(listTarefas.provas.map((tarefas)=> {
-			return {
-				'value': tarefas.id,
-				'label': tarefas.titulo
-			};
-		}));
-		setOptionsRoteiros(listTarefas.roteiros.map((tarefas)=> {
-			return {
-				'value': tarefas.id,
-				'label': tarefas.titulo
-			};
-		}));
+		setOptionsProvas(listTarefas.provas
+			.filter((tarefa: Tarefa) => tarefa.id !== id)
+			.map((tarefas: Tarefa) => {
+				return {
+					'value': tarefas.id,
+					'label': tarefas.titulo
+				};
+			}));
+
+		setOptionsRoteiros(listTarefas.roteiros
+			.filter((tarefa: Tarefa) => tarefa.id !== id)
+			.map((tarefa: Tarefa) => {
+				return {
+					'value': tarefa.id,
+					'label': tarefa.titulo
+				};
+			}));
 
 	}
 
@@ -147,10 +150,6 @@ function TarefaNova() {
 
 
 	async function handleOnFinish(criadorId: number) {
-
-		
-		removerProblemaTarefa();
-		
 		const tarefa: Tarefa = {
 			...tarefaAtual,
 			dtAbertura: datas[0],
@@ -158,6 +157,7 @@ function TarefaNova() {
 			descricao: descricao,
 			titulo: titulo,
 			criadorId: criadorId,
+			problemas: problemasTarefa.map(problema => problema.value),
 			turmaId:  parseInt(turmaId),
 			ehProva: ehProva,
 		};
@@ -217,7 +217,8 @@ function TarefaNova() {
 							/>
 						</Form.Item>
 						<Form.Item>
-							<Checkbox 
+							<Checkbox
+								checked={ehProva}
 								onChange={(evt) => setEhProva(evt.target.checked)}
 							>
 							Problema de Prova
@@ -251,7 +252,7 @@ function TarefaNova() {
 						<ProblemasAdicionados>
 							{problemasTarefa?.map((problem, idx) => (
 						
-								<p  key={idx}>{problem.label}</p>
+								<p key={idx}>{problem.label}</p>
 					
 							))}
 						</ProblemasAdicionados>
@@ -275,6 +276,7 @@ function TarefaNova() {
 								value={roteiroPorTurma}
 								onChange={(value, label) => setRoteirosPorTurma(label)}							
 								options={optionsRoteiros}
+								allowClear
 							/>
 							<ListaProblemas>
 								{problemasPorRoteiro?.length === 0 ? null : (
@@ -310,6 +312,7 @@ function TarefaNova() {
 								value={provasPorTurma}
 								onChange={(value,label) => {setProvasPorTurma(label); problemaPorProva(value);}}							
 								options={optionsProvas}
+								allowClear
 							/>
 							<ListaProblemas>
 					
