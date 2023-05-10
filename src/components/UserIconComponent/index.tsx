@@ -3,11 +3,12 @@ import { Button, Dropdown, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserIcon } from '../NavBar/styles';
+import { decrypt } from '../../utils/crypto';
 
 function UserIconComponent() {
 	const [items, setItems] = useState();
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	function handleSair() {
 		localStorage.removeItem('@Auth:user');

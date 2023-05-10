@@ -16,6 +16,7 @@ import { Problema } from '../../types/Problema';
 import ProblemaService from '../../services/ProblemaService';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import SubmissaoService from '../../services/SubmissaoService';
+import { decrypt } from '../../utils/crypto';
 
 
 
@@ -69,7 +70,7 @@ export default function Perfil(){
 	
 	useEffect(() => {
 		async function loadUsuario() {
-			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+			const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 			if (!user) return;
 

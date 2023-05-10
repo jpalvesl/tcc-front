@@ -27,6 +27,7 @@ import { toast } from 'react-toastify';
 import SubmissaoService from '../../services/SubmissaoService';
 import { CorrectIcon } from '../../assets/icons/CorrectIcon';
 import { FailIcon } from '../../assets/icons/FailIcon';
+import { decrypt } from '../../utils/crypto';
 
 const columnsProvas = [
 	{
@@ -108,8 +109,7 @@ function TurmaTarefas() {
 	const [tarefaDeletadaId, setTarefaDeletadaId] = useState<number>();
 	const [submissoesAlunos, setSubmissoesAlunos] = useState([]);
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
-	
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	const navigate = useNavigate();
 

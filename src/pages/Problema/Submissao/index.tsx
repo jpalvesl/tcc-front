@@ -8,6 +8,7 @@ import { VisualizeIcon } from '../../../assets/icons/VisualizeIcon';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoResponse } from '../../../types/Submissao';
 import CasosDeTesteService from '../../../services/CasosDeTesteService';
+import { decrypt } from '../../../utils/crypto';
 
 const columns = [
 	{
@@ -53,7 +54,7 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 		resposta: {}
 	});
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	function handleOpenModal(codigoResposta: string) {
 		setCode(codigoResposta);

@@ -9,6 +9,7 @@ import TopicoService from '../../services/TopicoService';
 import { Problema } from '../../types/Problema';
 import { Topico } from '../../types/Topico';
 import { ProblemaNovoContainer } from './styles';
+import { decrypt } from '../../utils/crypto';
 
 const dificuldade = [
 	{ value: '1', label: '1' },
@@ -24,8 +25,7 @@ function ProblemaNovo() {
 
 	const navigate = useNavigate();
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
-	
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	useEffect(() => {
 		(async () => {

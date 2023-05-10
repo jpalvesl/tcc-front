@@ -7,6 +7,7 @@ import { ProblemaTabProps } from '..';
 import CasosDeTesteService from '../../../services/CasosDeTesteService';
 import { ICasosDeTeste } from '../../../types/CasosDeTeste';
 import { Actions, Caso, CasosDeTesteCadastradosContainer, CasosDeTesteContainer } from './styles';
+import { decrypt } from '../../../utils/crypto';
 const { Panel } = Collapse;
 
 const content = 'Para importar os casos de teste, você precisa fornecer um arquivo .json no padrão';
@@ -15,8 +16,7 @@ function CasosDeTeste({ problemaId } :ProblemaTabProps) {
 	const [casosTeste, setCasosTeste] = useState<ICasosDeTeste[]>([]); 
 	const [activeKey, setActiveKey] = useState<string[]>([]); 
 
-
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	function removeCasoDeTeste(caso: number) {
 		const novosCasos = casosTeste

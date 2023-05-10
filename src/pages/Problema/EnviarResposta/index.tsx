@@ -14,8 +14,8 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	useEffect(() => {
 		document.title = 'Problema - Enviar resposta';
 	}, []);
-
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	async function handleEnviaResposta() {
 		await SubmissaoService.realizaSubmissao(problemaId, user.id, {

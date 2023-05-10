@@ -24,6 +24,7 @@ import { CriadorContainer,
 } from './styles';
 import { Submissoes } from './Submissao';
 import { toast } from 'react-toastify';
+import { decrypt } from '../../utils/crypto';
 
 export interface ProblemaTabProps {
 	problemaId?: number;
@@ -42,7 +43,7 @@ function Problema() {
 	const { id } = useParams();
 	const numericId = Number(id);
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	const itemsDropDown = [
 		{

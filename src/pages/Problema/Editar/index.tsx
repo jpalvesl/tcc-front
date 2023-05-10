@@ -8,6 +8,7 @@ import ProblemaService from '../../../services/ProblemaService';
 import TopicoService from '../../../services/TopicoService';
 import { Problema } from '../../../types/Problema';
 import { Topico } from '../../../types/Topico';
+import { decrypt } from '../../../utils/crypto';
 
 function Editar({ problema }: ProblemaTabProps) {
 	const [problemaEditado, setProblemaEditado] = useState({ ...problema } as Problema);
@@ -19,7 +20,7 @@ function Editar({ problema }: ProblemaTabProps) {
 		document.title = 'Problema - Edição';
 	}, []);
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	useEffect(() => {
 		(async () => {
