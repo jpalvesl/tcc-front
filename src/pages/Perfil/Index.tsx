@@ -124,7 +124,10 @@ export default function Perfil(){
 			label: <p className='label-titulo'>Turmas</p>,
 			children:  <p> <h3 className='titulo'>Minhas Turmas</h3><Divider/>{turmas?.map((turma, idx) => (
 				
-				<div key={turma.id}>
+				<div 
+					key={turma.id}
+					style={{ marginBottom: 16 }}
+				>
 					<p className='turmasAluno' key={idx}>{turma.nomeTurma} - {turma.semestre}</p>
 					<p className='instituicaoTitulo'>{turma.instituicaoTitulo}</p>
 				</div>
