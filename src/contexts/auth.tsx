@@ -17,7 +17,11 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const loadingStoreData = () => {
-			const storageUser = decrypt(localStorage.getItem('@Auth:user'));
+			let storageUser = localStorage.getItem('@Auth:user');
+			if (storageUser === null) return;
+
+
+			storageUser = decrypt(storageUser);
 			const storageToken = localStorage.getItem('@Auth:token');
 
 			if (storageUser && storageToken) {
