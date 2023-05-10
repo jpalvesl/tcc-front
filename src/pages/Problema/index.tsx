@@ -23,6 +23,7 @@ import { CriadorContainer,
 	ProblemaWrapper
 } from './styles';
 import { Submissoes } from './Submissao';
+import { toast } from 'react-toastify';
 
 export interface ProblemaTabProps {
 	problemaId?: number;
@@ -58,7 +59,7 @@ function Problema() {
 	useEffect(() => {
 		async function loadProblema() {
 			if (Number.isNaN(numericId)) {
-				alert('O id passado não é um número');
+				toast('O id passado não é um número');
 				return;
 			}
 

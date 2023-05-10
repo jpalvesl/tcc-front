@@ -19,7 +19,7 @@ export default function Contato(){
 					<CampoInfo>
 						
 						<p className='textInfo'>Para entrar em contato com a nossa equipe de suporte, por favor preencha o
-formulário abaixo ou envie um e-mail para support@saep.com</p>
+formulário abaixo ou envie um e-mail para code2knoww@gmail.com</p>
 						
 					</CampoInfo>
 

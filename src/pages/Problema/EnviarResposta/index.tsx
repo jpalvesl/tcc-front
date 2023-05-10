@@ -21,7 +21,9 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 		await SubmissaoService.realizaSubmissao(problemaId, user.id, {
 			codigoResposta: code
 		} as ISubmissaoRequest)
-			.then(() => alert('Realizou a submissao'))
+			.then(() => {
+				toast('Submissão realizada com sucesso');
+			})
 			.catch((err) => {
 				console.error(err);
 				toast(err.response.data.message);
