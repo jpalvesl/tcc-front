@@ -14,7 +14,22 @@ export const PermissoesContainer = styled.div`
     padding-left: 16px;
   }
 
+  h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
   form {
     padding: 0 200px;
+  }
+
+  button {
+    float: right;
+    width: 150px;
   }
 `;

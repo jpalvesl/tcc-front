@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { ProblemaTabProps } from '..';
 import SubmissaoService from '../../../services/SubmissaoService';
 import { ISubmissaoRequest } from '../../../types/Submissao';
+import { decrypt } from '../../../utils/crypto';
 
 function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	const [code, setCode] = useState(
@@ -14,14 +15,16 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	useEffect(() => {
 		document.title = 'Problema - Enviar resposta';
 	}, []);
-
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	async function handleEnviaResposta() {
 		await SubmissaoService.realizaSubmissao(problemaId, user.id, {
 			codigoResposta: code
 		} as ISubmissaoRequest)
-			.then(() => alert('Realizou a submissao'))
+			.then(() => {
+				toast('Submissão realizada com sucesso');
+			})
 			.catch((err) => {
 				console.error(err);
 				toast(err.response.data.message);

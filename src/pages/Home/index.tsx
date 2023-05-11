@@ -11,6 +11,7 @@ import TarefaService from '../../services/TarefaService';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Usuario } from '../../types/Usuario';
 import { Divider } from '../../components/Divider';
+import { decrypt } from '../../utils/crypto';
 
 export const Home = () => {
 	const [roteiros, setRoteiros] = useState<Tarefa[]>([]);
@@ -19,8 +20,8 @@ export const Home = () => {
 	useEffect(() => {
 
 		async function loadTarefas() {
-
-			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+			const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
+			
 			if (!user) return;
 			setUsuario(user);
 

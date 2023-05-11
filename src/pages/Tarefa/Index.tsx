@@ -20,9 +20,7 @@ import { ColumnsType } from 'antd/es/table';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { FailIcon } from '../../assets/icons/FailIcon';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { DragSortingTable } from '../../components/DragSortingTable';
-import Column from 'antd/es/table/Column';
+import { decrypt } from '../../utils/crypto';
 
 
 const columns: ColumnsType<any> = [
@@ -54,32 +52,32 @@ export default function TarefaProblemas() {
 	const {turmaId} = useParams();
 	const { id } = useParams();
 	const [tarefa, setTarefa] = useState<Tarefa>();
+	const [statusTarefa, setStatusTarefa] = useState('');
 	const [turma, setTurma] = useState<Turma>();
 	const navigate = useNavigate();
 	const [problemas, setProblemas] = useState<Problema[]>([]);
 	const [searchText, setSearchText] = useState('');
 
-	const problemasFiltradosToColumns =  
-				problemas
-					.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
-					.map(problema => {
-				
-						return {
-							...problema,
-							key: problema.id,
-							resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
-							nome: (
-								<Link 
-									to={`/problema/${problema.id}`}
-									style={{ fontWeight: 'bold' }}
-								>
-									{problema.nome}
-								</Link>
-							)
-						};
-	
-					});
-			
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
+
+	const problemasFiltradosToColumns = problemas
+		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
+		.map(problema => {
+			return {
+				...problema,
+				key: problema.id,
+				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+				nome: (
+					<Link 
+						to={`/problema/${problema.id}`}
+						style={{ fontWeight: 'bold' }}
+					>
+						{problema.nome}
+					</Link>
+				)
+			};
+
+		});
 
 	function handleEditarTarefa(actionType: string, tarefa: Tarefa) {
 		navigate('editar', {
@@ -113,6 +111,12 @@ export default function TarefaProblemas() {
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
+<<<<<<< HEAD
+
+		const { data: statusTarefa } = await TarefaService.statusTarefa(id, user.id);
+		setStatusTarefa(statusTarefa);
+=======
+>>>>>>> main
 	}
 
 
@@ -152,7 +156,7 @@ export default function TarefaProblemas() {
 							<EditOutlined />
 						</Button>
 						<p>
-							<strong>Status: </strong> Resolvida
+							<strong>Status: </strong> {statusTarefa}
 						</p>
 						<p>
 							<strong>Encerra em: </strong> {tarefa?.dtEncerramento}

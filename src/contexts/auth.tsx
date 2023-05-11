@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import api from '../services/api';
 import AuthService from '../services/AuthService';
+import { encrypt, decrypt } from '../utils/crypto';
 
 
 export const AuthContext = createContext(null);
@@ -16,7 +17,11 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const loadingStoreData = () => {
-			const storageUser = localStorage.getItem('@Auth:user');
+			let storageUser = localStorage.getItem('@Auth:user');
+			if (storageUser === null) return;
+
+
+			storageUser = decrypt(storageUser);
 			const storageToken = localStorage.getItem('@Auth:token');
 
 			if (storageUser && storageToken) {
@@ -40,7 +45,9 @@ export const AuthProvider = ({ children }) => {
 					'Authorization'
 				] = `Bearer ${token}`;
 
-				localStorage.setItem('@Auth:user', JSON.stringify(usuarioRetornado));
+				const userEncrypted = encrypt(JSON.stringify(usuarioRetornado));
+
+				localStorage.setItem('@Auth:user', userEncrypted);
 				localStorage.setItem('@Auth:token', token);
 			}
 		} catch (error) {

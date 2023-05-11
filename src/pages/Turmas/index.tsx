@@ -22,6 +22,7 @@ function Turmas() {
 	const [searchText, setSearchText] = useState('');
 	const [turmas, setTurmas] = useState<Array<Turma>>([]);
 	const [turmasProfessor, setTurmasProfessor] = useState<Array<Turma>>([]);
+	const [turmasMonitor, setTurmasMonitor] = useState<Turma[]>([]);
 	const [turmaDeletadaId, setTurmaDeletadaId] = useState<number>();
 	const [isModalKeyOpen, setIsModalKeyOpen] = useState(false);
 	const [chave, setChave] = useState('');
@@ -33,6 +34,7 @@ function Turmas() {
 
 	const turmasFiltradas = turmas.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 	const turmasProfessorFiltradas = turmasProfessor.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
+	const turmasMonitorFiltradas = turmasMonitor.filter((turma) => (turma.titulo?.toLowerCase()?.startsWith(searchText.toLowerCase())));
 
 
 	async function initializeData() {
@@ -42,6 +44,7 @@ function Turmas() {
 		
 		setTurmas(data.aluno);
 		setTurmasProfessor(data.professor);
+		setTurmasMonitor(data.monitor);
 	}
 
 	useEffect(() => {
@@ -174,6 +177,34 @@ function Turmas() {
 						<Divider/>
 					</>
 				)}
+
+				{turmasMonitor?.length === 0 ? null : (
+					<>
+						<h2 style={{ fontSize: 32, paddingLeft: 16, marginBottom: 16, fontFamily: 'Poppins' }}>Turmas como Monitor</h2>
+						{turmasMonitorFiltradas?.map((turma, idx) => (
+							<TurmaRow key={`${turma.id}-${idx}`}>
+								<TurmaInfo>
+									<Link to={`/turma/${turma.id}`}>
+										<h3>{turma.nomeTurma} - {turma.semestre}</h3>
+									</Link>
+									<Link to={`/instituicao/${turma.instituicaoId}`}>
+										<span>{turma.instituicaoTitulo}</span>
+									</Link>
+								</TurmaInfo>
+
+								<TurmaActions>
+									<Button size='large' onClick={() => handleEditarTurma('UPDATE', turma)} >
+										<EditOutlined />
+									</Button>
+									<Button size='large' onClick={() => showModal(turma.id)}>
+										<DeleteOutlined />
+									</Button>
+								</TurmaActions>
+							</TurmaRow>
+						))}
+						<Divider/>
+					</>
+				)}	
 
 
 

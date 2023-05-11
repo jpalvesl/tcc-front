@@ -56,10 +56,12 @@ export const ConteudoPerfil = styled.div`
 
   p.turmasAluno {
     font-size: 22px;
+    font-weight: bold;
   }
 
-  p.instituicaoTitulo{
-    font-size: 20px;
+  p.instituicaoTitulo {
+    font-size: 12px;
+    color: ${themes.default.gray['500']};
   }
 
   h3.titulo {

@@ -15,7 +15,6 @@ export default function Cadastro() {
 	const [usuario, setUsuario] = useState('');
 	const [senha, setSenha] = useState('');
 	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
-	const instituicaoAtualId = 1;
 
 	const navigate = useNavigate();
 
@@ -34,7 +33,6 @@ export default function Cadastro() {
 			nome,
 			usuario,
 			senha,
-			instituicaoAtualId,
 		};
 
 		UsuarioService.cadastrar(usuarioPayload)
@@ -119,7 +117,7 @@ export default function Cadastro() {
 						<Form.Item
 							label='Senha'
 							name='senha'
-							rules={[{required: true, message: 'Por favor digite o usuario!'}]}
+							rules={[{required: true, message: 'Por favor digite a senha!', min: 8}]}
 						>
 							<Input 
 								size='large'
@@ -132,7 +130,7 @@ export default function Cadastro() {
 						<Form.Item
 							label='Confirmar Senha'
 							name='confirmar_senha'
-							rules={[{required: true, message: 'Por favor digite o usuario!'}]}
+							rules={[{required: true, message: 'Por favor digite a confirmação da senha!', min: 8}]}
 						>
 							<Input 
 								size='large'

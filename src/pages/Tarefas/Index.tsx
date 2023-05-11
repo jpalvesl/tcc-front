@@ -7,6 +7,7 @@ import { Tarefa } from '../../types/Tarefa';
 import TarefaService from '../../services/TarefaService';
 import { Clipboard, Exam } from '@phosphor-icons/react';
 import { Link, useNavigate } from 'react-router-dom';
+import { decrypt } from '../../utils/crypto';
 
 
 
@@ -54,7 +55,7 @@ function Tarefas() {
 	const [searchText, setSearchText] = useState('');
 	const navigate = useNavigate();
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	function tarefasToColumns(tarefas: Tarefa[]) {
 		return tarefas.map(tarefa => {

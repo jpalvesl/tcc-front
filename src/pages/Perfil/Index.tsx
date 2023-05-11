@@ -16,6 +16,7 @@ import { Problema } from '../../types/Problema';
 import ProblemaService from '../../services/ProblemaService';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import SubmissaoService from '../../services/SubmissaoService';
+import { decrypt } from '../../utils/crypto';
 
 
 
@@ -69,7 +70,7 @@ export default function Perfil(){
 	
 	useEffect(() => {
 		async function loadUsuario() {
-			const user = JSON.parse(localStorage.getItem('@Auth:user'));
+			const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 			if (!user) return;
 
@@ -123,7 +124,10 @@ export default function Perfil(){
 			label: <p className='label-titulo'>Turmas</p>,
 			children:  <p> <h3 className='titulo'>Minhas Turmas</h3><Divider/>{turmas?.map((turma, idx) => (
 				
-				<div key={turma.id}>
+				<div 
+					key={turma.id}
+					style={{ marginBottom: 16 }}
+				>
 					<p className='turmasAluno' key={idx}>{turma.nomeTurma} - {turma.semestre}</p>
 					<p className='instituicaoTitulo'>{turma.instituicaoTitulo}</p>
 				</div>

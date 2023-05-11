@@ -7,6 +7,7 @@ import { NavBar } from '../../components/NavBar';
 import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { ProblemasContainer, SearchRow } from './styles';
+import { decrypt } from '../../utils/crypto';
 
 const columns: ColumnsType<any> = [
 	{
@@ -39,7 +40,7 @@ function Problemas() {
 
 	const navigate = useNavigate();
 
-	const user = JSON.parse(localStorage.getItem('@Auth:user'));
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	const problemasFiltradosToColumns = problemas
 		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
