@@ -1,5 +1,3 @@
-import { Button, Form, Input } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import { useEffect } from 'react';
 import { NavBar } from '../../components/NavBar';
 import { CampoContato, CampoForm, CampoInfo, ContatoContainer } from './styles';
@@ -24,48 +22,23 @@ formulário abaixo ou envie um e-mail para code2knoww@gmail.com</p>
 					</CampoInfo>
 
 					<CampoForm>
-						<Form
-							name="basic"
-							layout='vertical'
-							initialValues={{ remember: true }}
-							onFinish={() => {console.log('ok');}}
-							onFinishFailed={() => {console.log('ok');}}
-							autoComplete="off"
-							
+						<form
+							action="https://formsubmit.co/myrlla.lucas@academico.ifpb.edu.br"
+							method="POST"
+							className="form"
 						>
-							<Form.Item
-								label='Assunto'
-								name='assunto'
-								rules={[{required: true, message: 'Por favor digite o assunto!'}]}
-							>
-								{/* Alterar tamanho da fonte do label do form */}
-								<Input size='large'  />
-							</Form.Item>
-
-							<Form.Item
-								label='Mensagem'
-								name='mensagem'
-								rules={[{required: true, message: 'Por favor digite sua mensagem!'}]}
-							>
-								<TextArea
-									
-									placeholder="Digite sua mensagem"
-									autoSize={{ minRows: 10, maxRows: 10 }}
-								/>
-							</Form.Item>
-
-                        
-
-							<Form.Item>
-								<Button 
-									style={{float:'right', width: '25%', backgroundColor: 'green' }} 
-									size='large' type="primary" 
-									htmlType="submit"
-								>
-                                Enviar
-								</Button>
-							</Form.Item>
-						</Form>
+							<label htmlFor="name">Assunto</label>
+							<input type="text" name="name" id="name" required />
+							<label htmlFor="message">Mensagem</label>
+							<textarea name="message" id="message" required></textarea>
+							<input type="hidden" name="_captcha" value="false" />
+							<input
+								type="hidden"
+								name="_next"
+								value="http://localhost:5173"
+							/>
+							<button type="submit">Enviar</button>
+						</form>
 					</CampoForm>
 
 					

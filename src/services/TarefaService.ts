@@ -2,7 +2,7 @@ import { Tarefa } from '../types/Tarefa';
 import api from './api';
 const localDefaultEndpoint = 'tarefa';
 
-class TurmaService {
+class TarefaService {
 	findByAluno(usuarioId: number) {
 		return api.get(`${localDefaultEndpoint}/usuario/${usuarioId}`);
 	}
@@ -40,4 +40,4 @@ class TurmaService {
 	}
 }
 
-export default new TurmaService;
+export default new TarefaService;
