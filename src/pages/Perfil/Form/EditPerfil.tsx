@@ -10,6 +10,7 @@ import { CampoForm, CampoImage, PerfilContainer } from './styles';
 import { toast } from 'react-toastify';
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {storage} from '../../../firebase';
+import avatar from '../../../assets/Image/avatar.png';
 
 
 
@@ -106,7 +107,11 @@ function EditarPerfil (){
 	async function handleOnFinish(id: number){
 		model.imagemUrl = imgUrl;
 		
-		await UsuarioService.edit(id,model);
+		await UsuarioService.edit(id,model).
+			then(() => { 
+				toast('Alterações salvas com sucesso.');
+				navigate('/perfil');
+			}).catch(() => toast('Erro ao salvar alterações'));
 		const resposta = await UsuarioService.findById(id);
 		
 		console.log(resposta);
@@ -126,7 +131,7 @@ function EditarPerfil (){
 					<CampoImage>
 						<div className='imagem'>
 							
-							{imgUrl && <img src={imgUrl} alt="Imagem" />}
+							<img src={imgUrl? imgUrl : avatar} alt="Imagem" />
 							
 						</div>
 						<div className='formImg'>
