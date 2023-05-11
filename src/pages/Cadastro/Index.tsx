@@ -15,7 +15,6 @@ export default function Cadastro() {
 	const [usuario, setUsuario] = useState('');
 	const [senha, setSenha] = useState('');
 	const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
-	const instituicaoAtualId = 1;
 
 	const navigate = useNavigate();
 
@@ -34,7 +33,6 @@ export default function Cadastro() {
 			nome,
 			usuario,
 			senha,
-			instituicaoAtualId,
 		};
 
 		UsuarioService.cadastrar(usuarioPayload)

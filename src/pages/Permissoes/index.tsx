@@ -5,6 +5,12 @@ import { NavBar } from '../../components/NavBar';
 import { PermissoesContainer } from './styles';
 import InstituicaoService from '../../services/InstituicaoService';
 import { Instituicao } from '../../types/Instituicao';
+import UsuarioService from '../../services/UsuarioService';
+import { Usuario } from '../../types/Usuario';
+import { decrypt } from '../../utils/crypto';
+import { GerenciarPermissoes } from '../../types/GerenciarPermissoes';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Permissoes() {
 	const [permissoesAlteradas, setPermissoesAlteradas] = useState({
@@ -15,9 +21,16 @@ function Permissoes() {
 	});
 
 	const [instituicoesOptions, setInstituicoesOptions] = useState([]);
-	const [usuarioOptions, setUsuarioOptions] = useState([]);
+	const [usuarioOptions, setUsuarioOptions] = useState({
+		novosAdms: [],
+		antigosAdms: [],
+		novosProfessores: [],
+		antigosProfessores: [],
+	});
 
+	const navigate = useNavigate();
 
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	useEffect(() => {
 		document.title = 'Gerenciar Permissões';
@@ -35,11 +48,17 @@ function Permissoes() {
 
 		loadInstituicoes();
 	}, []);
-
-	const handleChange = (value: string) => {
-		console.log(`selected ${value}`);
-	};
   
+	async function handleOnFinish() {
+		try {
+			await UsuarioService.gerenciarPermissoes(user.id, permissoesAlteradas);
+			toast('Permissões alteradas com sucesso');
+			navigate('/');
+		} catch (error) {
+			console.log(error.response.data.message);
+		}
+	}
+
 	return (
 		<>
 			<NavBar />    
@@ -51,8 +70,7 @@ function Permissoes() {
 				<Form
 					name="basic"
 					layout='vertical'
-					onFinish={()=> {}}
-					onFinishFailed={() => {}}
+					onFinish={handleOnFinish}
 				>
 
 					<h2>Administradores</h2>
@@ -64,22 +82,34 @@ function Permissoes() {
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
+							onChange={async (value) => {
+								const { data } = await UsuarioService.findByInstituicao(Number(value));
+								
+								const usuarios = data
+									.filter((usuario: Usuario) => !usuario.ehAdm)
+									.map((usuario: Usuario) => ({
+										value: usuario.id,
+										label: usuario.nome
+									}));
+
+								setUsuarioOptions({
+									...usuarioOptions,
+									novosAdms: usuarios
+								});
+							}}
 							options={instituicoesOptions}
 						/>
 					</Form.Item>
 
 					<Form.Item
 						label='Usuário'
-						name='novos-adms'
+						name='novosAdms'
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
-							options={[
-								{ value: 'João Pedro', label: 'João Pedro' },
-								{ value: 'Myrlla Lucas', label: 'Myrlla Lucas' },
-							]}
+							onChange={(value) => setPermissoesAlteradas({...permissoesAlteradas, novosAdms: value})}
+							options={usuarioOptions.novosAdms}
+							disabled={!usuarioOptions.novosAdms.length}
 							mode='multiple'
 						/>
 					</Form.Item>
@@ -92,25 +122,35 @@ function Permissoes() {
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
+							onChange={async (value) => {
+								const { data } = await UsuarioService.findByInstituicao(Number(value));
+								
+								const usuarios = data
+									.filter((usuario: Usuario) => usuario.ehAdm)
+									.map((usuario: Usuario) => ({
+										value: usuario.id,
+										label: usuario.nome
+									}));
+								
+								setUsuarioOptions({
+									...usuarioOptions,
+									antigosAdms: usuarios
+								});
+							}}
 							options={instituicoesOptions}
 						/>
 					</Form.Item>
 
 					<Form.Item
 						label='Usuário'
-						name='antigos-adms'
+						name='antigosAdms'
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
-							options={[
-								{ value: 'jack', label: 'Jack' },
-								{ value: 'lucy', label: 'Lucy' },
-								{ value: 'Yiminghe', label: 'yiminghe' },
-								{ value: 'disabled', label: 'Disabled', disabled: true },
-							]}
-							disabled
+							onChange={(value) => setPermissoesAlteradas({...permissoesAlteradas, antigosAdms: value})}
+							options={usuarioOptions.antigosAdms}
+							disabled={!usuarioOptions.antigosAdms.length}
+							mode='multiple'
 						/>
 					</Form.Item>
 
@@ -125,25 +165,35 @@ function Permissoes() {
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
+							onChange={async (value) => {
+								const { data } = await UsuarioService.findByInstituicao(Number(value));
+								
+								const usuarios = data
+									.filter((usuario: Usuario) => !usuario.ehProfessor)
+									.map((usuario: Usuario) => ({
+										value: usuario.id,
+										label: usuario.nome
+									}));
+
+								setUsuarioOptions({
+									...usuarioOptions,
+									novosProfessores: usuarios
+								});
+							}}
 							options={instituicoesOptions}
 						/>
 					</Form.Item>
 
 					<Form.Item
 						label='Usuário'
-						name='novos-professores'
+						name='novosProfessores'
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
-							options={[
-								{ value: 'jack', label: 'Jack' },
-								{ value: 'lucy', label: 'Lucy' },
-								{ value: 'Yiminghe', label: 'yiminghe' },
-								{ value: 'disabled', label: 'Disabled', disabled: true },
-							]}
-							disabled
+							onChange={(value) => setPermissoesAlteradas({...permissoesAlteradas, novosProfessores: value})}
+							options={usuarioOptions.novosProfessores}
+							disabled={!usuarioOptions.novosProfessores.length}
+							mode='multiple'
 						/>
 					</Form.Item>
 
@@ -155,31 +205,42 @@ function Permissoes() {
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
+							onChange={async (value) => {
+								const { data } = await UsuarioService.findByInstituicao(Number(value));
+								
+								const usuarios = data
+									.filter((usuario: Usuario) => usuario.ehProfessor)
+									.map((usuario: Usuario) => ({
+										value: usuario.id,
+										label: usuario.nome
+									}));
+
+								setUsuarioOptions({
+									...usuarioOptions,
+									antigosProfessores: usuarios
+								});
+							}}
 							options={instituicoesOptions}
 						/>
 					</Form.Item>
 
 					<Form.Item
 						label='Usuário'
-						name='antigos-professores'
+						name='antigosProfessores'
 					>
 						<Select
 							size='large'
-							onChange={handleChange}
-							options={[
-								{ value: 'jack', label: 'Jack' },
-								{ value: 'lucy', label: 'Lucy' },
-								{ value: 'Yiminghe', label: 'yiminghe' },
-								{ value: 'disabled', label: 'Disabled', disabled: true },
-							]}
-							disabled
+							onChange={(value) => setPermissoesAlteradas({...permissoesAlteradas, antigosProfessores: value})}
+							options={usuarioOptions.antigosProfessores}
+							disabled={!usuarioOptions.antigosProfessores.length}
+							mode='multiple'
 						/>
 					</Form.Item>
 
 					<Button 
 						size='large'
 						type='primary'
+						htmlType="submit"
 					>
 						Salvar
 					</Button>

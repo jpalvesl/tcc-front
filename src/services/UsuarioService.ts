@@ -1,4 +1,5 @@
 import { EditSenha } from '../types/EditSenha';
+import { GerenciarPermissoes } from '../types/GerenciarPermissoes';
 import { Usuario } from '../types/Usuario';
 import api from './api';
 const localDefaultEndpoint = 'usuario';
@@ -41,6 +42,10 @@ class UsuarioService {
 
 	editarSenha(usuarioId: number, editSenhaPayload: EditSenha) {
 		return api.put(`${localDefaultEndpoint}/${usuarioId}/editar_senha`, editSenhaPayload);
+	}
+
+	gerenciarPermissoes(usuarioId: number, gerenciarPermissoesPayload: GerenciarPermissoes) {
+		return api.post(`${localDefaultEndpoint}/${usuarioId}/gerenciar_permissoes`, gerenciarPermissoesPayload);
 	}
 }
 
