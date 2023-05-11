@@ -131,11 +131,15 @@ function TurmaTarefas() {
 					</Link>),
 				pontuacao: `0/${tarefa.qtdProblemas}`,
 				prazo: dtEncerramentoFormatado,
-				botao:<>{user?.ehProfessor && (<><Button size='large' onClick={() => showModal(tarefa.id)}>
-					<DeleteOutlined /> 
-				</Button><Button size='large' onClick={() => handleEditarTatefa('UPDATE', tarefa)} >
-					<EditOutlined />
-				</Button></>)}</> 
+				botao:<>{turma?.professores.map((professor) => {
+					if (professor.id === user.id){
+						((<><Button size='large' onClick={() => showModal(tarefa.id)}>
+							<DeleteOutlined /> 
+						</Button><Button size='large' onClick={() => handleEditarTatefa('UPDATE', tarefa)} >
+							<EditOutlined />
+						</Button></>));
+					}
+				})}</> 
 			};
 		});
 	}
@@ -285,11 +289,16 @@ function TurmaTarefas() {
 						value={searchText}
 						onChange={(evt => setSearchText(evt.target.value))}
 					/>
-					{user?.ehProfessor && (<Button size='large' style={{ width: '150px' }} onClick={()=> handleCriarTarefa(turma?.id)} >
-						<PlusOutlined />
-						Nova Tarefa
-					</Button>)}
-
+					<>
+						{turma?.professores.map((professor) => {
+							if (professor.id === user.id){
+								return ((<><Button size='large' style={{ width: '150px' }} onClick={()=> handleCriarTarefa(turma?.id)} >
+									<PlusOutlined />
+							Nova Tarefa
+								</Button></>));
+							}
+						})}
+					</>
 					<Button size='large' >
 						<FilterOutlined />
 					</Button>
