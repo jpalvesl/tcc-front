@@ -57,17 +57,34 @@ const stepsCriadorProblema = [
 		content: 'Aqui você pode visualizar a descrição do problema'
 	},
 	{
-		target: '.casosTeste',
-		content: 'Todos os casos de teste do problema são públicos'
+		
+		spotlightPadding: 20,
+		target: '.entradaProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
 	},
 	{
-		target: '.enviarResposta',
-		content: 'Aqui você poderá inserir seu código resposta'
+		
+		spotlightPadding: 20,
+		target: '.saidaProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
+	},
+	{
+		target: '.casosTeste',
+		content: 'Todos os casos de teste do problema são públicos'
 	},
 	{
 		target: '.editar',
 		content: 'Aqui você pode editar o problema e os casos de teste'
 	},
+	{
+		target: '.enviar',
+		content: 'Aqui você poderá inserir seu código resposta'
+	},
+	{
+		target: '.submissoes',
+		content: 'Aqui você poderá inserir seu código resposta'
+	},
+	
 ];
 
 const stepsUsuarioAluno = [
@@ -88,11 +105,23 @@ const stepsUsuarioAluno = [
 		content: 'Aqui você pode visualizar a descrição do problema'
 	},
 	{
+		
+		spotlightPadding: 20,
+		target: '.entradaProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.saidaProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
+	},
+	{
 		target: '.casosTeste',
 		content: 'Todos os casos de teste do problema são públicos'
 	},
 	{
-		target: '.enviarResposta',
+		target: '.enviar',
 		content: 'Aqui você poderá inserir seu código resposta'
 	},
 ];
@@ -166,25 +195,25 @@ function Problema() {
 				},
 				{
 					key: '2',
-					label: <span className='enviarReposta'>Enviar Resposta</span>,
+					label: (<span className='enviar'>Enviar Resposta</span>),
 					children: <EnviarResposta  problemaId={numericId} />,
 				},
 				{
 					key: '3',
-					label: 'Submissões',
+					label: <span className='submissoes'>Submissões</span>,
 					children: <Submissoes problemaId={numericId} />,
 				},
 				{
 					key: '4',
 					label: (
-						<span className='editarProblema'>
-							<Dropdown   menu={{ items: itemsDropDown }}>
-								<Space >
+						
+						<Dropdown  className='editar'  menu={{ items: itemsDropDown }}>
+							<Space >
 								Editar
-									<DownOutlined />
-								</Space>
-							</Dropdown>
-						</span>
+								<DownOutlined />
+							</Space>
+						</Dropdown>
+						
 						
 					),
 					children: isCasoDeTeste
