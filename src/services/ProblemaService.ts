@@ -24,6 +24,10 @@ class ProblemaService {
 		return api.get(`${localDefaultEndpoint}/tarefa/${tarefaId}`);
 	}
 
+	findByTarefaAndUsuario(tarefaId: number, usuarioId: number) {
+		return api.get(`${localDefaultEndpoint}/tarefa/${tarefaId}/usuario/${usuarioId}`);
+	}
+
 	add(problema: Problema) {
 		return api.post(`${localDefaultEndpoint}`, problema);
 	}

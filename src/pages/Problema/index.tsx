@@ -25,6 +25,9 @@ import { CriadorContainer,
 import { Submissoes } from './Submissao';
 import { toast } from 'react-toastify';
 import { decrypt } from '../../utils/crypto';
+import UsuarioService from '../../services/UsuarioService';
+import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import { State } from '../../types/State';
 
 export interface ProblemaTabProps {
 	problemaId?: number;
@@ -32,32 +35,121 @@ export interface ProblemaTabProps {
 	casosTeste?: ICasosDeTeste[];
 }
 
+const stepsCriadorProblema = [
+	{
+		disableBeacon: true,
+		floaterProps: {
+			disableAnimation: true,
+		},
+		spotlightPadding: 20,
+		placement: 'center',
+		target: 'body',
+		content: 'Comece o tour'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.descricaoProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.entradaProblema',
+		content: 'Aqui está uma explicação de como deve ser a entrada do problema (caso ela exista)'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.saidaProblema',
+		content: 'Aqui está uma explicação de como deve ser a saída do problema'
+	},
+	{
+		target: '.casosTeste',
+		content: 'Todos os casos de teste do problema são públicos. Você pode visualizar melhor qual seria a saída do seu código para uma determinada entrada'
+	},
+	{
+		target: '.editar',
+		content: 'Aqui você pode editar o problema e os casos de teste'
+	},
+	{
+		target: '.enviar',
+		content: 'Aqui você poderá inserir seu código resposta'
+	},
+	{
+		target: '.submissoes',
+		content: 'Aqui você você pode visualizar as suas submissões'
+	},
+	
+];
+
+const stepsUsuarioAluno = [
+	{
+		disableBeacon: true,
+		floaterProps: {
+			disableAnimation: true,
+		},
+		spotlightPadding: 20,
+		placement: 'center',
+		target: 'body',
+		content: 'Comece o tour'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.descricaoProblema',
+		content: 'Aqui você pode visualizar a descrição do problema'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.entradaProblema',
+		content: 'Aqui está uma explicação de como deve ser a entrada do problema (caso ela exista)'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.saidaProblema',
+		content: 'Aqui está uma explicação de como deve ser a saída do problema'
+	},
+	{
+		target: '.casosTeste',
+		content: 'Todos os casos de teste do problema são públicos. Você pode visualizar melhor qual seria a saída do seu código para uma determinada entrada'
+	},
+	{
+		target: '.enviar',
+		content: 'Aqui você poderá inserir seu código resposta'
+	},
+	{
+		target: '.submissoes',
+		content: 'Aqui você você pode visualizar as suas submissões'
+	},
+];
+
 function Problema() {
 	const [problema, setProblema] = useState<IProblema>({} as IProblema);
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [items, setItems] = useState([]);
+	const [userImage, setUserImage] = useState('')
 
-	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
+
+
+	const [{ run, steps }, setState] = useState<State>({
+		run: false,
+		steps: stepsUsuarioAluno,
+	});
+
+	const [isCasoDeTeste, setIsCasoDeTeste] = useState(false);
 
 	const { id } = useParams();
 	const numericId = Number(id);
 
-	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
-
-	const itemsDropDown = [
-		{
-			key: '1',
-			label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
-		},
-		{
-			key: '2',
-			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
-		},
-	];	
+	const user = localStorage.getItem('@Auth:user') ? JSON.parse(decrypt(localStorage.getItem('@Auth:user'))): null;
 
 
 	useEffect(() => {
+		
 		async function loadProblema() {
 			if (Number.isNaN(numericId)) {
 				toast('O id passado não é um número');
@@ -67,12 +159,35 @@ function Problema() {
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
+			const { data: criador } = await UsuarioService.findById(problema.criadorId)
+			setUserImage(criador?.imagemUrl)
+			const tour = localStorage.getItem('fez_tour_problema');
+			if (tour == null){
+
+				console.log('ids',problema.criadorId,user.id);
+			
+				problema.criadorId == user.id? setState({run: true, steps: stepsCriadorProblema}) : setState({run: true, steps: stepsUsuarioAluno});
+
+			}
+
 
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
 			
+			const itemsDropDown = [
+				{
+					key: '1',
+					label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
+				},
+				{
+					key: '2',
+					label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
+				},
+			];	
+
 			const allItems = [
 				{
+					
 					key: '1',
 					label: 'Descrição',
 					children: <Descricao 
@@ -83,23 +198,26 @@ function Problema() {
 				},
 				{
 					key: '2',
-					label: 'Enviar Resposta',
-					children: <EnviarResposta problemaId={numericId} />,
+					label: (<span className='enviar'>Enviar Resposta</span>),
+					children: <EnviarResposta  problemaId={numericId} />,
 				},
 				{
 					key: '3',
-					label: 'Submissões',
+					label: <span className='submissoes'>Submissões</span>,
 					children: <Submissoes problemaId={numericId} />,
 				},
 				{
 					key: '4',
 					label: (
-						<Dropdown menu={{ items: itemsDropDown }}>
-							<Space>
+						
+						<Dropdown  className='editar'  menu={{ items: itemsDropDown }}>
+							<Space >
 								Editar
 								<DownOutlined />
 							</Space>
 						</Dropdown>
+						
+						
 					),
 					children: isCasoDeTeste
 						? <CasosDeTeste casosTeste={casosTeste} problemaId={numericId} />
@@ -125,12 +243,12 @@ function Problema() {
 				},
 				{
 					key: '2',
-					label: 'Enviar Resposta',
+					label: (<span className='enviar'>Enviar Resposta</span>),
 					children: <EnviarResposta problemaId={numericId} />,
 				},
 				{
 					key: '3',
-					label: 'Submissões',
+					label: <span className='submissoes'>Submissões</span>,
 					children: <Submissoes problemaId={numericId} />,
 				}
 			];
@@ -153,12 +271,42 @@ function Problema() {
 		
 		document.title = 'Problema';
 		loadProblema();
-	}, []);
+	}, [isCasoDeTeste]);
+
+	const handleJoyrideCallback = (data: CallBackProps) => {
+		const { status, type } = data;
+		console.log('status', status);
+		if (status == STATUS.FINISHED){
+			localStorage.setItem('fez_tour_problema','fez');
+		}
+		const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+		if (finishedStatuses.includes(status)) {
+			setState({ run: false });
+		}
+
+		
+	};
 	
 
 	return (
 		<>
 			<NavBar />
+			<Joyride
+				callback={handleJoyrideCallback}
+				run={run}
+				styles={{
+					options: {
+						zIndex: 10000,
+					},
+				}} 
+				continuous
+				hideCloseButton
+				scrollToFirstStep
+				showProgress
+				showSkipButton
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				steps={steps}/>
 			<ProblemaContainer>
 				{isLoading ? <Spin /> : (
 					<HeaderContainer>
@@ -177,7 +325,7 @@ function Problema() {
 							</ProblemaInfo>
 
 							<CriadorContainer>
-								<FotoPerfil /> <span>{problema?.autor}</span>
+								<FotoPerfil src={userImage} /> <span>{problema?.autor}</span>
 							</CriadorContainer>
 						</ProblemaWrapper>
 

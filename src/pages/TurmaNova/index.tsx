@@ -191,7 +191,7 @@ function TurmaNova() {
 				>
 					<Form.Item
 						label="Nome da Turma"
-						name="nome"
+						name="nomeTurma"
 						rules={[{ required: true, message: 'Insira o nome da turma' }]}
 					>
 						<Input 

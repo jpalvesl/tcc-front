@@ -108,7 +108,7 @@ function ProblemaNovo() {
 							options={topicosOptions}
 							onChange={(topicos) => setProblema({
 								...problema,
-								topicos
+								topicos: topicos.map((value: number) => ({ id: value }))
 							})}
 						/>
 					</Form.Item>

@@ -87,9 +87,12 @@ function TarefaNova() {
 	async function findProblemasTurmas(){
 		const {data: problemas} = await ProblemaService.findAll();
 		const {data: turmas} = await TurmaService.findByUsuario(user.id);
+		console.log('problemas do find all',problemas);
+		
 		
 		
 		setOptions(problemas.map((problemas: Problema)=> {
+			
 			return {
 				'value': problemas.id,
 				'label': problemas.nome,
@@ -143,11 +146,14 @@ function TarefaNova() {
 
 	}
 
+	
+
 	async function problemaPorProva(value){
 		const {data: listProblemasProva} = await ProblemaService.findByTarefa(value);
 		setProblemasPorProva(listProblemasProva);
 	}
 
+	
 
 	async function handleOnFinish(criadorId: number) {
 		const tarefa: Tarefa = {
@@ -188,19 +194,20 @@ function TarefaNova() {
 				<h1>{actionType === 'CREATE' ? 'Criar Tarefa' : 'Editar Tarefa'}</h1>
 				<Divider />
 				{<Form 
-				
+					
 					layout='vertical'
 					onFinish={() => handleOnFinish(user.id)}
 				>
 					<Form.Item style={{ marginBottom: 0 }}>
 						<Form.Item
 							label="Titulo"
-							name="titulo"
+							
 							style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-							rules={[{ required: true, message: 'Insira o titulo da tarefa' }]}
+							rules={[{ required: true, message: 'Campo obrigatório' }]}
 						>
 							<Input 
 								size='large' 
+								
 								value={titulo}
 								onChange={(evt) => setTitulo(evt.target.value)}
 							/>
@@ -232,8 +239,9 @@ function TarefaNova() {
 					</Form.Item>
 				
 
-					<Form.Item rules={[{ required: true, message: 'Insira uma descrição para tarefa' }]} name="descricao" label="Descrição">
-						<Input 
+					<Form.Item rules={[{ required: true, message: 'Campo obrigatório' }]} name="descricao" label="Descrição">
+						<Input
+							name="descricao" 
 							size='large' 
 							value={descricao}
 							onChange={(evt) => setDescricao(evt.target.value)}
@@ -242,7 +250,7 @@ function TarefaNova() {
 				
 					<Divider/>
 				
-					<Form.Item rules={[{ required: true, message: 'Insira pelo menos um problema' }]} name="addProblemas" label="Adicionar Problemas">
+					<Form.Item  name="problemasTarefa" label="Adicionar Problemas">
 						<Select
 							mode='multiple'
 							size='large'

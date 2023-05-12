@@ -1,4 +1,4 @@
-import { ClipboardText, Exam, UsersThree } from '@phosphor-icons/react';
+import { ClipboardText, DeviceMobile, Exam, UsersThree, WarningOctagon } from '@phosphor-icons/react';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
@@ -19,7 +19,7 @@ function LandingPage() {
 						<h1>Seja realmente bom em programação.</h1>
 
 						<p>
-              Desenvolva fluência em 61 linguagens de programação com nossa combinação única de aprendizado, prática e orientação. O exercício é divertido, eficaz e 100% gratuito, para sempre.
+              Desenvolva fluência em <strong>Python</strong> linguagens de programação com nossa combinação única de aprendizado, prática e orientação. O exercício é divertido, eficaz e 100% gratuito, para sempre.
 						</p>
 
 						<Link to='/cadastro'>
@@ -85,10 +85,49 @@ function LandingPage() {
 					>
 						<h3 className="vertical-timeline-element-title">Aplique provas e tarefas</h3>
 						<p>
-              Faça suas provas no The Huxley ou mantenha a sua turma praticando através de tarefas. Escolha as questões, diga quantos pontos cada uma vale, defina o início e o fim da tarefa e pronto! O The Huxley vai calcular automaticamente as notas dos seus alunos de acordo com os acertos de cada um.
+              				Faça suas provas no Code2Know ou mantenha a sua turma praticando através de tarefas. é sempre bom lembrar que o nosso sistema possui casos de teste abertos que auxiliam no desenvolvimento do aluno
 						</p>
 						<img 
 							src="https://media.discordapp.net/attachments/778615078244319252/1100143949756235877/Captura_de_tela_de_2023-04-24_16-38-54.png" 
+							alt="" 
+							style={{ marginTop: 8, width: 450 }}
+						/>
+					</VerticalTimelineElement>
+
+					<VerticalTimelineElement
+						className="vertical-timeline-element--work"
+						contentStyle={{ background: themes.default.gray['800'], color: '#fff' }}
+						contentArrowStyle={{ borderRight: `7px solid  ${themes.default.gray['800']}` }}
+						date="2023"
+						dateClassName='date'
+						iconStyle={{ background: themes.default.gray['800'], color: '#fff' }}
+						icon={<WarningOctagon size={32} />}
+					>
+						<h3 className="vertical-timeline-element-title">Obtenha um feedback mais claro</h3>
+						<p>
+              				Os erros encontrados durante o código são mostrados caso durante a submissão algum erro aconteça.
+						</p>
+						<img 
+							src="https://cdn.discordapp.com/attachments/677312142692581415/1106455334932983818/image.png" 
+							alt="" 
+							style={{ marginTop: 8, width: 450 }}
+						/>
+					</VerticalTimelineElement>
+					<VerticalTimelineElement
+						className="vertical-timeline-element--work"
+						contentStyle={{ background: themes.default.gray['800'], color: '#fff' }}
+						contentArrowStyle={{ borderRight: `7px solid  ${themes.default.gray['800']}` }}
+						date="2023"
+						dateClassName='date'
+						iconStyle={{ background: themes.default.gray['800'], color: '#fff' }}
+						icon={<DeviceMobile size={32} />}
+					>
+						<h3 className="vertical-timeline-element-title">Mantenha o sistema atualizado</h3>
+						<p>
+              				Através da tela de contato você pode pedir por funcionalidades, e relatar problemas, o lugar ideal para requisitar permissão para ser um professor no nosso sistema.
+						</p>
+						<img 
+							src="https://media.discordapp.net/attachments/677312142692581415/1106456700208295957/Captura_de_tela_de_2023-05-12_02-42-02.png?width=984&height=678"
 							alt="" 
 							style={{ marginTop: 8, width: 450 }}
 						/>

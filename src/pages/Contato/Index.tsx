@@ -23,7 +23,7 @@ formulário abaixo ou envie um e-mail para code2knoww@gmail.com</p>
 
 					<CampoForm>
 						<form
-							action="https://formsubmit.co/myrlla.lucas@academico.ifpb.edu.br"
+							action="https://formsubmit.co/code2knoww@gmail.com"
 							method="POST"
 							className="form"
 						>
