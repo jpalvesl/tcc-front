@@ -19,7 +19,7 @@ function LandingPage() {
 						<h1>Seja realmente bom em programação.</h1>
 
 						<p>
-              Desenvolva fluência em 61 linguagens de programação com nossa combinação única de aprendizado, prática e orientação. O exercício é divertido, eficaz e 100% gratuito, para sempre.
+              Desenvolva fluência em <strong>Python</strong> linguagens de programação com nossa combinação única de aprendizado, prática e orientação. O exercício é divertido, eficaz e 100% gratuito, para sempre.
 						</p>
 
 						<Link to='/cadastro'>
