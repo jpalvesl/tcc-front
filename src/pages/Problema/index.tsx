@@ -140,23 +140,12 @@ function Problema() {
 		steps: stepsUsuarioAluno,
 	});
 
-	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
+	const [isCasoDeTeste, setIsCasoDeTeste] = useState(false);
 
 	const { id } = useParams();
 	const numericId = Number(id);
 
 	const user = localStorage.getItem('@Auth:user') ? JSON.parse(decrypt(localStorage.getItem('@Auth:user'))): null;
-
-	const itemsDropDown = [
-		{
-			key: '1',
-			label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
-		},
-		{
-			key: '2',
-			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
-		},
-	];	
 
 
 	useEffect(() => {
@@ -185,6 +174,17 @@ function Problema() {
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
 			
+			const itemsDropDown = [
+				{
+					key: '1',
+					label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
+				},
+				{
+					key: '2',
+					label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
+				},
+			];	
+
 			const allItems = [
 				{
 					
@@ -271,7 +271,7 @@ function Problema() {
 		
 		document.title = 'Problema';
 		loadProblema();
-	}, []);
+	}, [isCasoDeTeste]);
 
 	const handleJoyrideCallback = (data: CallBackProps) => {
 		const { status, type } = data;
