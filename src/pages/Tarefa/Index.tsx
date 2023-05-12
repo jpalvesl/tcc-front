@@ -111,12 +111,9 @@ export default function TarefaProblemas() {
 		setTarefa(response.data);
 		const { data } = await TurmaService.findById(response.data.turmaId);
 		setTurma(data);
-<<<<<<< HEAD
 
 		const { data: statusTarefa } = await TarefaService.statusTarefa(id, user.id);
 		setStatusTarefa(statusTarefa);
-=======
->>>>>>> main
 	}
 
 
