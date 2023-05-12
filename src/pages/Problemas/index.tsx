@@ -11,12 +11,7 @@ import { decrypt } from '../../utils/crypto';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 import UsuarioService from '../../services/UsuarioService';
 import { Usuario } from '../../types/Usuario';
-
-
-interface State {
-  run: boolean;
-  steps: Step	[];
-}
+import { State } from '../../types/State';
 
 const stepsUsuarioAluno = [
 	{
@@ -50,7 +45,7 @@ const stepsUsuarioProfessor = [
 		spotlightPadding: 20,
 		placement: 'center',
 		target: 'body',
-		content: 'Comece o tour'
+		content: 'Essa é a listagem de problemas.'
 	},
 	{
 		
@@ -169,7 +164,6 @@ function Problemas() {
 	return (
 		<>
 			<NavBar />
-			{console.log('run', run)}
 			<Joyride
 				callback={handleJoyrideCallback}
 				run={run}

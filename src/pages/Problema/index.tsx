@@ -26,18 +26,13 @@ import { Submissoes } from './Submissao';
 import { toast } from 'react-toastify';
 import { decrypt } from '../../utils/crypto';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import { State } from '../../types/State';
 
 export interface ProblemaTabProps {
 	problemaId?: number;
 	problema?: IProblema;
 	casosTeste?: ICasosDeTeste[];
 }
-
-interface State {
-  run: boolean;
-  steps: Step	[];
-}
-
 
 const stepsCriadorProblema = [
 	{
@@ -60,17 +55,17 @@ const stepsCriadorProblema = [
 		
 		spotlightPadding: 20,
 		target: '.entradaProblema',
-		content: 'Aqui você pode visualizar a descrição do problema'
+		content: 'Aqui está uma explicação de como deve ser a entrada do problema (caso ela exista)'
 	},
 	{
 		
 		spotlightPadding: 20,
 		target: '.saidaProblema',
-		content: 'Aqui você pode visualizar a descrição do problema'
+		content: 'Aqui está uma explicação de como deve ser a saída do problema'
 	},
 	{
 		target: '.casosTeste',
-		content: 'Todos os casos de teste do problema são públicos'
+		content: 'Todos os casos de teste do problema são públicos. Você pode visualizar melhor qual seria a saída do seu código para uma determinada entrada'
 	},
 	{
 		target: '.editar',
@@ -82,7 +77,7 @@ const stepsCriadorProblema = [
 	},
 	{
 		target: '.submissoes',
-		content: 'Aqui você poderá inserir seu código resposta'
+		content: 'Aqui você você pode visualizar as suas submissões'
 	},
 	
 ];
@@ -108,21 +103,25 @@ const stepsUsuarioAluno = [
 		
 		spotlightPadding: 20,
 		target: '.entradaProblema',
-		content: 'Aqui você pode visualizar a descrição do problema'
+		content: 'Aqui está uma explicação de como deve ser a entrada do problema (caso ela exista)'
 	},
 	{
 		
 		spotlightPadding: 20,
 		target: '.saidaProblema',
-		content: 'Aqui você pode visualizar a descrição do problema'
+		content: 'Aqui está uma explicação de como deve ser a saída do problema'
 	},
 	{
 		target: '.casosTeste',
-		content: 'Todos os casos de teste do problema são públicos'
+		content: 'Todos os casos de teste do problema são públicos. Você pode visualizar melhor qual seria a saída do seu código para uma determinada entrada'
 	},
 	{
 		target: '.enviar',
 		content: 'Aqui você poderá inserir seu código resposta'
+	},
+	{
+		target: '.submissoes',
+		content: 'Aqui você você pode visualizar as suas submissões'
 	},
 ];
 
@@ -240,12 +239,12 @@ function Problema() {
 				},
 				{
 					key: '2',
-					label: <span className='enviarResposta'>Enviar Resposta</span>,
+					label: (<span className='enviar'>Enviar Resposta</span>),
 					children: <EnviarResposta problemaId={numericId} />,
 				},
 				{
 					key: '3',
-					label: 'Submissões',
+					label: <span className='submissoes'>Submissões</span>,
 					children: <Submissoes problemaId={numericId} />,
 				}
 			];

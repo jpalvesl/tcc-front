@@ -14,7 +14,7 @@ import { Divider } from '../../components/Divider';
 import { decrypt } from '../../utils/crypto';
 import JoyRide , { CallBackProps, STATUS, Step } from 'react-joyride';
 import '../../components/init';
-import { Button } from 'antd';
+
 const steps = [
 	{
 		disableBeacon: true,
@@ -24,7 +24,7 @@ const steps = [
 		spotlightPadding: 20,
 		placement: 'center',
 		target: 'body',
-		content: 'Comece o tour'
+		content: <h2>Bem-vindo ao Code2Know! Vamos começar sua jornada!</h2>,
 	},
 	{
 		
@@ -45,11 +45,11 @@ const steps = [
 	},
 	{
 		target: '.problemas',
-		content: 'Aqui você pode ver os problemas disponíveis no sistema'
+		content: 'Aqui temos a lista com todos os problemas disponíveis no sistema.'
 	},
 	{
 		target: '.contato',
-		content: 'Aqui você pode entrar em contato com nosso suporte'
+		content: 'Aqui você pode entrar em contato com nosso suporte, podendo solicitar uma permissão para adm.'
 	},
 	{
 		target: '.sobre',
@@ -57,7 +57,7 @@ const steps = [
 	},
 	{
 		target: '.perfil',
-		content: 'Perfil'
+		content: 'Acesse seu perfil, gerencie sua conta e gerencie permissões (caso você seja um adm)'
 	},
 ];
 export const Home = () => {
