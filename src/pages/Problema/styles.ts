@@ -49,7 +49,7 @@ export const CriadorContainer = styled.div`
   margin-right: 16px;
 `;
 
-export const FotoPerfil = styled.div`
+export const FotoPerfil = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;

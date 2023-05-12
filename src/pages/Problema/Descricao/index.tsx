@@ -24,10 +24,12 @@ function Descricao({ problema, casosTeste }: ProblemaTabProps) {
 	
 	const casoFormatado = casosTeste?.map(caso => {
 		const casoEmParagrafos = caso.entrada.split('\n').map((item, idx) => (<p key={`item-${idx}`}>{item}</p>));
+		const saida = caso.saida.split('\n').map((item, idx) => (<p key={`item-${idx}`}>{item}</p>));
 
 		return {
 			...caso,
-			entrada: casoEmParagrafos,
+			entrada: casoEmParagrafos, 
+			saida
 		};
 	});
 

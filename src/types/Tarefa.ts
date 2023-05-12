@@ -8,4 +8,5 @@ export interface Tarefa {
   criadorId: number;
   turmaId: number;
   qtdProblemas: number;
+  status?: string;
 }

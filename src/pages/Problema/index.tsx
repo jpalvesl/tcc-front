@@ -25,6 +25,7 @@ import { CriadorContainer,
 import { Submissoes } from './Submissao';
 import { toast } from 'react-toastify';
 import { decrypt } from '../../utils/crypto';
+import UsuarioService from '../../services/UsuarioService';
 import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
 import { State } from '../../types/State';
 
@@ -130,6 +131,7 @@ function Problema() {
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [items, setItems] = useState([]);
+	const [userImage, setUserImage] = useState('')
 
 
 
@@ -138,23 +140,12 @@ function Problema() {
 		steps: stepsUsuarioAluno,
 	});
 
-	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
+	const [isCasoDeTeste, setIsCasoDeTeste] = useState(false);
 
 	const { id } = useParams();
 	const numericId = Number(id);
 
-	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
-
-	const itemsDropDown = [
-		{
-			key: '1',
-			label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
-		},
-		{
-			key: '2',
-			label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
-		},
-	];	
+	const user = localStorage.getItem('@Auth:user') ? JSON.parse(decrypt(localStorage.getItem('@Auth:user'))): null;
 
 
 	useEffect(() => {
@@ -168,6 +159,8 @@ function Problema() {
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
+			const { data: criador } = await UsuarioService.findById(problema.criadorId)
+			setUserImage(criador?.imagemUrl)
 			const tour = localStorage.getItem('fez_tour_problema');
 			if (tour == null){
 
@@ -181,6 +174,17 @@ function Problema() {
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
 			
+			const itemsDropDown = [
+				{
+					key: '1',
+					label: <span onClick={() => setIsCasoDeTeste(false)}>Problema</span>,
+				},
+				{
+					key: '2',
+					label: <span onClick={() => setIsCasoDeTeste(true)}>Casos de teste</span>,
+				},
+			];	
+
 			const allItems = [
 				{
 					
@@ -267,7 +271,7 @@ function Problema() {
 		
 		document.title = 'Problema';
 		loadProblema();
-	}, []);
+	}, [isCasoDeTeste]);
 
 	const handleJoyrideCallback = (data: CallBackProps) => {
 		const { status, type } = data;
@@ -321,7 +325,7 @@ function Problema() {
 							</ProblemaInfo>
 
 							<CriadorContainer>
-								<FotoPerfil /> <span>{problema?.autor}</span>
+								<FotoPerfil src={userImage} /> <span>{problema?.autor}</span>
 							</CriadorContainer>
 						</ProblemaWrapper>
 

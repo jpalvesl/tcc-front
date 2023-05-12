@@ -109,7 +109,7 @@ export const Router = createBrowserRouter([
 		element: <TarefaProblemas/>
 	},
 	{
-		path: '/tarefa/:id/',
+		path: '/tarefa/:id',
 		element: <TarefaProblemas/>
 	},
 	{

@@ -81,12 +81,6 @@ const columns: ColumnsType<any> = [
 		key: 'dificuldade',
 		align: 'center'
 	},
-	{
-		title: 'Resolvido',
-		dataIndex: 'resolvido',
-		key: 'resolvido',
-		align: 'center'
-	},
 ];
 
 function Problemas() {
@@ -102,7 +96,8 @@ function Problemas() {
 
 	const navigate = useNavigate();
 
-	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
+	const user = localStorage.getItem('@Auth:user') ? JSON.parse(decrypt(localStorage.getItem('@Auth:user'))): null;
+
 
 	const problemasFiltradosToColumns = problemas
 		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
@@ -110,7 +105,6 @@ function Problemas() {
 			return {
 				...problema,
 				key: problema.id,
-				resolvido: '',
 				nome: (
 					<Link 
 						to={`/problema/${problema.id}`}

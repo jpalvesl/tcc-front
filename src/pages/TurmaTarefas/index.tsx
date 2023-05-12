@@ -111,11 +111,6 @@ const columnsProvas = [
 		key: 'name',
 	},
 	{
-		title: 'Pontuação',
-		dataIndex: 'pontuacao',
-		key: 'pontuacao',
-	},
-	{
 		title: 'Prazo',
 		dataIndex: 'prazo',
 		key: 'prazo',
@@ -132,11 +127,6 @@ const columnsRoteiros = [
 		title: '',
 		dataIndex: 'name',
 		key: 'name',
-	},
-	{
-		title: 'Pontuação',
-		dataIndex: 'pontuacao',
-		key: 'pontuacao',
 	},
 	{
 		title: 'Prazo',
@@ -208,7 +198,6 @@ function TurmaTarefas() {
 							? <Exam size={16}/> 
 							: <Clipboard size={16}/>} {tarefa.titulo}
 					</Link>),
-				pontuacao: `0/${tarefa.qtdProblemas}`,
 				prazo: dtEncerramentoFormatado,
 				botao:<>{turma?.professores.map((professor) => {
 					if (professor.id === user.id){
