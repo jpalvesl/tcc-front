@@ -17,6 +17,7 @@ import { AuthContext } from '../../contexts/auth';
 import TurmaService from '../../services/TurmaService';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Turma } from '../../types/Turma';
+import { decrypt } from '../../utils/crypto';
 const { RangePicker } = DatePicker;
 
 
@@ -28,7 +29,6 @@ interface TarefaNovaState {
 function TarefaNova() {
 	const { id } = useParams();
 	const {turmaId} = useParams();
-	const { user } = useContext(AuthContext);
 	const { state } = useLocation();
 	const navigate = useNavigate();
 	const { actionType, tarefaAtual } = state as TarefaNovaState;
@@ -47,6 +47,7 @@ function TarefaNova() {
 	const [optionsProvas, setOptionsProvas] = useState([]);
 	const [turma, setTurma] = useState([]);
 	const [ehProva, setEhProva] = useState(Boolean);
+	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
 	dayjs.extend(customParseFormat);
 
@@ -81,7 +82,8 @@ function TarefaNova() {
 				'value': problemas.id,
 				'label': problemas.nome,
 			};
-		}));	
+		}));
+			
 	}
 
 	async function findProblemasTurmas(){
@@ -112,10 +114,6 @@ function TarefaNova() {
 		problemasPorRoteiro.map((problemas)=> TarefaService.addProblemaEmTarefa(problemas.value,idTarefa, user.id));
 	}
 
-	async function removerProblemaTarefa() {
-		problemasTarefaInicial.filter(function (element, index, array) {console.log(element);if (problemasTarefa.indexOf(element.value)==-1) {console.log('element',element.value);}});
-		problemasTarefa.map(function (element, index, array){ console.log('dentro do map', element);});
-	}
 
 	function formataData() {
 		const dtAbertura = dayjs(tarefaAtual?.dtAbertura);
@@ -156,6 +154,7 @@ function TarefaNova() {
 	
 
 	async function handleOnFinish(criadorId: number) {
+		console.log('datas',datas);
 		const tarefa: Tarefa = {
 			...tarefaAtual,
 			dtAbertura: datas[0],
@@ -176,15 +175,38 @@ function TarefaNova() {
 
 		} else {
 			addProblemaTarefa(id);
-
-			
-			
-
+			console.log('TAREFA EDITADA', tarefa);
 			TarefaService.edit(tarefa, criadorId).then(() => {
 				toast('Tarefa editada com sucesso.');
 				navigate(`/tarefa/${id}/${turmaId}`);
 			}).catch(() => toast('Erro ao editar tarefa'));
 		}
+	}
+
+	function formataInitialValues() { 
+		if (!tarefaAtual) return null;
+		console.log('tarefatual',{
+			...tarefaAtual,
+			dtAbertura: datas[0],
+			dtEncerramento: datas[1],
+			descricao: descricao,
+			titulo: titulo,
+			problemas: problemasTarefa.map(problema => problema.value),
+			turmaId:  parseInt(turmaId),
+			ehProva: ehProva,
+				
+		});
+		return {
+			...tarefaAtual,
+			dtAbertura: datas[0],
+			dtEncerramento: datas[1],
+			descricao: descricao,
+			titulo: titulo,
+			problemas: problemasTarefa.map(problema => problema.value),
+			turmaId:  parseInt(turmaId),
+			ehProva: ehProva,
+				
+		};
 	}
 	
 	return (
@@ -193,65 +215,67 @@ function TarefaNova() {
 			<TurmaNovaContainer>
 				<h1>{actionType === 'CREATE' ? 'Criar Tarefa' : 'Editar Tarefa'}</h1>
 				<Divider />
-				{<Form 
-					
+				{(actionType === 'UPDATE' && titulo) &&  <Form 
+					initialValues={formataInitialValues()}
 					layout='vertical'
 					onFinish={() => handleOnFinish(user.id)}
 				>
-					<Form.Item style={{ marginBottom: 0 }}>
-						<Form.Item
-							label="Titulo"
-							
-							style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-							rules={[{ required: true, message: 'Campo obrigatório' }]}
-						>
-							<Input 
-								size='large' 
-								
-								value={titulo}
-								onChange={(evt) => setTitulo(evt.target.value)}
-							/>
-						</Form.Item>
-						<Form.Item rules={[{ required: true, message: 'Insira as datas de inicio e fim' }]} name="datas" label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
 					
-							<RangePicker 
-								defaultValue={formataData()}
-								size='large'
-								locale={locale} 
-								onChange={(datas) => {
-									const datasFormatadas = datas?.map((dateDayJs) => {
-										
-										return dateDayJs?.toISOString().substring(0,10);
-									});								
-									
-									setDatas(datasFormatadas);
-								}}				
-							/>
-						</Form.Item>
-						<Form.Item>
-							<Checkbox
-								checked={ehProva}
-								onChange={(evt) => setEhProva(evt.target.checked)}
-							>
-							Problema de Prova
-							</Checkbox>
-						</Form.Item>
+					<Form.Item
+						label="Titulo"
+						name='titulo'
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
+						style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+					>
+						<Input 
+							size='large' 
+							name="titulo"
+							value={titulo}
+							onChange={(evt) => setTitulo(evt.target.value)}
+						/>
 					</Form.Item>
+					<Form.Item  label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
+					
+						<RangePicker 
+							name='datas'
+							defaultValue={formataData()}
+							size='large'
+							locale={locale} 
+							onChange={(datas) => {
+								const datasFormatadas = datas?.map((dateDayJs) => {
+										
+									return dateDayJs?.toISOString().substring(0,10);
+								});								
+									
+								setDatas(datasFormatadas);
+							}}				
+						/>
+					</Form.Item>
+					<Form.Item>
+						<Checkbox
+							checked={ehProva}
+							onChange={(evt) => setEhProva(evt.target.checked)}
+						>
+							Problema de Prova
+						</Checkbox>
+					</Form.Item>
+					
 				
 
-					<Form.Item rules={[{ required: true, message: 'Campo obrigatório' }]} name="descricao" label="Descrição">
+					<Form.Item  label="Descrição" name="descricao" rules={[{ required: true, message: 'Campo obrigatório' }]}>
 						<Input
 							name="descricao" 
 							size='large' 
-							value={descricao}
+							value={tarefaAtual?.descricao}
 							onChange={(evt) => setDescricao(evt.target.value)}
 						/>
 					</Form.Item>
 				
 					<Divider/>
 				
-					<Form.Item  name="problemasTarefa" label="Adicionar Problemas">
+					<Form.Item  label="Adicionar Problemas"  rules={[{ required: true, message: 'Campo obrigatório' }]}>
 						<Select
+							
 							mode='multiple'
 							size='large'
 							value={problemasTarefa}
