@@ -75,6 +75,8 @@ function ProblemaNovo() {
 				>
 					<Form.Item
 						label='Nome do problema'
+						name="nome"
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
 					>
 						<Input
 							size='large'
@@ -114,6 +116,7 @@ function ProblemaNovo() {
 					<Form.Item
 						label='Dificuldade'
 						name='dificuldade'
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
 					>
 						<Select
 							size='large'
@@ -153,6 +156,8 @@ function ProblemaNovo() {
 
 					<Form.Item
 						label='Descrição'
+						name="descricao"
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
 					>
 						<TextArea
 							rows={5}
@@ -164,6 +169,8 @@ function ProblemaNovo() {
 
 					<Form.Item
 						label='Entrada'
+						name="entrada"
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
 					>
 						<TextArea
 							rows={5}
@@ -175,6 +182,8 @@ function ProblemaNovo() {
 
 					<Form.Item
 						label='Saida'
+						name="saida"
+						rules={[{ required: true, message: 'Campo obrigatório' }]}
 					>
 						<TextArea
 							rows={5}

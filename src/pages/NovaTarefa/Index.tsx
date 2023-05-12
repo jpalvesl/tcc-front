@@ -193,14 +193,19 @@ function TarefaNova() {
 					onFinish={() => handleOnFinish(user.id)}
 				>
 					<Form.Item style={{ marginBottom: 0 }}>
-						<Form.Item label="Titulo" style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}>
+						<Form.Item
+							label="Titulo"
+							name="titulo"
+							style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+							rules={[{ required: true, message: 'Insira o titulo da tarefa' }]}
+						>
 							<Input 
 								size='large' 
 								value={titulo}
 								onChange={(evt) => setTitulo(evt.target.value)}
 							/>
 						</Form.Item>
-						<Form.Item label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
+						<Form.Item rules={[{ required: true, message: 'Insira as datas de inicio e fim' }]} name="datas" label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
 					
 							<RangePicker 
 								defaultValue={formataData()}
@@ -227,7 +232,7 @@ function TarefaNova() {
 					</Form.Item>
 				
 
-					<Form.Item label="Descrição">
+					<Form.Item rules={[{ required: true, message: 'Insira uma descrição para tarefa' }]} name="descricao" label="Descrição">
 						<Input 
 							size='large' 
 							value={descricao}
@@ -237,7 +242,7 @@ function TarefaNova() {
 				
 					<Divider/>
 				
-					<Form.Item label="Adicionar Problemas">
+					<Form.Item rules={[{ required: true, message: 'Insira pelo menos um problema' }]} name="addProblemas" label="Adicionar Problemas">
 						<Select
 							mode='multiple'
 							size='large'

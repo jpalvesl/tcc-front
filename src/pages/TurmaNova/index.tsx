@@ -82,7 +82,7 @@ function TurmaNova() {
 		return [dtAbertura, dtEncerramento];
 	}
 
-	function formataInitialValues() {
+	function formataInitialValues() { 
 		if (!turmaAtual) return null;
 
 		return {
@@ -191,6 +191,8 @@ function TurmaNova() {
 				>
 					<Form.Item
 						label="Nome da Turma"
+						name="nome"
+						rules={[{ required: true, message: 'Insira o nome da turma' }]}
 					>
 						<Input 
 							size='large'
@@ -202,6 +204,8 @@ function TurmaNova() {
 
 					<Form.Item 
 						label="Semestre"
+						name="semestre"
+						rules={[{ required: true, message: 'Insira o semestre da turma' }]}
 					>
 						<Input 
 							size='large'
@@ -255,6 +259,7 @@ function TurmaNova() {
 						<Form.Item 
 							label="Datas"
 							name='datas'
+							rules={[{ required: true, message: 'Insira as datas de inicio e fim' }]}
 						>
 							<RangePicker 
 								size='large'

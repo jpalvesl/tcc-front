@@ -28,6 +28,7 @@ import SubmissaoService from '../../services/SubmissaoService';
 import { CorrectIcon } from '../../assets/icons/CorrectIcon';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import { decrypt } from '../../utils/crypto';
+import moment from 'moment';
 
 const columnsProvas = [
 	{
@@ -116,6 +117,8 @@ function TurmaTarefas() {
 	
 	const { turma_id } = useParams();
 
+	
+
 	function tarefasToColumns(tarefas: Tarefa[]) {
 		return tarefas.map(tarefa => {
 			const dtEncerramentoFormatado = tarefa.dtEncerramento.replaceAll('-', '/');
@@ -127,7 +130,7 @@ function TurmaTarefas() {
 					<Link to={`/tarefa/${tarefa.id}/${turma?.id}`}>
 						{tarefa.ehProva 
 							? <Exam size={16}/> 
-							: <Clipboard size={16}/>} {tarefa.titulo}
+							: <Clipboard size={16}/>} {tarefa.titulo} 
 					</Link>),
 				pontuacao: `0/${tarefa.qtdProblemas}`,
 				prazo: dtEncerramentoFormatado,
@@ -179,6 +182,8 @@ function TurmaTarefas() {
 			}
 		});
 	}
+
+	
 
 	useEffect(() => {
 		async function loadTurma() {
@@ -347,9 +352,11 @@ function TurmaTarefas() {
 
 					<Divider />
 
-					<h2 style={{ marginBottom: 16 }}>Submissões dos alunos</h2>
+					
 					{turma?.professores.map(professor => professor.id).includes(user.id) && (
+						
 						<SubmissoesAlunos>
+							<h2 style={{ marginBottom: 16 }}>Submissões dos alunos</h2>
 							<Table 
 								size='middle'
 								bordered
