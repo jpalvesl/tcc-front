@@ -2,12 +2,12 @@ import { Button, Form, Input } from 'antd';
 import {  useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import PhotoPerfil from '../../../assets/icons/PhotoPerfil';
+
 
 import { Divider } from '../../../components/Divider';
 import { NavBar } from '../../../components/NavBar';
 import UsuarioService from '../../../services/UsuarioService';
-import { CampoForm, CampoImage, PerfilContainer } from './styles';
+import { CampoFormSenha, PerfilContainer } from './styles';
 
 
 
@@ -50,13 +50,8 @@ function AlterarSenha (){
 				<h2>Perfil</h2>
 				<Divider/>
 				<div className='container'>
-					<CampoImage>
-						<div className='imagem'>
-							<PhotoPerfil/>
-						</div>
-						
-					</CampoImage>
-					<CampoForm>
+					
+					<CampoFormSenha>
 						<Form
 							name="basic"
 							layout='vertical'
@@ -122,7 +117,7 @@ function AlterarSenha (){
 							</Form.Item>
 						</Form>
 						
-					</CampoForm>
+					</CampoFormSenha>
 				</div>
 
 				

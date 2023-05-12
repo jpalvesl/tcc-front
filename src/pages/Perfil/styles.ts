@@ -93,19 +93,22 @@ export const CampoFoto = styled.div`
   div.imagem{
     border-radius: 100%;
     overflow: hidden;
-    padding: 8px;
     height:200px;
     width: 200px;
     margin: 0 auto;
-    background: black;
+    border: solid 1px black;
     
   
   }
 
   div.imagem > img {
-    width: 100%;
+    border-radius: 100%;
+    height:200px;
+    width: 200px;
    
   }
+
+  
   
   
   
