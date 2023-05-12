@@ -26,12 +26,6 @@ const columns: ColumnsType<any> = [
 		key: 'dificuldade',
 		align: 'center'
 	},
-	{
-		title: 'Resolvido',
-		dataIndex: 'resolvido',
-		key: 'resolvido',
-		align: 'center'
-	},
 ];
 
 function Problemas() {
@@ -49,7 +43,6 @@ function Problemas() {
 			return {
 				...problema,
 				key: problema.id,
-				resolvido: '',
 				nome: (
 					<Link 
 						to={`/problema/${problema.id}`}

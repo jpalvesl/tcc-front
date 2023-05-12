@@ -25,6 +25,7 @@ import { CriadorContainer,
 import { Submissoes } from './Submissao';
 import { toast } from 'react-toastify';
 import { decrypt } from '../../utils/crypto';
+import UsuarioService from '../../services/UsuarioService';
 
 export interface ProblemaTabProps {
 	problemaId?: number;
@@ -37,6 +38,7 @@ function Problema() {
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [items, setItems] = useState([]);
+	const [userImage, setUserImage] = useState('')
 
 	const [isCasoDeTeste, setIsCasoDeTeste] = useState(true);
 
@@ -67,6 +69,8 @@ function Problema() {
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
+			const { data: criador } = await UsuarioService.findById(problema.criadorId)
+			setUserImage(criador?.imagemUrl)
 
 			const { data: casosTeste } = await CasosDeTesteService.findByProblema(numericId);
 			setCasosTeste(casosTeste);
@@ -177,7 +181,7 @@ function Problema() {
 							</ProblemaInfo>
 
 							<CriadorContainer>
-								<FotoPerfil /> <span>{problema?.autor}</span>
+								<FotoPerfil src={userImage} /> <span>{problema?.autor}</span>
 							</CriadorContainer>
 						</ProblemaWrapper>
 

@@ -70,7 +70,7 @@ function Tarefas() {
 							? <Exam size={16}/> 
 							: <Clipboard size={16}/>} {tarefa.titulo}
 					</Link>),
-				pontuacao: `0/${tarefa.qtdProblemas}`, 
+				pontuacao: tarefa.status, 
 				prazo: dtEncerramentoFormatado
 			};
 		});

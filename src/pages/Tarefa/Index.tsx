@@ -21,6 +21,7 @@ import ProblemaService from '../../services/ProblemaService';
 import { Problema } from '../../types/Problema';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import { decrypt } from '../../utils/crypto';
+import { CorrectIcon } from '../../assets/icons/CorrectIcon';
 
 
 const columns: ColumnsType<any> = [
@@ -63,10 +64,13 @@ export default function TarefaProblemas() {
 	const problemasFiltradosToColumns = problemas
 		.filter(problema => problema.nome.toLowerCase().includes(searchText.toLowerCase().trim()))
 		.map(problema => {
+			
 			return {
 				...problema,
 				key: problema.id,
-				resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+				resolvido: problema.status === 'OK'
+				? <CorrectIcon size={32} />
+				: <FailIcon size={32} />, 
 				nome: (
 					<Link 
 						to={`/problema/${problema.id}`}
@@ -93,8 +97,9 @@ export default function TarefaProblemas() {
 			findTask(id);
 			
 		}
+		
 		async function buscaProblemas() {
-			const { data: problemasResponse } = await ProblemaService.findByTarefa(id);
+			const { data: problemasResponse } = await ProblemaService.findByTarefaAndUsuario(id, user.id);
 			setProblemas(problemasResponse);
 		}
 		buscaProblemas();
