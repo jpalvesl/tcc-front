@@ -28,6 +28,81 @@ import SubmissaoService from '../../services/SubmissaoService';
 import { CorrectIcon } from '../../assets/icons/CorrectIcon';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import { decrypt } from '../../utils/crypto';
+import { State } from '../../types/State';
+import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+
+const stepsUsuarioProfessor = [
+	{
+		disableBeacon: true,
+		floaterProps: {
+			disableAnimation: true,
+		},
+		spotlightPadding: 20,
+		placement: 'center',
+		target: 'body',
+		content: 'Comece o tour'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.filterTarefa',
+		content: 'Aqui você pode buscar a tarefa desejada'
+	},
+	{
+		spotlightPadding: 20,
+		target: '.novaTarefa',
+		content: 'Aqui você pode criar uma nova tarefa'
+	},
+	{
+		target: '.provasList',
+		content: 'Uma listagem com as provas presentes na turma'
+	},
+	{
+		target: '.roteiroList',
+		content: 'Uma listagem com os roteiros presentes na turma'
+	},
+	{
+		target: '.membrosList',
+		content: 'Aqui são listados todos os alunos da turma'
+	},
+	{
+		target: '.submissoesList',
+		content: 'Lista de submissões dos alunos da turma'
+	},
+];
+
+const stepsUsuarioAluno = [
+	{
+		disableBeacon: true,
+		floaterProps: {
+			disableAnimation: true,
+		},
+		spotlightPadding: 20,
+		placement: 'center',
+		target: 'body',
+		content: 'Comece o tour'
+	},
+	{
+		
+		spotlightPadding: 20,
+		target: '.filterTarefa',
+		content: 'Aqui você pode buscar a tarefa desejada'
+	},
+
+	{
+		target: '.provasList',
+		content: 'Uma listagem com as provas presentes na turma'
+	},
+	{
+		target: '.roteiroList',
+		content: 'Uma listagem com os roteiros presentes na turma'
+	},
+	{
+		target: '.membrosList',
+		content: 'Aqui são listados todos os alunos da turma'
+	},
+	
+];
 
 const columnsProvas = [
 	{
@@ -98,6 +173,10 @@ function TurmaTarefas() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [tarefaDeletadaId, setTarefaDeletadaId] = useState<number>();
 	const [submissoesAlunos, setSubmissoesAlunos] = useState([]);
+	const [{ run, steps }, setState] = useState<State>({
+		run: false,
+		steps: stepsUsuarioProfessor,
+	});
 
 	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
 
@@ -120,11 +199,15 @@ function TurmaTarefas() {
 							: <Clipboard size={16}/>} {tarefa.titulo}
 					</Link>),
 				prazo: dtEncerramentoFormatado,
-				botao:<>{user?.ehProfessor && (<><Button size='large' onClick={() => showModal(tarefa.id)}>
-					<DeleteOutlined /> 
-				</Button><Button size='large' onClick={() => handleEditarTatefa('UPDATE', tarefa)} >
-					<EditOutlined />
-				</Button></>)}</> 
+				botao:<>{turma?.professores.map((professor) => {
+					if (professor.id === user.id){
+						((<><Button size='large' onClick={() => showModal(tarefa.id)}>
+							<DeleteOutlined /> 
+						</Button><Button size='large' onClick={() => handleEditarTatefa('UPDATE', tarefa)} >
+							<EditOutlined />
+						</Button></>));
+					}
+				})}</> 
 			};
 		});
 	}
@@ -169,13 +252,27 @@ function TurmaTarefas() {
 		});
 	}
 
-	useEffect(() => {
+	useEffect(() => { 
+		
 		async function loadTurma() {
 			document.title = 'Turmas';
 
 			const { data: turmasData } = await TurmaService.findById(turma_id);
 			document.title = turmasData.titulo;
 			setTurma(turmasData);
+
+			const tour = localStorage.getItem('fez_tour_turma');
+			if (tour == null){
+				turmasData.professores.map((professor)=>{
+					if (professor.id === user.id){
+						return setState({run: true, steps: stepsUsuarioProfessor});
+					}
+					return setState({run: true, steps: stepsUsuarioAluno});
+					
+					
+				});
+
+			}
 
 			if (!user) return;
 
@@ -229,8 +326,39 @@ function TurmaTarefas() {
 			closeModal();
 		}
 	}
+
+	const handleJoyrideCallback = (data: CallBackProps) => {
+		const { status, type } = data;
+		console.log('status', status);
+		if (status == STATUS.FINISHED){
+			localStorage.setItem('fez_tour_turma','fez');
+		}
+		const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
+
+		if (finishedStatuses.includes(status)) {
+			setState({ run: false });
+		}
+
+		
+	};
+
 	return (
 		<>
+			<Joyride
+				callback={handleJoyrideCallback}
+				run={run}
+				styles={{
+					options: {
+						zIndex: 10000,
+					},
+				}} 
+				continuous
+				hideCloseButton
+				scrollToFirstStep
+				showProgress
+				showSkipButton
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				steps={steps}/>
 			<NavBar />    
 			<TurmaTarefasContainer>
 				<h1>Turmas</h1>
@@ -268,17 +396,23 @@ function TurmaTarefas() {
 				</DescriptionContainer>
 
 				<SearchRow>
-					<Input 
+					<Input
+						className='filterTarefa' 
 						size='large' 
 						placeholder='Buscar tarefa' 
 						value={searchText}
 						onChange={(evt => setSearchText(evt.target.value))}
 					/>
-					{user?.ehProfessor && (<Button size='large' style={{ width: '150px' }} onClick={()=> handleCriarTarefa(turma?.id)} >
-						<PlusOutlined />
-						Nova Tarefa
-					</Button>)}
-
+					<>
+						{turma?.professores.map((professor) => {
+							if (professor.id === user.id){
+								return ((<><Button className='novaTarefa' size='large' style={{ width: '150px' }} onClick={()=> handleCriarTarefa(turma?.id)} >
+									<PlusOutlined />
+							Nova Tarefa
+								</Button></>));
+							}
+						})}
+					</>
 					<Button size='large' >
 						<FilterOutlined />
 					</Button>
@@ -286,7 +420,7 @@ function TurmaTarefas() {
 
 				<ContentContainer>
 					<ProvasSection>
-						<h2>Provas</h2> 
+						<h2 className='provasList'>Provas</h2> 
 						<Table 
 							size='middle'
 							bordered
@@ -299,7 +433,7 @@ function TurmaTarefas() {
 					<Divider />
 
 					<RoteirosSection>
-						<h2>Roteiros</h2>
+						<h2 className='roteiroList'>Roteiros</h2>
 						<Table
 							size='middle'
 							bordered
@@ -310,7 +444,7 @@ function TurmaTarefas() {
 					</RoteirosSection>
 
 					<MembrosSection>
-						<h2 onClick={() => setShowMembros(!showMembros)} style={{ cursor: 'pointer' }}>
+						<h2 className='membrosList' onClick={() => setShowMembros(!showMembros)} style={{ cursor: 'pointer' }}>
 							{showMembros ? <MinusOutlined /> : <PlusOutlined />} Membros
 						</h2>
 						<Row gutter={[16, 16]}>
@@ -340,6 +474,7 @@ function TurmaTarefas() {
 					{turma?.professores.map(professor => professor.id).includes(user.id) && (
 						<SubmissoesAlunos>
 							<Table 
+								className='submissoesList'
 								size='middle'
 								bordered
 								dataSource={submissoesToColumns(submissoesAlunos)}

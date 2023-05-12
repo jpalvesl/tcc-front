@@ -35,7 +35,7 @@ function Descricao({ problema, casosTeste }: ProblemaTabProps) {
 
 	return (
 		<>
-			<Section>
+			<Section className='descricaoProblema'>
 				<h1>Descrição</h1>
 				<p>
 					{problema?.descricao}
@@ -44,7 +44,7 @@ function Descricao({ problema, casosTeste }: ProblemaTabProps) {
 
 			<Divider />
 
-			<Section>
+			<Section className='entradaProblema'>
 				<h1>Entrada</h1>
 				<p>
 					{problema?.textoEntrada}
@@ -53,7 +53,7 @@ function Descricao({ problema, casosTeste }: ProblemaTabProps) {
 
 			<Divider />
 
-			<Section>
+			<Section className='saidaProblema'>
 				<h1>Saída</h1>
 				<p>
 					{problema?.textoSaida}
@@ -62,7 +62,7 @@ function Descricao({ problema, casosTeste }: ProblemaTabProps) {
 
 			<Divider />
 
-			<Section>
+			<Section className='casosTeste'>
 				<h1>Casos de teste</h1>
 				<Table
 					columns={columns}

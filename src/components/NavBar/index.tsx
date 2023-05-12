@@ -15,13 +15,13 @@ export const NavBar = () => {
 				<Action to='/'>
 					<QuestionCircleOutlined style={{ fontSize: 40, color: themes.default.white }} />
 				</Action>
-				<Action to='/problema'>Problemas</Action>
-				<Action to='/contato'>Contato</Action>
-				<Action to='/sobre'>Sobre</Action>
+				<Action to='/problema' className='problemas'>Problemas</Action>
+				<Action to='/contato' className='contato'>Contato</Action>
+				<Action to='/sobre' className='sobre'>Sobre</Action>
 				{signed? (
 					<>
-						<Action to='/turma'>Turma</Action>
-						<Action to='/tarefas'>Tarefa</Action>
+						<Action to='/turma' className='turma'>Turma</Action>
+						<Action to='/tarefas' className='tarefas'>Tarefa</Action>
 					</>
 					
 				): null}
