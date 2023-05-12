@@ -87,9 +87,12 @@ function TarefaNova() {
 	async function findProblemasTurmas(){
 		const {data: problemas} = await ProblemaService.findAll();
 		const {data: turmas} = await TurmaService.findByUsuario(user.id);
+		console.log('problemas do find all',problemas);
+		
 		
 		
 		setOptions(problemas.map((problemas: Problema)=> {
+			
 			return {
 				'value': problemas.id,
 				'label': problemas.nome,

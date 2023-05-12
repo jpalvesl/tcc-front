@@ -163,7 +163,7 @@ export default function TarefaProblemas() {
 						
 						
 					</DescriptionRight>
-				</DescriptionContainer>
+				</DescriptionContainer> 
 				<SearchRow>
 					<Input 
 						size='large' 

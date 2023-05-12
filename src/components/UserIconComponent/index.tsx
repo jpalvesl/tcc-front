@@ -64,7 +64,7 @@ function UserIconComponent() {
 	return (
 
 
-		<Dropdown menu={{ items }}>
+		<Dropdown menu={{ items }} className='perfil'>
 			<Space>
 				<UserIcon />
 				<DownOutlined style={{ color: '#fff' }} />

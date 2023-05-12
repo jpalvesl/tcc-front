@@ -32,7 +32,7 @@ function EnviarResposta({ problemaId }: ProblemaTabProps) {
 	}
 
 	return (
-		<div style={{
+		<div  style={{
 			textAlign: 'right'
 		}}>
 			<CodeEditor
