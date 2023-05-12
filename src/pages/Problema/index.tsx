@@ -45,7 +45,7 @@ function Problema() {
 	const { id } = useParams();
 	const numericId = Number(id);
 
-	const user = JSON.parse(decrypt(localStorage.getItem('@Auth:user')));
+	const user = localStorage.getItem('@Auth:user') ? JSON.parse(decrypt(localStorage.getItem('@Auth:user'))): null;
 
 	const itemsDropDown = [
 		{
