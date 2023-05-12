@@ -52,17 +52,19 @@ export const CampoImage = styled.div`
   div.imagem{
     border-radius: 100%;
     overflow: hidden;
-    padding: 8px;
+    
     height:250px;
     width: 250px;
     margin: 0 auto;
-    background: black;
+    
     
   
   }
 
   div.imagem > img {
-    width: 100%;
+    border-radius: 100%;
+    height:250px;
+    width: 250px;
    
   }
   
@@ -87,6 +89,25 @@ export const CampoImage = styled.div`
 export const CampoForm = styled.div`
   
   width: 70%;
+  a {
+    color: ${themes.default.blue['600']};
+  }
+
+  
+  
+  
+
+  
+
+  
+  
+
+`;
+
+export const CampoFormSenha = styled.div`
+  
+  width: 70%;
+  margin: 0 auto;
   a {
     color: ${themes.default.blue['600']};
   }

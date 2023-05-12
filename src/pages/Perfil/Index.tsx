@@ -17,6 +17,7 @@ import ProblemaService from '../../services/ProblemaService';
 import { FailIcon } from '../../assets/icons/FailIcon';
 import SubmissaoService from '../../services/SubmissaoService';
 import { decrypt } from '../../utils/crypto';
+import avatar from '../../assets/Image/avatar.png';
 
 
 
@@ -36,6 +37,7 @@ export default function Perfil(){
 
 	const [submissoes, setSubmissoes] = useState([]);
 	const [mapProblemas, setMapProblemas] = useState({ tentados: [], resolvidos: [] });
+	//const avatar = 'https://firebasestorage.googleapis.com/v0/b/code2know-db2e7.appspot.com/o/imagens%2FAvatar%20Padr%C3%A3o%2Favatar.png?alt=media&token=aadcac3d-6e9f-415c-84ac-f745c963e6b4';
 
 	interface DataType {
 		key: string;
@@ -151,7 +153,7 @@ export default function Perfil(){
 					<CampoFoto>
 						<div className='imagem'>
 							
-							<img src={usuario?.imagemUrl} alt="Imagem" />
+							<img src={usuario?.imagemUrl? usuario?.imagemUrl : avatar} alt="Imagem" />
 						</div>
 					</CampoFoto>
 					<CampoInfo>
@@ -177,7 +179,7 @@ export default function Perfil(){
 							Problemas resolvidos: {mapProblemas.resolvidos}
 						</p>
 						
-
+						
 					</CampoInfo>
 
 				</CabecalhoPerfil>
