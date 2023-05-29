@@ -215,7 +215,7 @@ function TarefaNova() {
 			<TurmaNovaContainer>
 				<h1>{actionType === 'CREATE' ? 'Criar Tarefa' : 'Editar Tarefa'}</h1>
 				<Divider />
-				{(actionType === 'UPDATE' && titulo) &&  <Form 
+				{(actionType === 'UPDATE' && titulo || actionType === 'CREATE') &&  <Form 
 					initialValues={formataInitialValues()}
 					layout='vertical'
 					onFinish={() => handleOnFinish(user.id)}
@@ -234,7 +234,7 @@ function TarefaNova() {
 							onChange={(evt) => setTitulo(evt.target.value)}
 						/>
 					</Form.Item>
-					<Form.Item  label="Datas" style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
+					<Form.Item  label="Datas"  style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}>
 					
 						<RangePicker 
 							name='datas'

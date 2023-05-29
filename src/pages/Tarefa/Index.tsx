@@ -153,10 +153,9 @@ export default function TarefaProblemas() {
 					</DescriptionLeft>
 
 					<DescriptionRight> 
-						
-						<Button size='large' style={{float: 'right'	}} onClick={() => handleEditarTarefa('UPDATE', tarefa)} >
+						{!!turma?.professores.filter(professor => professor.id === user.id).length && <Button size='large' style={{float: 'right'	}} onClick={() => handleEditarTarefa('UPDATE', tarefa)} >
 							<EditOutlined />
-						</Button>
+						</Button>}
 						<p>
 							<strong>Status: </strong> {statusTarefa}
 						</p>

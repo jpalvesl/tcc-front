@@ -18,6 +18,7 @@ import { FailIcon } from '../../assets/icons/FailIcon';
 import SubmissaoService from '../../services/SubmissaoService';
 import { decrypt } from '../../utils/crypto';
 import avatar from '../../assets/Image/avatar.png';
+import { CorrectIcon } from '../../assets/icons/CorrectIcon';
 
 
 
@@ -97,11 +98,16 @@ export default function Perfil(){
 		console.log(key);
 	};
 
+	console.log("problemas",submissoes)
+
 	const problemasFiltradosToColumns = problemas.map(problema => {
+		
+		const problemaResolvido = !!problemas.filter(problemaFiltrado => problemaFiltrado.id === problema.id && problema.status === 'OK').length
+
 		return {
 			...problema,
 			key: problema.id,
-			resolvido: <FailIcon size={32} />, // Verificar como devemos fazer para mostrar o problema feito
+			resolvido: problema.status ? <CorrectIcon size={32} />: <FailIcon size={32} />,
 			titulo: (
 				<Link 
 					to={`/problema/${problema.id}`}
