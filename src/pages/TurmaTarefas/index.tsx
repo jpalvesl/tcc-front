@@ -360,7 +360,7 @@ function TurmaTarefas() {
 				scrollToFirstStep
 				showProgress
 				showSkipButton
-				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar', skip: 'pular'}}
 				steps={steps}/>
 			<NavBar />    
 			<TurmaTarefasContainer>

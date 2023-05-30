@@ -44,7 +44,7 @@ const stepsCriadorProblema = [
 		spotlightPadding: 20,
 		placement: 'center',
 		target: 'body',
-		content: 'Comece o tour'
+		content: 'Essa é a tela do Problema!'
 	},
 	{
 		
@@ -131,7 +131,7 @@ function Problema() {
 	const [casosTeste, setCasosTeste] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [items, setItems] = useState([]);
-	const [userImage, setUserImage] = useState('')
+	const [userImage, setUserImage] = useState('');
 
 
 
@@ -159,8 +159,8 @@ function Problema() {
 			const { data: problema } = await ProblemaService.findById(numericId);
 			setProblema(problema);
 
-			const { data: criador } = await UsuarioService.findById(problema.criadorId)
-			setUserImage(criador?.imagemUrl)
+			const { data: criador } = await UsuarioService.findById(problema.criadorId);
+			setUserImage(criador?.imagemUrl);
 			const tour = localStorage.getItem('fez_tour_problema');
 			if (tour == null){
 
@@ -305,7 +305,7 @@ function Problema() {
 				scrollToFirstStep
 				showProgress
 				showSkipButton
-				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar', skip: 'pular'}}
 				steps={steps}/>
 			<ProblemaContainer>
 				{isLoading ? <Spin /> : (

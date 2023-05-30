@@ -25,10 +25,9 @@ const stepsUsuarioAluno = [
 		content: 'Comece o tour'
 	},
 	{
-		
-		spotlightPadding: 20,
 		target: '.filterProblema',
-		content: 'Aqui você pode buscar pelo nome do problema'
+		content: 'Aqui você pode buscar pelo nome do problema',
+		
 	},
 	{
 		target: '.problemasList',
@@ -49,12 +48,12 @@ const stepsUsuarioProfessor = [
 	},
 	{
 		
-		spotlightPadding: 20,
+		
 		target: '.filterProblema',
 		content: 'Aqui você pode buscar pelo nome do problema'
 	},
 	{
-		spotlightPadding: 20,
+		
 		target: '.novoProblema',
 		content: 'Aqui você pode criar um novo problema'
 	},
@@ -171,7 +170,7 @@ function Problemas() {
 				scrollToFirstStep
 				showProgress
 				showSkipButton
-				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar', skip: 'pular'}}
 				steps={usuario?.ehProfessor?stepsUsuarioProfessor: stepsUsuarioAluno}/>
 			<ProblemasContainer>
 				<h1>Problemas</h1>

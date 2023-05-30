@@ -49,7 +49,7 @@ const steps = [
 	},
 	{
 		target: '.contato',
-		content: 'Aqui você pode entrar em contato com nosso suporte, podendo solicitar uma permissão para adm.'
+		content: 'Aqui você pode entrar em contato com nosso suporte, podendo solicitar uma permissão para ser um admistrador da sua instituição.'
 	},
 	{
 		target: '.sobre',
@@ -119,7 +119,7 @@ export const Home = () => {
 				scrollToFirstStep
 				showProgress
 				showSkipButton
-				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar'}}
+				locale={{back: 'voltar', close: 'fechar', next: 'próximo', last: 'fechar', skip: 'pular'}}
 				steps={steps}/>
 			<HomeContainer>
 				<BemVindoUser>
