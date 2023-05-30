@@ -183,10 +183,10 @@ function Submissoes({ problemaId }: ProblemaTabProps) {
 					</Col>
 					<Col span={8}>
 						<Card title={
-							['ERRO DE APRESENTAÇÃO', 'OK'].includes(casoMostrado.resposta.status)
+							['Saída incorreta', 'OK'].includes(casoMostrado.resposta.status)
 								? 'Resposta obtida'
 								: 'Erro Obtido'}>
-							{['ERRO DE APRESENTAÇÃO', 'OK'].includes(casoMostrado.resposta.status)
+							{['Saída incorreta', 'OK'].includes(casoMostrado.resposta.status)
 								? casoMostrado.resposta.saida
 								: casoMostrado.resposta.status}
 						</Card>
